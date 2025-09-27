@@ -1,0 +1,84 @@
+/* css del detalle de un juego */
+
+/* ------------------------------
+   Carousel Portada
+------------------------------ */
+#carouselJuego {
+  max-width: 600px; /* ancho máximo del carousel */
+  margin: 0 auto; /* centrar */
+}
+
+#carouselJuego .carousel-inner img {
+  max-height: 400px; /* altura máxima */
+  width: 100%; /* ocupar ancho del contenedor */
+  object-fit: cover; /* recorta para llenar el contenedor */
+  margin: 0 auto;
+}
+
+/* ------------------------------
+   Miniaturas debajo del carousel
+------------------------------ */
+#miniaturas {
+  max-width: 600px; /* igual al carousel */
+  margin: 0 auto;
+}
+
+#miniaturas .img-thumbnail {
+  width: 80px; /* ancho miniatura */
+  height: 80px; /* alto miniatura */
+  object-fit: cover; /* recorta si no es cuadrada */
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border 0.2s, transform 0.2s;
+}
+
+#miniaturas .img-thumbnail:hover {
+  transform: scale(1.05); /* efecto hover */
+}
+
+#miniaturas .active-mini {
+  border: 3px solid #0d6efd; /* borde azul */
+}
+
+/* ------------------------------
+   Estrellas de calificación
+------------------------------ */
+.estrella {
+  font-size: 2rem;
+  color: gray;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.estrella.seleccionada {
+  color: gold;
+}
+
+/* ------------------------------
+   Botones favoritos
+------------------------------ */
+#btn-favorito i {
+  margin-right: 5px;
+}
+
+/* ------------------------------
+   Comentarios (cards)
+------------------------------ */
+.card {
+  margin-bottom: 1rem;
+}
+
+.card .card-text {
+  word-wrap: break-word;
+}
+
+.card .btn {
+  margin-right: 0.3rem;
+}
+
+/* ------------------------------
+   Formulario agregar comentario
+------------------------------ */
+#form-comentario textarea {
+  resize: none;
+}
