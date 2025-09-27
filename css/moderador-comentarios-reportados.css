@@ -1,0 +1,43 @@
+ .comment-bloque {
+     background-color: whitesmoke;
+     border-radius: .6rem;
+     padding: .75rem 1rem;
+ }
+
+
+ .badge-resuelto {
+     background-color: #d1fae5;
+     color: #065f46;
+     font-weight: 500;
+ }
+
+ .badge-pendiente {
+     background-color: #fef9c3;
+     color: #92400e;
+     font-weight: 500;
+ }
+
+ .custom-select {
+
+     background-color: #fff;
+     border: 1px solid #d1d5db;
+     border-radius: 6px;
+     padding: 0.5rem 2rem 0.5rem 0.75rem;
+     font-size: 0.95rem;
+     font-weight: 500;
+     color: #374151;
+     cursor: pointer;
+
+
+ }
+
+ .custom-select:focus {
+     outline: none;
+     border-color: #6c63ff;
+     box-shadow: 0 0 0 0.2rem rgba(108, 99, 255, 0.25);
+ }
+
+ .custom-select option {
+     font-weight: 400;
+     padding: 8px;
+ }
