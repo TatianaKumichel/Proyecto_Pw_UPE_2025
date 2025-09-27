@@ -1,4 +1,5 @@
-/* No usaremos variables globales, pero para la simulación de rol:
+/* ------------------------------------------------------------
+ No usaremos variables globales, pero para la simulación de rol sin backend:
  true = usuario registrado, false = visitante
  esto será totalmente reemplazado cuando haya backend
  */
@@ -6,7 +7,7 @@ var usuarioRegistrado = false;
 
 window.onload = function () {
   // Configuaracion usuario registrado.
-  // se modificado cuando haya backend
+  // se cambiara cuando haya backend
   if (!usuarioRegistrado) {
     // Ocultar favorito
     const btnFavorito = document.getElementById("btn-favorito");
