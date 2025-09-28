@@ -5,6 +5,12 @@ window.onload = function () {
     const formRegistro = document.getElementById("formRegistro");
     const formRecuperar = document.getElementById("formRecuperar");
     const categorias = document.querySelectorAll('.dropdown-item[data-categoria]');
+    const buscador = document.getElementById("buscador");
+    const sugerencias = document.getElementById("sugerencias");
+    // Array.from convierto en un arreglo el mapeo del queryselector
+    const juegos = Array.from(document.querySelectorAll(".card-title")).map(function (el) {
+        return el.textContent;
+    });
 
     // esto es un objeto de un estado de usuario logeado o deslogeado
     const estado = {
@@ -51,14 +57,21 @@ window.onload = function () {
             categoriaClick(this.dataset.categoria);
         });
     });
+
+    buscador.addEventListener("input", function () {
+        mostrarSugerencias(this.value, juegos, sugerencias);
+    });
+
+    sugerencias.addEventListener("click", function (e) {
+        if (e.target.tagName === "LI") {
+            buscador.value = e.target.textContent;
+            sugerencias.innerHTML = "";
+        }
+    });
 };
 
-function categoriaClick(e) {
-    const categoria = this.dataset.categoria;
-    filtrarJuegos(categoria);
-}
 // funcion para filtrar juegos por categoria
-function onCategoriaClick(categoria) {
+function categoriaClick(categoria) {
     const juegos = document.querySelectorAll('.col-12.col-sm-6.col-md-4'); 
     juegos.forEach(function(juego) {
         if (categoria === 'todas' || juego.dataset.categoria === categoria) {
@@ -66,6 +79,26 @@ function onCategoriaClick(categoria) {
         } else {
             juego.style.display = 'none';
         }
+    });
+}
+// logica para que se muestre un desplegable bajo el buscador
+// acorde a lo que el usuario vaya ingresando en el input
+function mostrarSugerencias(texto, juegos, contenedor) {
+    contenedor.innerHTML = "";
+
+    if (!texto) return;
+
+    let textoMin = texto.toLowerCase();
+
+    let coincidencias = juegos.filter(function (juego) {
+        return juego.toLowerCase().includes(textoMin);
+    });
+
+    coincidencias.forEach(function (nombre) {
+        var li = document.createElement("li");
+        li.className = "list-group-item list-group-item-action";
+        li.textContent = nombre;
+        contenedor.appendChild(li);
     });
 }
 

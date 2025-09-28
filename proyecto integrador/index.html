@@ -68,8 +68,9 @@
           <li class="nav-item"><a class="nav-link active" href="#">FAQ</a></li>
         </ul>
         <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Buscar juegos...">
+          <input id="buscador" class="form-control me-2" type="search" placeholder="Buscar juegos...">
           <button class="btn btn-outline-primary" type="submit">Buscar</button>
+          <ul id="sugerencias" class="list-group position-absolute w-100" style="top:100%; z-index:1000;"></ul>
         </form>
       </div>
     </div>
