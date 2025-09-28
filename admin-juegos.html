@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Juegos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/admin-juegos.css">
+</head>
+<body class="bg-light">
+
+      <!-- Menu -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../proyecto integrador/index.html">🎮 Games</a>
+
+        <!-- Mobile -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarContent"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="../proyecto integrador/index.html">Inicio</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">Catálogo</a></li>
+            <li class="nav-item"><a class="nav-link" href="../favoritos.html">Favoritos</a></li>
+          </ul>
+
+          <!-- login -->
+          <div id="authButtons">
+            <button
+              class="btn btn-outline-light me-2"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+            >
+              Iniciar sesión
+            </button>
+            <button
+              class="btn btn-warning"
+              data-bs-toggle="modal"
+              data-bs-target="#registerModal"
+            >
+              Registrarse
+            </button>
+          </div>
+
+          <div id="userMenu" class="dropdown d-none">
+            <button
+              class="btn btn-outline-light dropdown-toggle"
+              data-bs-toggle="dropdown"
+            >
+              <span id="userName">Usuario</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#">Perfil</a></li>
+              <li><a class="dropdown-item" href="#">Mis Favoritos</a></li>
+              <li><a class="dropdown-item" href="#">Ajustes</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <button class="dropdown-item" id="logoutBtn">
+                  Cerrar sesión
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+  <!-- Sidebar -->
+  <div class="offcanvas-lg offcanvas-start bg-dark text-white sidebar-nav" tabindex="-1" id="sidebar">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Menú Admin</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <nav class="nav flex-column">
+        <a href="admin-juegos.html" class="nav-link text-white px-3">🎮 Juegos</a>
+        <a href="admin-generos.html" class="nav-link text-white px-3">📂 Géneros</a>
+        <a href="admin-plataformas.html" class="nav-link text-white px-3">💻 Plataformas</a>
+        <a href="admin-empresas.html" class="nav-link text-white px-3 active">🏢 Empresas</a>
+        <a href="admin-moderadores.html" class="nav-link text-white px-3">🛡️ Moderadores</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Espaciador -->
+  <div style="margin-top: 70px"></div>
+
+  <!-- Panel de Juegos -->
+  <main class="container my-4">
+    <h1 class="mb-4 text-center">📋 Lista de Juegos</h1>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="h4">Gestión de Juegos</h2>
+      <button id="btnAgregarJuego" class="btn btn-primary">➕ Agregar Juego</button>
+    </div>
+
+    <!-- FORMULARIO PARA NUEVO JUEGO (oculto al inicio) -->
+    <form id="formJuego" class="d-none mb-4">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-2 text-center">
+          <label for="imagenJuego" class="form-label">Imagen</label>
+          <input type="file" id="imagenJuego" class="form-control" accept="image/*">
+        </div>
+        <div class="col-md-4">
+          <label for="nombreJuego" class="form-label">Nombre</label>
+          <input type="text" id="nombreJuego" class="form-control" placeholder="Nombre del juego" required>
+        </div>
+        <div class="col-md-6">
+          <label for="descripcionJuego" class="form-label">Descripción</label>
+          <textarea id="descripcionJuego" class="form-control" rows="2" placeholder="Breve descripción..." required></textarea>
+        </div>
+        <div class="col-md-3">
+          <label for="plataformaJuego" class="form-label">Plataforma</label>
+          <input type="text" id="plataformaJuego" class="form-control" placeholder="PC, PS, XBOX..." required>
+        </div>
+        <div class="col-md-3">
+          <label for="generoJuego" class="form-label">Género</label>
+          <input type="text" id="generoJuego" class="form-control" placeholder="Acción, Aventura..." required>
+        </div>
+        <div class="col-md-3">
+          <label for="empresaJuego" class="form-label">Empresa</label>
+          <input type="text" id="empresaJuego" class="form-control" placeholder="Respawn, EA..." required>
+        </div>
+        <div class="col-md-3">
+          <label for="fechaJuego" class="form-label">Fecha</label>
+          <input type="date" id="fechaJuego" class="form-control" required>
+        </div>
+        <div class="col-12 text-end mt-2">
+          <button type="submit" class="btn btn-success">💾 Guardar</button>
+          <button type="button" id="cancelarJuego" class="btn btn-secondary">Cancelar</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Tabla de juegos -->
+    <div class="table-responsive shadow rounded">
+      <table class="table table-striped align-middle text-center">
+        <thead class="table-dark">
+          <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Plataforma</th>
+            <th>Género</th>
+            <th>Empresa</th>
+            <th>Lanzamiento</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-juegos">
+          <tr>
+            <td class="game-img"><img src="../img/apex1.jpg" alt="Juego" class="img-thumbnail"></td>
+            <td>Halo Infinite</td>
+            <td>Shooter futurista en mundo semiabierto</td>
+            <td>Xbox, PC</td>
+            <td>Shooter</td>
+            <td>343 Industries</td>
+            <td>2021-12-08</td>
+            <td>
+              <button class="btn btn-outline-warning btn-sm me-1"><i class="bi bi-pencil-square"></i></button>
+              <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/admin-juegos.js" defer></script>
+</body>
+</html>

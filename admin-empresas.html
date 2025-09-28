@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrar Empresas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/admin-empresas.css">
+</head>
+
+<body class="bg-light">
+
+  <!-- Navbar principal -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="../proyecto integrador/index.html">🎮 Games</a>
+
+      <!-- Mobile toggle -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="../proyecto integrador/index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Catálogo</a></li>
+          <li class="nav-item"><a class="nav-link" href="../favoritos.html">Favoritos</a></li>
+        </ul>
+
+        <!-- login -->
+        <div id="authButtons">
+          <button class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+            Iniciar sesión
+          </button>
+          <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#registerModal">
+            Registrarse
+          </button>
+        </div>
+
+        <div id="userMenu" class="dropdown d-none">
+          <button class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
+            <span id="userName">Usuario</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#">Perfil</a></li>
+            <li><a class="dropdown-item" href="#">Mis Favoritos</a></li>
+            <li><a class="dropdown-item" href="#">Ajustes</a></li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <button class="dropdown-item" id="logoutBtn">
+                Cerrar sesión
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div class="offcanvas-lg offcanvas-start bg-dark text-white sidebar-nav" tabindex="-1" id="sidebar">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Menú Admin</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <nav class="nav flex-column">
+        <a href="admin-juegos.html" class="nav-link text-white px-3">🎮 Juegos</a>
+        <a href="admin-generos.html" class="nav-link text-white px-3">📂 Géneros</a>
+        <a href="admin-plataformas.html" class="nav-link text-white px-3">💻 Plataformas</a>
+        <a href="admin-empresas.html" class="nav-link text-white px-3 active">🏢 Empresas</a>
+        <a href="admin-moderadores.html" class="nav-link text-white px-3">🛡️ Moderadores</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Espaciador para navbar fija -->
+  <div style="margin-top: 70px;"></div>
+
+  <!-- Main content -->
+  <main class="container my-4">
+    <h1 class="mb-4 text-center">📋 Gestión de Empresas</h1>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="h4">Panel de Empresas</h2>
+      <button id="btnAgregarEmpresa" class="btn btn-primary">➕ Agregar Empresa</button>
+    </div>
+
+    <!-- Formulario para nueva empresa -->
+    <form id="formEmpresa" class="d-none mb-4">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-6">
+          <label for="nombreEmpresa" class="form-label">Nombre de la Empresa</label>
+          <input type="text" id="nombreEmpresa" class="form-control" placeholder="Ej: Ubisoft, Nintendo..." required>
+        </div>
+        <div class="col-md-6 text-end">
+          <button type="submit" class="btn btn-success">💾 Guardar</button>
+          <button type="button" id="cancelarEmpresa" class="btn btn-secondary">Cancelar</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Tabla de empresas -->
+    <div class="table-responsive shadow rounded">
+      <table class="table table-striped align-middle text-center">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Empresa</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tablaEmpresas">
+          <tr>
+            <td>1</td>
+            <td>Empresa de ejemplo</td>
+            <td>
+              <button class="btn btn-outline-warning btn-sm me-1 btn-editar">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <button class="btn btn-outline-danger btn-sm me-1 btn-eliminar">
+                <i class="bi bi-trash"></i>
+              </button>
+              <button class="btn btn-outline-success btn-sm btn-publicar">
+                <i class="bi bi-check-circle"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/admin-empresas.js" defer></script>
+</body>
+
+</html>
