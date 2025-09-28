@@ -1,0 +1,10 @@
+/* Para ocultar cards */
+.oculto {
+  display: none;
+}
+
+/* Ajuste de las imágenes para que no deformen */
+.card-img-top {
+  height: 150px;
+  object-fit: cover;
+}
