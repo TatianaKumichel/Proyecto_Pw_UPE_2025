@@ -37,3 +37,4 @@ selectPlataforma.addEventListener("change", filtrarVideojuegos);
 
 // Mostrar al inicio
 filtrarVideojuegos();
+
