@@ -1,0 +1,52 @@
+@media (min-width: 992px) {
+  .sidebar-nav {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    width: 220px;
+    height: calc(100% - 56px);
+    transform: none !important;
+    visibility: visible !important;
+  }
+
+  main {
+    margin-left: 220px;
+  }
+}
+
+.sidebar-nav .nav-link {
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.sidebar-nav .nav-link.active {
+  background-color: #0d6efd;
+}
+
+.sidebar-nav .nav-link:hover {
+  background-color: #343a40;
+}
+
+table .game-img img {
+  max-width: 80px;
+  max-height: 80px;
+  object-fit: cover;
+}
+
+
+.table-responsive {
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.table-responsive table {
+  border-collapse: separate;
+}
+
+.table-responsive thead th {
+  position: sticky;
+  top: 0;
+  background-color: #343a40;
+  /* coincide con table-dark */
+  z-index: 10;
+}
