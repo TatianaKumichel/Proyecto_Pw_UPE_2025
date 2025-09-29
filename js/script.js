@@ -7,19 +7,20 @@ window.onload = function () {
   const categorias = document.querySelectorAll(
     ".dropdown-item[data-categoria]"
   );
+  const cerrarSesionA = document.getElementById("cerrarSesion");
 
   // esto es un objeto de un estado de usuario logeado o deslogeado
   const estado = {
     usuarioLogeado: false,
     nombreUsuario: "",
-    fotoPerfilLogeado: "./img/usuario_logeado.jpg",
-    fotoPerfilDeslogeado: "./img/user_gray.png",
+/*     fotoPerfilLogeado: "./img/usuario_logeado.jpg",
+    fotoPerfilDeslogeado: "./img/user_gray.png", */
   };
 
   // al entrar a la pagina se muestra el perfil logeado o no acorde
   // a si se logeo o no. Podria tambien mostrarse mas elementos
   // si quien se logea es un admin/moderador...
-  actualizarMenu(estado, menuUsuario, perfilIcono);
+  actualizarMenu(estado);
 
   // primero se verifica que exista en el DOM el formulario de login
   // o el de registro y entonces se llama al evento de submit
@@ -53,6 +54,8 @@ window.onload = function () {
       categoriaClick(this.dataset.categoria);
     });
   });
+
+
 };
 
 // funcion para filtrar juegos por categoria
@@ -68,51 +71,34 @@ function categoriaClick(categoria) {
 }
 
 // --- Funcion para actualizar el menu/index segun el usuario ---
-// genera un dropdown en el html cuando se hace clic en el icono del usuario
-// si esta logeado muestra un dropdown, sino muestra el otro
-// el nombre que muestra es el valor de la variable del objeto estado
-// especificamente nombreUsuario
-function actualizarMenu(estado, menuUsuario, perfilIcono) {
+// actualmente solamente cambia el nombre del span de "Mi Perfil"
+// al texto previo al @ del correo electronico cuando se hace
+// login o registro. Para hacer lo opuesto, una funcion
+// de cierre de sesion hace que vuelva de nuevo a mostrar "Mi Perfil".
+function actualizarMenu(estado) {
+  const nombrePerfil = document.getElementById("nombrePerfil");
+
   if (estado.usuarioLogeado) {
-    // con .src indico que la ruta de la imagen que quiero referenciar
-    // es la de la imagen del usuario...
-    if (perfilIcono) {
-      perfilIcono.src = estado.fotoPerfilLogeado;
-      menuUsuario.innerHTML = `
-            <li class="dropdown-header"> Hola, ${estado.nombreUsuario}</li>
-            <li><a class="dropdown-item" href="./perfilUsuario.html">Gestionar cuenta</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><button class="dropdown-item text-danger" id="cerrarSesion">Cerrar sesión</button></li>
-        `;
-      // logica de cierre de sesion, que pasa de usuario logeado a deslogeado
-      const cerrarSesionBoton = document.getElementById("cerrarSesion");
-      if (cerrarSesionBoton) {
-        cerrarSesionBoton.addEventListener("click", cerrarSesionSubmit);
-      }
-    }
+    nombrePerfil.textContent = estado.nombreUsuario;
   } else {
-    // con .src indico que la ruta de la imagen que quiero referenciar es
-    // la del icono gris
-    if (perfilIcono) {
-      perfilIcono.src = estado.fotoPerfilDeslogeado;
-      menuUsuario.innerHTML = `
-            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar sesión</button></li>
-            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#registroModal">Registrarse</button></li>
-        `;
-    }
+    nombrePerfil.textContent = "Mi Perfil";
   }
-  function cerrarSesionSubmit() {
-    cerrarSesion(estado, menuUsuario, perfilIcono);
+  const cerrarSesionA = document.getElementById("cerrarSesion");
+  if (cerrarSesionA) {
+    cerrarSesionA.addEventListener("click", cerrarSesionSubmit.bind(estado));
   }
 }
 
 // logica de cierre de sesion, pasa a estado de usuario logeado a deslogeado
-function cerrarSesion(estado, menuUsuario, perfilIcono) {
+function cerrarSesion(estado) {
   estado.usuarioLogeado = false;
   estado.nombreUsuario = "";
-  actualizarMenu(estado, menuUsuario, perfilIcono);
+  actualizarMenu(estado);
 }
 
+function cerrarSesionSubmit(estado) {
+  cerrarSesion(estado);
+}
 // con esta funcion se hace el pasaje de usuario logeado a deslogeado
 function manejarLogin(e, estado, menuUsuario, perfilIcono) {
   e.preventDefault();

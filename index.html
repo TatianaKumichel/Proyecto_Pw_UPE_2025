@@ -65,7 +65,7 @@
               <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="perfilDropdown" role="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-person-circle fs-5 me-1"></i>
-                <span class="d-none d-lg-inline">Mi Perfil</span>
+                <span id="nombrePerfil" class="d-none d-lg-inline">Mi Perfil</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="perfilDropdown">
                 <li>
@@ -108,7 +108,7 @@
                   <hr class="dropdown-divider" />
                 </li>
                 <li>
-                  <a class="dropdown-item text-danger" href="#">Cerrar Sesión</a>
+                  <a id="cerrarSesion" class="dropdown-item text-danger" href="#">Cerrar Sesión</a>
                 </li>
               </ul>
             </li>
@@ -219,7 +219,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formLoginFake">
+          <form id="formLogin">
             <div class="mb-3">
               <label for="correo" class="form-label">Correo electrónico</label>
               <input type="email" class="form-control" id="correo" required />
