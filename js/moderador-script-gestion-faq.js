@@ -105,7 +105,7 @@ function AgregarFAQ(pregunta, respuesta) {
       </h5>
       <p class="faq-respuesta card-text text-muted">${respuesta}</p>
       <div class="d-flex gap-2">
-        <button class="btn btn-secondary btn-sm " data-bs-toggle="modal" data-bs-target="#modalNuevaFAQ">
+        <button class="btn btn-secondary btn-sm " data-bs-toggle="modal" data-bs-target="#modalEditarFAQ">
           <i class="bi bi-pencil-square"></i> Editar
         </button>
         <button class="btn btn-danger btn-sm " data-bs-toggle="modal" data-bs-target="#modalEliminar">
