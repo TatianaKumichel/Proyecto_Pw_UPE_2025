@@ -3,7 +3,7 @@
  true = usuario registrado, false = visitante
  esto será totalmente reemplazado cuando haya backend
  */
-var usuarioRegistrado = false;
+var usuarioRegistrado = true;
 
 window.onload = function () {
   // Configuaracion usuario registrado.
