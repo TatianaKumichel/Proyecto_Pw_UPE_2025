@@ -1,0 +1,17 @@
+/* Ajustes generales */
+.navbar-brand small {
+  font-size: 0.75rem;
+}
+
+.dropdown-menu {
+  border-radius: 0.75rem;
+}
+
+.dropdown-item i {
+  margin-right: 8px;
+}
+
+/* Hover links en el footer */
+.footer a:hover {
+  color: blueviolet;
+}

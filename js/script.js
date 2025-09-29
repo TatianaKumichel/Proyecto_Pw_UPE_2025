@@ -55,7 +55,6 @@ window.onload = function () {
   });
 };
 
-
 // funcion para filtrar juegos por categoria
 function categoriaClick(categoria) {
   const juegos = document.querySelectorAll(".col-12.col-sm-6.col-md-4");
@@ -74,30 +73,33 @@ function categoriaClick(categoria) {
 // el nombre que muestra es el valor de la variable del objeto estado
 // especificamente nombreUsuario
 function actualizarMenu(estado, menuUsuario, perfilIcono) {
-  
   if (estado.usuarioLogeado) {
     // con .src indico que la ruta de la imagen que quiero referenciar
     // es la de la imagen del usuario...
-    perfilIcono.src = estado.fotoPerfilLogeado;
-    menuUsuario.innerHTML = `
+    if (perfilIcono) {
+      perfilIcono.src = estado.fotoPerfilLogeado;
+      menuUsuario.innerHTML = `
             <li class="dropdown-header"> Hola, ${estado.nombreUsuario}</li>
             <li><a class="dropdown-item" href="./perfilUsuario.html">Gestionar cuenta</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><button class="dropdown-item text-danger" id="cerrarSesion">Cerrar sesión</button></li>
         `;
-    // logica de cierre de sesion, que pasa de usuario logeado a deslogeado
-    const cerrarSesionBoton = document.getElementById("cerrarSesion");
-    if (cerrarSesionBoton) {
-      cerrarSesionBoton.addEventListener("click", cerrarSesionSubmit);
+      // logica de cierre de sesion, que pasa de usuario logeado a deslogeado
+      const cerrarSesionBoton = document.getElementById("cerrarSesion");
+      if (cerrarSesionBoton) {
+        cerrarSesionBoton.addEventListener("click", cerrarSesionSubmit);
+      }
     }
   } else {
     // con .src indico que la ruta de la imagen que quiero referenciar es
     // la del icono gris
-    perfilIcono.src = estado.fotoPerfilDeslogeado;
-    menuUsuario.innerHTML = `
+    if (perfilIcono) {
+      perfilIcono.src = estado.fotoPerfilDeslogeado;
+      menuUsuario.innerHTML = `
             <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar sesión</button></li>
             <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#registroModal">Registrarse</button></li>
         `;
+    }
   }
   function cerrarSesionSubmit() {
     cerrarSesion(estado, menuUsuario, perfilIcono);
