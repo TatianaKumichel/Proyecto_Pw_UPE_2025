@@ -7,62 +7,80 @@
     <title>Administrar Géneros</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/admin-generos.css" />
+    <link rel="stylesheet" href="./css/admin-generos.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="./js/admin-plataforma.js" defer></script>
 </head>
 
 <body class="bg-light">
 
 
-    <!-- Menu -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../proyecto integrador/index.html">🎮 Games</a>
+    <!-- Portada para el banner o logo y el icono de usuario -->
 
-            <!-- Mobile -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <header class="bg-dark text-white">
+        <div
+          class="container d-flex justify-content-between align-items-center py-2"
+        >
+          <!-- Logo + nombre + menú -->
+          <div class="d-flex align-items-center">
+            <i class="bi bi-controller fs-2 text-primary me-2"></i>
+            <h1 class="h4 mb-0 me-4">UPEGaming</h1>
+  
+            <!-- Menú de navegación -->
+            <nav class="navbar navbar-expand-lg navbar-dark p-0">
+              <div class="container-fluid p-0">
+                <button
+                  class="navbar-toggler"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navbarNav"
+                >
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="../proyecto integrador/index.html">Inicio</a>
+                      <a class="nav-link active" href="./index.html">Inicio</a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="#">Catálogo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../favoritos.html">Favoritos</a></li>
-                </ul>
-
-                <!-- login -->
-                <div id="authButtons">
-                    <button class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
-                        Iniciar sesión
-                    </button>
-                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#registerModal">
-                        Registrarse
-                    </button>
+  
+                    <li class="nav-item">
+                      <a class="nav-link" href="./filtros.html">Catálogo</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="./favoritos.html">Favoritos</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="./faqPublico.html">FAQ</a></li>
+                  </ul>
                 </div>
-
-                <div id="userMenu" class="dropdown d-none">
-                    <button class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
-                        <span id="userName">Usuario</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">Perfil</a></li>
-                        <li><a class="dropdown-item" href="#">Mis Favoritos</a></li>
-                        <li><a class="dropdown-item" href="#">Ajustes</a></li>
-                        <li>
-                            <hr class="dropdown-divider" />
-                        </li>
-                        <li>
-                            <button class="dropdown-item" id="logoutBtn">
-                                Cerrar sesión
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+              </div>
+            </nav>
+          </div>
+  
+          <!-- Icono de usuario -->
+          <div class="dropdown">
+            <button
+              class="btn p-0 border-0 bg-transparent"
+              id="perfilDropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img
+                src="./img/usuario_logeado.jpg"
+                alt="Perfil"
+                class="rounded-circle perfil-icono"
+                style="width: 40px; height: 40px"
+              />
+            </button>
+            <ul
+              class="dropdown-menu dropdown-menu-end shadow"
+              aria-labelledby="perfilDropdown"
+              id="menuUsuario"
+            >
+              <!-- El dropdown se llena con JS -->
+            </ul>
+          </div>
         </div>
-    </nav>
+      </header>
 
   <!-- Sidebar -->
   <div class="offcanvas-lg offcanvas-start bg-dark text-white sidebar-nav" tabindex="-1" id="sidebar">
@@ -145,8 +163,10 @@
 
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/admin-plataforma.js"></script>
+    <!-- footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p class="mb-0">© 2025 UPEGaming - Todos los derechos reservados</p>
+      </footer>
 </body>
 
 </html>

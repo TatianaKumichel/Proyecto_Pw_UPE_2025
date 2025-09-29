@@ -81,7 +81,7 @@ function actualizarMenu(estado, menuUsuario, perfilIcono) {
     perfilIcono.src = estado.fotoPerfilLogeado;
     menuUsuario.innerHTML = `
             <li class="dropdown-header"> Hola, ${estado.nombreUsuario}</li>
-            <li><a class="dropdown-item" href="cuenta.html">Gestionar cuenta</a></li>
+            <li><a class="dropdown-item" href="./perfilUsuario.html">Gestionar cuenta</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><button class="dropdown-item text-danger" id="cerrarSesion">Cerrar sesión</button></li>
         `;

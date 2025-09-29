@@ -12,76 +12,76 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/detalle.css" />
-    <script src="js/detalle.js" defer></script>
+    <link rel="stylesheet" href="./css/detalle.css" />
+    <script src="./js/detalle.js" defer></script>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
   </head>
   <body>
-    <!-- inicio menu que se reemplazara por el posta -->
+    <header class="bg-dark text-white">
+      <div
+        class="container d-flex justify-content-between align-items-center py-2"
+      >
+        <!-- Logo + nombre + menú -->
+        <div class="d-flex align-items-center">
+          <i class="bi bi-controller fs-2 text-primary me-2"></i>
+          <h1 class="h4 mb-0 me-4">UPEGaming</h1>
 
-    <!-- Menu -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">🎮 Games</a>
+          <!-- Menú de navegación -->
+          <nav class="navbar navbar-expand-lg navbar-dark p-0">
+            <div class="container-fluid p-0">
+              <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+              >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="./index.html">Inicio</a>
+                  </li>
 
-        <!-- Mobile -->
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarContent"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+                  <li class="nav-item">
+                    <a class="nav-link" href="./filtros.html">Catálogo</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="./favoritos.html">Favoritos</a>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="./faqPublico.html">FAQ</a></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
 
-        <div class="collapse navbar-collapse" id="navbarContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Inicio</a>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="#">Catálogo</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Favoritos</a></li>
+        <!-- Icono de usuario -->
+        <div class="dropdown">
+          <button
+            class="btn p-0 border-0 bg-transparent"
+            id="perfilDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              src="./img/usuario_logeado.jpg"
+              alt="Perfil"
+              class="rounded-circle perfil-icono"
+              style="width: 40px; height: 40px"
+            />
+          </button>
+          <ul
+            class="dropdown-menu dropdown-menu-end shadow"
+            aria-labelledby="perfilDropdown"
+            id="menuUsuario"
+          >
+            <!-- El dropdown se llena con JS -->
           </ul>
-
-          <!-- login -->
-          <div id="authButtons">
-            <button
-              class="btn btn-outline-light me-2"
-              data-bs-toggle="modal"
-              data-bs-target="#loginModal"
-            >
-              Iniciar sesión
-            </button>
-            <button
-              class="btn btn-warning"
-              data-bs-toggle="modal"
-              data-bs-target="#registerModal"
-            >
-              Registrarse
-            </button>
-          </div>
-
-          <div id="userMenu" class="dropdown d-none">
-            <button
-              class="btn btn-outline-light dropdown-toggle"
-              data-bs-toggle="dropdown"
-            >
-              <span id="userName">Usuario</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">Perfil</a></li>
-              <li><a class="dropdown-item" href="#">Mis Favoritos</a></li>
-              <li><a class="dropdown-item" href="#">Ajustes</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <button class="dropdown-item" id="logoutBtn">
-                  Cerrar sesión
-                </button>
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
-    </nav>
+    </header>
 
     <!-- Espaciador para no tapar contenido -->
     <div style="margin-top: 70px"></div>
@@ -361,7 +361,6 @@
       </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
   </body>
 </html>
