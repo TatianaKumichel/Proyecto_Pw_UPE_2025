@@ -55,12 +55,9 @@ window.onload = function () {
   });
 };
 
-function categoriaClick(e) {
-  const categoria = this.dataset.categoria;
-  filtrarJuegos(categoria);
-}
+
 // funcion para filtrar juegos por categoria
-function onCategoriaClick(categoria) {
+function categoriaClick(categoria) {
   const juegos = document.querySelectorAll(".col-12.col-sm-6.col-md-4");
   juegos.forEach(function (juego) {
     if (categoria === "todas" || juego.dataset.categoria === categoria) {
