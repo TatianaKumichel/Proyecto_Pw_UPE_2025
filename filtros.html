@@ -1,670 +1,416 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Filtro de Videojuegos</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./js/filtros.js" defer></script>
-    <script src="./js/script.js" defer></script>
-    <link rel="stylesheet" href="./css/style_filtros.css" />
-  </head>
-  <body class="bg-light">
-    <header>
-      <nav
-        class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top shadow-sm"
-      >
-        <div class="container">
-          <!-- Logo -->
-          <a class="navbar-brand d-flex align-items-center" href="#">
-            <!--a home-->
-            <div
-              class="bg-dark text-white rounded p-2 me-2 d-flex align-items-center justify-content-center"
-            >
-              <i class="bi bi-controller"></i>
-            </div>
-            <div>
-              <span class="fw-bold">UPEGaming</span><br />
-              <small class="text-muted d-none d-sm-inline"
-                >Tu catálogo de videojuegos</small
-              >
-            </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Filtro de Videojuegos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./js/filtros.js" defer></script>
+  <script src="./js/script.js" defer></script>
+  <link rel="stylesheet" href="./css/style_filtros.css" />
+</head>
+
+<body class="bg-light">
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top shadow-sm">
+      <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand d-flex align-items-center" href="./index.html">
+          <!--a home-->
+          <div class="bg-dark text-white rounded p-2 me-2 d-flex align-items-center justify-content-center">
+            <i class="bi bi-controller"></i>
+          </div>
+          <div>
+            <span class="fw-bold">UPEGaming</span><br />
+            <small class="text-muted d-none d-sm-inline">Tu catálogo de videojuegos</small>
+          </div>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Links -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item">
+              <a class="nav-link" href="./index.html"><i class="bi bi-house"></i>
+                <span class="d-lg-none">Home</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./filtros.html"><i class="bi bi-collection"></i>
+                <span class="d-lg-none">Catálogo</span></a>
+              <!-- a busqueda con filtros-->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registroModal"><i
+                  class="bi bi-person-plus"></i> Registrarse</a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="perfilDropdown" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle fs-5 me-1"></i>
+                <span class="d-none d-lg-inline">Mi Perfil</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="perfilDropdown">
+                <li>
+                  <a class="dropdown-item" href="./perfilUsuario.html"><i class="bi bi-person"></i> Ver Perfil</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./favoritos.html"><i class="bi bi-heart"></i> Mis Favoritos</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./moderador-comentarios-reportados.html"><i
+                      class="bi bi-chat-dots"></i> Comentarios Reportados</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./moderador-gestion-faq.html"><i class="bi bi-question-circle"></i>
+                    Gestión FAQ</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./admin-plataformas.html"><i class="bi bi-display"></i> Plataformas</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./admin-generos.html"><i class="bi bi-tags"></i> Géneros</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./admin-empresas.html"><i class="bi bi-building"></i> Empresas</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./admin-moderadores.html"><i class="bi bi-shield"></i> Gestión
+                    Moderadores</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./admin-juegos.html"><i class="bi bi-joystick"></i> Gestión Juegos</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item text-danger" href="#">Cerrar Sesión</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main class="container my-4">
+    <div class="container py-5">
+      <h2 class="mb-4 text-center">Buscar Videojuegos</h2>
+
+      <!-- Filtros -->
+      <div class="row mb-4">
+        <div class="col-md-4 mb-2">
+          <input type="text" id="filtroNombre" class="form-control" placeholder="Buscar por nombre..." />
+        </div>
+        <div class="col-md-4 mb-2">
+          <select id="filtroGenero" class="form-select">
+            <option value="">Todos los géneros</option>
+            <option value="Aventura">Aventura</option>
+            <option value="RPG">RPG</option>
+            <option value="Deportes">Deportes</option>
+            <option value="Sandbox">Sandbox</option>
+          </select>
+        </div>
+        <div class="col-md-4 mb-2">
+          <select id="filtroPlataforma" class="form-select">
+            <option value="">Todas las plataformas</option>
+            <option value="PlayStation">PlayStation</option>
+            <option value="PC">PC</option>
+            <option value="Nintendo Switch">Nintendo Switch</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Resultados -->
+      <div class="row" id="contenedorResultados">
+        <div class="col-12 col-md-4 mb-3 card p-0" data-genero="Aventura" data-plataforma="PlayStation">
+          <a href="detalle.html" target="_blank"><img src="./img/apex1.jpg" class="card-img-top" alt="The Last of Us" />
           </a>
+          <div class="card-body">
+            <h5 class="card-title">Apex Legends</h5>
+            <p class="card-text">Respawn Entertainment - FPS - PlayStation</p>
+          </div>
+        </div>
 
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarContent"
-          >
-            <span class="navbar-toggler-icon"></span>
+        <div class="col-12 col-md-4 mb-3 card p-0" data-genero="Fps" data-plataforma="Playstation">
+          <img src="img/315718bce7eed62e3cf3fb02d61b81ff1782d6b6cf850fa4.avif" class="card-img-top"
+            alt="The Last of Us" />
+          <div class="card-body">
+            <h5 class="card-title">The Last of Us</h5>
+            <p class="card-text">Naughty Dog - Aventura - PlayStation</p>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4 mb-3 card p-0" data-genero="RPG" data-plataforma="PC">
+          <img src="img/7bp19fsj4g531.webp" class="card-img-top" alt="Cyberpunk 2077" />
+          <div class="card-body">
+            <h5 class="card-title">Cyberpunk 2077</h5>
+            <p class="card-text">CD Projekt - RPG - PC</p>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4 mb-3 card p-0" data-genero="Deportes" data-plataforma="PC">
+          <img src="img/easportsfc-24-official-cover-v0-8d71oqtiurbb1.webp" class="card-img-top" alt="FIFA 24" />
+          <div class="card-body">
+            <h5 class="card-title">FIFA 24</h5>
+            <p class="card-text">EA Sports - Deportes - PC</p>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4 mb-3 card p-0" data-genero="Sandbox" data-plataforma="PC">
+          <img src="img/d7074117b126b7fcdbf13358137a927a.png" class="card-img-top" alt="Minecraft" />
+          <div class="card-body">
+            <h5 class="card-title">Minecraft</h5>
+            <p class="card-text">Mojang - Sandbox - PC</p>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4 mb-3 card p-0" data-genero="Aventura" data-plataforma="Nintendo Switch">
+          <img src="img/MV5BNjI0NTEwZDYtZDhlOC00MGM2LWFlNGItY2U2ZWRkMzk2ODI0XkEyXkFqcGc@._V1_.jpg" class="card-img-top"
+            alt="Zelda" />
+          <div class="card-body">
+            <h5 class="card-title">Zelda: Breath of the Wild</h5>
+            <p class="card-text">Nintendo - Aventura - Nintendo Switch</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="bg-dark text-white mt-4 pt-3 pb-2">
+    <div class="container d-flex justify-content-between align-items-start">
+      <div>
+        <div class="d-flex align-items-center mb-1">
+          <i class="bi bi-controller fs-4 text-primary me-2"></i>
+          <span class="h5 mb-0">UPEGaming</span>
+        </div>
+        <small class="text-white-50">Tu catálogo de videojuegos</small>
+      </div>
+      <div>
+        <h6 class="mb-1">Soporte</h6>
+        <a href="./faqPublico.html" class="text-white text-decoration-none">Preguntas frecuentes</a>
+      </div>
+    </div>
+    <div class="container text-center mt-3">
+      <small class="text-white">© 2025 UPEGaming - Todos los derechos reservados</small>
+    </div>
+  </footer>
+
+  <!-- modal de inicio de sesion -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Iniciar Sesión</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formLoginFake">
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control" id="correo" required />
+            </div>
+            <div class="mb-3">
+              <label for="clave" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="clave" required />
+            </div>
+            <div id="loginError" class="text-danger mb-3" style="display: none"></div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Ingresar</button>
+              <div class="text-center mt-3">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#recuperarModal" data-bs-dismiss="modal">
+                  ¿Olvidaste tu contraseña?
+                </a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal de registro -->
+  <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="registroModalLabel">Crear cuenta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formRegistro" method="POST" class="needs-validation" action="">
+            <div class="mb-3">
+              <label for="registroNombre" class="form-label">Nombre de usuario</label>
+              <input type="text" class="form-control" id="registroNombre" required />
+              <div class="invalid-feedback">
+                Por favor, el nombre solo debe contener letras.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="registroCorreo" class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control" id="registroCorreo" required />
+              <div class="invalid-feedback">
+                Por favor, el email debe ser correcto.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="registroClave" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="registroClave" required />
+              <div class="invalid-feedback">
+                Por favor, la contraseña debe ser una válida.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="registroConfirmacion" class="form-label">Confirmar contraseña</label>
+              <input type="password" class="form-control" id="registroConfirmacion" required />
+              <div class="invalid-feedback">
+                Por favor, las contraseñas deben coincidir.
+              </div>
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">
+                Registrarse
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal de recuperacion de contraseña -->
+  <div class="modal fade" id="recuperarModal" tabindex="-1" aria-labelledby="recuperarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="recuperarModalLabel">
+            Recuperar Contraseña
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formRecuperar">
+            <div class="mb-3">
+              <label for="recuperarCorreo" class="form-label">Ingresa tu correo registrado</label>
+              <input type="email" class="form-control" id="recuperarCorreo" required />
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">
+                Enviar enlace
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal de confirmacion de recuperacion de contraseña (para no usar un alert, pueden haber alternativas) -->
+  <div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmacionModalLabel">
+            Recuperación de Contraseña
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body" id="confirmacionMensaje">
+          <!-- con js aqui se coloca un mensaje de confirmacion -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            Aceptar
           </button>
-
-          <!-- Links -->
-          <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav ms-auto align-items-lg-center">
-              <li class="nav-item">
-                <a class="nav-link" href="#"
-                  ><i class="bi bi-house"></i>
-                  <span class="d-lg-none">Home</span></a
-                >
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="./filtros.html"
-                  ><i class="bi bi-collection"></i>
-                  <span class="d-lg-none">Catálogo</span></a
-                >
-                <!-- a busqueda con filtros-->
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#loginModal"
-                >
-                  <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#registroModal"
-                  ><i class="bi bi-person-plus"></i> Registrarse</a
-                >
-              </li>
-
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle d-flex align-items-center"
-                  href="#"
-                  id="perfilDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i class="bi bi-person-circle fs-5 me-1"></i>
-                  <span class="d-none d-lg-inline">Mi Perfil</span>
-                </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-end shadow"
-                  aria-labelledby="perfilDropdown"
-                >
-                  <li>
-                    <a class="dropdown-item" href="./perfilUsuario.html"
-                      ><i class="bi bi-person"></i> Ver Perfil</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./favoritos.html"
-                      ><i class="bi bi-heart"></i> Mis Favoritos</a
-                    >
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="./moderador-comentarios-reportados.html"
-                      ><i class="bi bi-chat-dots"></i> Comentarios Reportados</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./moderador-gestion-faq.html"
-                      ><i class="bi bi-question-circle"></i> Gestión FAQ</a
-                    >
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./admin-plataformas.html"
-                      ><i class="bi bi-display"></i> Plataformas</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./admin-generos.html"
-                      ><i class="bi bi-tags"></i> Géneros</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./admin-empresas.html"
-                      ><i class="bi bi-building"></i> Empresas</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./admin-moderadores.html"
-                      ><i class="bi bi-shield"></i> Gestión Moderadores</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./admin-juegos.html"
-                      ><i class="bi bi-joystick"></i> Gestión Juegos</a
-                    >
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a class="dropdown-item text-danger" href="#"
-                      >Cerrar Sesión</a
-                    >
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </header>
-    <main class="container my-4">
-      <div class="container py-5">
-        <h2 class="mb-4 text-center">Buscar Videojuegos</h2>
-
-        <!-- Filtros -->
-        <div class="row mb-4">
-          <div class="col-md-4 mb-2">
-            <input
-              type="text"
-              id="filtroNombre"
-              class="form-control"
-              placeholder="Buscar por nombre..."
-            />
-          </div>
-          <div class="col-md-4 mb-2">
-            <select id="filtroGenero" class="form-select">
-              <option value="">Todos los géneros</option>
-              <option value="Aventura">Aventura</option>
-              <option value="RPG">RPG</option>
-              <option value="Deportes">Deportes</option>
-              <option value="Sandbox">Sandbox</option>
-            </select>
-          </div>
-          <div class="col-md-4 mb-2">
-            <select id="filtroPlataforma" class="form-select">
-              <option value="">Todas las plataformas</option>
-              <option value="PlayStation">PlayStation</option>
-              <option value="PC">PC</option>
-              <option value="Nintendo Switch">Nintendo Switch</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Resultados -->
-        <div class="row" id="contenedorResultados">
-          <div
-            class="col-12 col-md-4 mb-3 card p-0"
-            data-genero="Aventura"
-            data-plataforma="PlayStation"
-          >
-            <a href="detalle.html" target="_blank"
-              ><img
-                src="./img/apex1.jpg"
-                class="card-img-top"
-                alt="The Last of Us"
-              />
-            </a>
-            <div class="card-body">
-              <h5 class="card-title">Apex Legends</h5>
-              <p class="card-text">Respawn Entertainment - FPS - PlayStation</p>
-            </div>
-          </div>
-
-          <div
-            class="col-12 col-md-4 mb-3 card p-0"
-            data-genero="Fps"
-            data-plataforma="Playstation"
-          >
-            <img
-              src="img/315718bce7eed62e3cf3fb02d61b81ff1782d6b6cf850fa4.avif"
-              class="card-img-top"
-              alt="The Last of Us"
-            />
-            <div class="card-body">
-              <h5 class="card-title">The Last of Us</h5>
-              <p class="card-text">Naughty Dog - Aventura - PlayStation</p>
-            </div>
-          </div>
-
-          <div
-            class="col-12 col-md-4 mb-3 card p-0"
-            data-genero="RPG"
-            data-plataforma="PC"
-          >
-            <img
-              src="img/7bp19fsj4g531.webp"
-              class="card-img-top"
-              alt="Cyberpunk 2077"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Cyberpunk 2077</h5>
-              <p class="card-text">CD Projekt - RPG - PC</p>
-            </div>
-          </div>
-
-          <div
-            class="col-12 col-md-4 mb-3 card p-0"
-            data-genero="Deportes"
-            data-plataforma="PC"
-          >
-            <img
-              src="img/easportsfc-24-official-cover-v0-8d71oqtiurbb1.webp"
-              class="card-img-top"
-              alt="FIFA 24"
-            />
-            <div class="card-body">
-              <h5 class="card-title">FIFA 24</h5>
-              <p class="card-text">EA Sports - Deportes - PC</p>
-            </div>
-          </div>
-
-          <div
-            class="col-12 col-md-4 mb-3 card p-0"
-            data-genero="Sandbox"
-            data-plataforma="PC"
-          >
-            <img
-              src="img/d7074117b126b7fcdbf13358137a927a.png"
-              class="card-img-top"
-              alt="Minecraft"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Minecraft</h5>
-              <p class="card-text">Mojang - Sandbox - PC</p>
-            </div>
-          </div>
-
-          <div
-            class="col-12 col-md-4 mb-3 card p-0"
-            data-genero="Aventura"
-            data-plataforma="Nintendo Switch"
-          >
-            <img
-              src="img/MV5BNjI0NTEwZDYtZDhlOC00MGM2LWFlNGItY2U2ZWRkMzk2ODI0XkEyXkFqcGc@._V1_.jpg"
-              class="card-img-top"
-              alt="Zelda"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Zelda: Breath of the Wild</h5>
-              <p class="card-text">Nintendo - Aventura - Nintendo Switch</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-    <footer class="bg-dark text-white mt-4 pt-3 pb-2">
-      <div class="container d-flex justify-content-between align-items-start">
-        <div>
-          <div class="d-flex align-items-center mb-1">
-            <i class="bi bi-controller fs-4 text-primary me-2"></i>
-            <span class="h5 mb-0">UPEGaming</span>
-          </div>
-          <small class="text-white-50">Tu catálogo de videojuegos</small>
-        </div>
-        <div>
-          <h6 class="mb-1">Soporte</h6>
-          <a href="./faqPublico.html" class="text-white text-decoration-none"
-            >Preguntas frecuentes</a
-          >
-        </div>
-      </div>
-      <div class="container text-center mt-3">
-        <small class="text-white"
-          >© 2025 UPEGaming - Todos los derechos reservados</small
-        >
-      </div>
-    </footer>
-
-    <!-- modal de inicio de sesion -->
-    <div
-      class="modal fade"
-      id="loginModal"
-      tabindex="-1"
-      aria-labelledby="loginModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="loginModalLabel">Iniciar Sesión</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Cerrar"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form id="formLoginFake">
-              <div class="mb-3">
-                <label for="correo" class="form-label"
-                  >Correo electrónico</label
-                >
-                <input type="email" class="form-control" id="correo" required />
-              </div>
-              <div class="mb-3">
-                <label for="clave" class="form-label">Contraseña</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="clave"
-                  required
-                />
-              </div>
-              <div
-                id="loginError"
-                class="text-danger mb-3"
-                style="display: none"
-              ></div>
-              <div class="text-end">
-                <button type="submit" class="btn btn-primary">Ingresar</button>
-                <div class="text-center mt-3">
-                  <a
-                    href="#"
-                    data-bs-toggle="modal"
-                    data-bs-target="#recuperarModal"
-                    data-bs-dismiss="modal"
-                  >
-                    ¿Olvidaste tu contraseña?
-                  </a>
-                </div>
-              </div>
-            </form>
-          </div>
         </div>
       </div>
     </div>
-    <!-- modal de registro -->
-    <div
-      class="modal fade"
-      id="registroModal"
-      tabindex="-1"
-      aria-labelledby="registroModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="registroModalLabel">Crear cuenta</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Cerrar"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form
-              id="formRegistro"
-              method="POST"
-              class="needs-validation"
-              action=""
-            >
-              <div class="mb-3">
-                <label for="registroNombre" class="form-label"
-                  >Nombre de usuario</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="registroNombre"
-                  required
-                />
-                <div class="invalid-feedback">
-                  Por favor, el nombre solo debe contener letras.
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="registroCorreo" class="form-label"
-                  >Correo electrónico</label
-                >
-                <input
-                  type="email"
-                  class="form-control"
-                  id="registroCorreo"
-                  required
-                />
-                <div class="invalid-feedback">
-                  Por favor, el email debe ser correcto.
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="registroClave" class="form-label">Contraseña</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="registroClave"
-                  required
-                />
-                <div class="invalid-feedback">
-                  Por favor, la contraseña debe ser una válida.
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="registroConfirmacion" class="form-label"
-                  >Confirmar contraseña</label
-                >
-                <input
-                  type="password"
-                  class="form-control"
-                  id="registroConfirmacion"
-                  required
-                />
-                <div class="invalid-feedback">
-                  Por favor, las contraseñas deben coincidir.
-                </div>
-              </div>
-              <div class="text-end">
-                <button type="submit" class="btn btn-primary">
-                  Registrarse
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- modal de recuperacion de contraseña -->
-    <div
-      class="modal fade"
-      id="recuperarModal"
-      tabindex="-1"
-      aria-labelledby="recuperarModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="recuperarModalLabel">
-              Recuperar Contraseña
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Cerrar"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form id="formRecuperar">
-              <div class="mb-3">
-                <label for="recuperarCorreo" class="form-label"
-                  >Ingresa tu correo registrado</label
-                >
-                <input
-                  type="email"
-                  class="form-control"
-                  id="recuperarCorreo"
-                  required
-                />
-              </div>
-              <div class="text-end">
-                <button type="submit" class="btn btn-primary">
-                  Enviar enlace
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- modal de confirmacion de recuperacion de contraseña (para no usar un alert, pueden haber alternativas) -->
-    <div
-      class="modal fade"
-      id="confirmacionModal"
-      tabindex="-1"
-      aria-labelledby="confirmacionModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="confirmacionModalLabel">
-              Recuperación de Contraseña
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Cerrar"
-            ></button>
-          </div>
-          <div class="modal-body" id="confirmacionMensaje">
-            <!-- con js aqui se coloca un mensaje de confirmacion -->
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-primary"
-              data-bs-dismiss="modal"
-            >
-              Aceptar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+  </div>
 
-    <!-- Modal Reportar -->
-    <div class="modal fade" id="modalReportar" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Reportar Comentario</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Cerrar"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <label for="razonReporte" class="form-label">Motivo:</label>
-            <textarea
-              id="razonReporte"
-              class="form-control"
-              rows="3"
-              placeholder="Motivo..."
-              required
-            ></textarea>
-            <div class="invalid-feedback">El motivo es obligatorio.</div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cancelar
-            </button>
-            <button
-              type="button"
-              id="btnAceptarReportar"
-              class="btn btn-primary"
-            >
-              Aceptar
-            </button>
-          </div>
+  <!-- Modal Reportar -->
+  <div class="modal fade" id="modalReportar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Reportar Comentario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <label for="razonReporte" class="form-label">Motivo:</label>
+          <textarea id="razonReporte" class="form-control" rows="3" placeholder="Motivo..." required></textarea>
+          <div class="invalid-feedback">El motivo es obligatorio.</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button type="button" id="btnAceptarReportar" class="btn btn-primary">
+            Aceptar
+          </button>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Modal Editar -->
-    <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Editar Comentario</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Cerrar"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <input type="text" id="inputEditar" class="form-control" />
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cancelar
-            </button>
-            <button type="button" id="btnAceptarEditar" class="btn btn-primary">
-              Aceptar
-            </button>
-          </div>
+  <!-- Modal Editar -->
+  <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Comentario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="inputEditar" class="form-control" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button type="button" id="btnAceptarEditar" class="btn btn-primary">
+            Aceptar
+          </button>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Modal Eliminar -->
-    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Eliminar Comentario</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Cerrar"
-            ></button>
-          </div>
-          <div class="modal-body">¿Eliminar el comentario?</div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cancelar
-            </button>
-            <button
-              type="button"
-              id="btnConfirmarEliminar"
-              class="btn btn-danger"
-            >
-              Eliminar
-            </button>
-          </div>
+  <!-- Modal Eliminar -->
+  <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Eliminar Comentario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">¿Eliminar el comentario?</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button type="button" id="btnConfirmarEliminar" class="btn btn-danger">
+            Eliminar
+          </button>
         </div>
       </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

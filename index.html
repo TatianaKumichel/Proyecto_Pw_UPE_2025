@@ -1,539 +1,343 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>UPEGaming</title>
-    <!-- Bootstrap 5.3.8 CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
 
-    <!-- Estilado (CSS)-->
-    <link rel="stylesheet" href="./css/estilos.css" />
-    <link rel="stylesheet" href="./css/nav.css" />
-    <!-- Bootstrap JS -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-      defer
-    ></script>
-    <!-- Mi JS -->
-    <script src="./js/script.js" defer></script>
-  </head>
-  <body class="bg-light">
-    <header>
-      <nav
-        class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top shadow-sm"
-      >
-        <div class="container">
-          <!-- Logo -->
-          <a class="navbar-brand d-flex align-items-center" href="#">
-            <!--a home-->
-            <div
-              class="bg-dark text-white rounded p-2 me-2 d-flex align-items-center justify-content-center"
-            >
-              <i class="bi bi-controller"></i>
-            </div>
-            <div>
-              <span class="fw-bold">UPEGaming</span><br />
-              <small class="text-muted d-none d-sm-inline"
-                >Tu catálogo de videojuegos</small
-              >
-            </div>
-          </a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UPEGaming</title>
+  <!-- Bootstrap 5.3.8 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
 
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarContent"
-          >
-            <span class="navbar-toggler-icon"></span>
+  <!-- Estilado (CSS)-->
+  <link rel="stylesheet" href="./css/estilos.css" />
+  <link rel="stylesheet" href="./css/nav.css" />
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
+  <!-- Mi JS -->
+  <script src="./js/script.js" defer></script>
+</head>
+
+<body class="bg-light">
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top shadow-sm">
+      <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand d-flex align-items-center" href="./index.html">
+          <!--a home-->
+          <div class="bg-dark text-white rounded p-2 me-2 d-flex align-items-center justify-content-center">
+            <i class="bi bi-controller"></i>
+          </div>
+          <div>
+            <span class="fw-bold">UPEGaming</span><br />
+            <small class="text-muted d-none d-sm-inline">Tu catálogo de videojuegos</small>
+          </div>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Links -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item">
+              <a class="nav-link" href="./index.html"><i class="bi bi-house"></i>
+                <span class="d-lg-none">Home</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./filtros.html"><i class="bi bi-collection"></i>
+                <span class="d-lg-none">Catálogo</span></a>
+              <!-- a busqueda con filtros-->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registroModal"><i
+                  class="bi bi-person-plus"></i> Registrarse</a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="perfilDropdown" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle fs-5 me-1"></i>
+                <span class="d-none d-lg-inline">Mi Perfil</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="perfilDropdown">
+                <li>
+                  <a class="dropdown-item" href="./perfilUsuario.html"><i class="bi bi-person"></i> Ver Perfil</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./favoritos.html"><i class="bi bi-heart"></i> Mis Favoritos</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./moderador-comentarios-reportados.html"><i
+                      class="bi bi-chat-dots"></i> Comentarios Reportados</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./moderador-gestion-faq.html"><i class="bi bi-question-circle"></i>
+                    Gestión FAQ</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./admin-plataformas.html"><i class="bi bi-display"></i> Plataformas</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./admin-generos.html"><i class="bi bi-tags"></i> Géneros</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./admin-empresas.html"><i class="bi bi-building"></i> Empresas</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./admin-moderadores.html"><i class="bi bi-shield"></i> Gestión
+                    Moderadores</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="./admin-juegos.html"><i class="bi bi-joystick"></i> Gestión Juegos</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item text-danger" href="#">Cerrar Sesión</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!--  contenedor -->
+  <main class="container my-4">
+    <div class="row">
+      <!-- Aqui se ponen los cards de juegos en columnas -->
+      <div class="col-lg-9">
+        <h3 class="mb-4">Catálogo</h3>
+        <div class="row g-4">
+          <!-- cards. Luego podrian ponerse dinamicamente tras conectar con una base de datos... -->
+          <div class="col-12 col-sm-6 col-md-4" data-categoria="aventura">
+            <div class="card h-100">
+              <img src="https://i.3djuegos.com/juegos/17986/palworld/fotos/ficha/palworld-5861112.jpg"
+                class="card-img-top" alt="Juego 1" />
+              <div class="card-body">
+                <h5 class="card-title">Juego 1</h5>
+                <p class="card-text">Descripción.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-4" data-categoria="estrategia">
+            <div class="card h-100">
+              <img
+                src="https://i0.wp.com/www.pcmrace.com/wp-content/uploads/2025/05/Warhammer-40.000-Dawn-of-War-%E2%80%93-Definitive-Edition-key-art-4k.jpg"
+                class="card-img-top" alt="Juego 2" />
+              <div class="card-body">
+                <h5 class="card-title">Juego 2</h5>
+                <p class="card-text">Descripción.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-4" data-categoria="supervivencia">
+            <div class="card h-100">
+              <img
+                src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3008130/b5944c43d563d780614d961ee859f7ce1248c9fa/capsule_616x353.jpg?t=1758717740"
+                class="card-img-top" alt="Juego 3" />
+              <div class="card-body">
+                <h5 class="card-title">Juego 3</h5>
+                <p class="card-text">Descripción.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carousel de imagenes en un costado o debajo acorde al tamaño de imagen -->
+      <aside class="col-lg-3 mt-4 mt-lg-0">
+        <h4>Tendencias</h4>
+        <div id="tendenciasCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="https://upload.wikimedia.org/wikipedia/en/3/32/Kingdom_Come_Deliverance_II.jpg"
+                class="d-block w-100" alt="Tendencia 1" />
+            </div>
+            <div class="carousel-item">
+              <img
+                src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2208810/3667d481acc2a8693153cc978ff8cf6f744e8d63/capsule_616x353.jpg?t=1755181567"
+                class="d-block w-100" alt="Tendencia 2" />
+            </div>
+            <div class="carousel-item">
+              <img src="https://upload.wikimedia.org/wikipedia/en/7/7b/Silent_Hill_f_cover_art.png"
+                class="d-block w-100" alt="Tendencia 3" />
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#tendenciasCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
           </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#tendenciasCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+      </aside>
+    </div>
+  </main>
 
-          <!-- Links -->
-          <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav ms-auto align-items-lg-center">
-              <li class="nav-item">
-                <a class="nav-link" href="#"
-                  ><i class="bi bi-house"></i>
-                  <span class="d-lg-none">Home</span></a
-                >
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="./filtros.html"
-                  ><i class="bi bi-collection"></i>
-                  <span class="d-lg-none">Catálogo</span></a
-                >
-                <!-- a busqueda con filtros-->
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#loginModal"
-                >
-                  <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+  <footer class="bg-dark text-white mt-4 pt-3 pb-2">
+    <div class="container d-flex justify-content-between align-items-start">
+      <div>
+        <div class="d-flex align-items-center mb-1">
+          <i class="bi bi-controller fs-4 text-primary me-2"></i>
+          <span class="h5 mb-0">UPEGaming</span>
+        </div>
+        <small class="text-white-50">Tu catálogo de videojuegos</small>
+      </div>
+      <div>
+        <h6 class="mb-1">Soporte</h6>
+        <a href="./faqPublico.html" class="text-white text-decoration-none">Preguntas frecuentes</a>
+      </div>
+    </div>
+    <div class="container text-center mt-3">
+      <small class="text-white">© 2025 UPEGaming - Todos los derechos reservados</small>
+    </div>
+  </footer>
+
+  <!-- modal de inicio de sesion -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Iniciar Sesión</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formLoginFake">
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control" id="correo" required />
+            </div>
+            <div class="mb-3">
+              <label for="clave" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="clave" required />
+            </div>
+            <div id="loginError" class="text-danger mb-3" style="display: none"></div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Ingresar</button>
+              <div class="text-center mt-3">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#recuperarModal" data-bs-dismiss="modal">
+                  ¿Olvidaste tu contraseña?
                 </a>
-              </li>
-
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#registroModal"
-                  ><i class="bi bi-person-plus"></i> Registrarse</a
-                >
-              </li>
-
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle d-flex align-items-center"
-                  href="#"
-                  id="perfilDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i class="bi bi-person-circle fs-5 me-1"></i>
-                  <span class="d-none d-lg-inline">Mi Perfil</span>
-                </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-end shadow"
-                  aria-labelledby="perfilDropdown"
-                >
-                  <li>
-                    <a class="dropdown-item" href="./perfilUsuario.html"
-                      ><i class="bi bi-person"></i> Ver Perfil</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./favoritos.html"
-                      ><i class="bi bi-heart"></i> Mis Favoritos</a
-                    >
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      href="./moderador-comentarios-reportados.html"
-                      ><i class="bi bi-chat-dots"></i> Comentarios Reportados</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./moderador-gestion-faq.html"
-                      ><i class="bi bi-question-circle"></i> Gestión FAQ</a
-                    >
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./admin-plataformas.html"
-                      ><i class="bi bi-display"></i> Plataformas</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./admin-generos.html"
-                      ><i class="bi bi-tags"></i> Géneros</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./admin-empresas.html"
-                      ><i class="bi bi-building"></i> Empresas</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./admin-moderadores.html"
-                      ><i class="bi bi-shield"></i> Gestión Moderadores</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="./admin-juegos.html"
-                      ><i class="bi bi-joystick"></i> Gestión Juegos</a
-                    >
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a class="dropdown-item text-danger" href="#"
-                      >Cerrar Sesión</a
-                    >
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </header>
-
-    <!--  contenedor -->
-    <main class="container my-4">
-      <div class="row">
-        <!-- Aqui se ponen los cards de juegos en columnas -->
-        <div class="col-lg-9">
-          <h3 class="mb-4">Catálogo</h3>
-          <div class="row g-4">
-            <!-- cards. Luego podrian ponerse dinamicamente tras conectar con una base de datos... -->
-            <div class="col-12 col-sm-6 col-md-4" data-categoria="aventura">
-              <div class="card h-100">
-                <img
-                  src="https://i.3djuegos.com/juegos/17986/palworld/fotos/ficha/palworld-5861112.jpg"
-                  class="card-img-top"
-                  alt="Juego 1"
-                />
-                <div class="card-body">
-                  <h5 class="card-title">Juego 1</h5>
-                  <p class="card-text">Descripción.</p>
-                </div>
               </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4" data-categoria="estrategia">
-              <div class="card h-100">
-                <img
-                  src="https://i0.wp.com/www.pcmrace.com/wp-content/uploads/2025/05/Warhammer-40.000-Dawn-of-War-%E2%80%93-Definitive-Edition-key-art-4k.jpg"
-                  class="card-img-top"
-                  alt="Juego 2"
-                />
-                <div class="card-body">
-                  <h5 class="card-title">Juego 2</h5>
-                  <p class="card-text">Descripción.</p>
-                </div>
-              </div>
-            </div>
-            <div
-              class="col-12 col-sm-6 col-md-4"
-              data-categoria="supervivencia"
-            >
-              <div class="card h-100">
-                <img
-                  src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3008130/b5944c43d563d780614d961ee859f7ce1248c9fa/capsule_616x353.jpg?t=1758717740"
-                  class="card-img-top"
-                  alt="Juego 3"
-                />
-                <div class="card-body">
-                  <h5 class="card-title">Juego 3</h5>
-                  <p class="card-text">Descripción.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Carousel de imagenes en un costado o debajo acorde al tamaño de imagen -->
-        <aside class="col-lg-3 mt-4 mt-lg-0">
-          <h4>Tendencias</h4>
-          <div
-            id="tendenciasCarousel"
-            class="carousel slide"
-            data-bs-ride="carousel"
-          >
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/en/3/32/Kingdom_Come_Deliverance_II.jpg"
-                  class="d-block w-100"
-                  alt="Tendencia 1"
-                />
-              </div>
-              <div class="carousel-item">
-                <img
-                  src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2208810/3667d481acc2a8693153cc978ff8cf6f744e8d63/capsule_616x353.jpg?t=1755181567"
-                  class="d-block w-100"
-                  alt="Tendencia 2"
-                />
-              </div>
-              <div class="carousel-item">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/en/7/7b/Silent_Hill_f_cover_art.png"
-                  class="d-block w-100"
-                  alt="Tendencia 3"
-                />
-              </div>
-            </div>
-            <button
-              class="carousel-control-prev"
-              type="button"
-              data-bs-target="#tendenciasCarousel"
-              data-bs-slide="prev"
-            >
-              <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button
-              class="carousel-control-next"
-              type="button"
-              data-bs-target="#tendenciasCarousel"
-              data-bs-slide="next"
-            >
-              <span class="carousel-control-next-icon"></span>
-            </button>
-          </div>
-        </aside>
-      </div>
-    </main>
-
-    <footer class="bg-dark text-white mt-4 pt-3 pb-2">
-      <div class="container d-flex justify-content-between align-items-start">
-        <div>
-          <div class="d-flex align-items-center mb-1">
-            <i class="bi bi-controller fs-4 text-primary me-2"></i>
-            <span class="h5 mb-0">UPEGaming</span>
-          </div>
-          <small class="text-white-50">Tu catálogo de videojuegos</small>
-        </div>
-        <div>
-          <h6 class="mb-1">Soporte</h6>
-          <a href="./faqPublico.html" class="text-white text-decoration-none"
-            >Preguntas frecuentes</a
-          >
-        </div>
-      </div>
-      <div class="container text-center mt-3">
-        <small class="text-white"
-          >© 2025 UPEGaming - Todos los derechos reservados</small
-        >
-      </div>
-    </footer>
-
-    <!-- modal de inicio de sesion -->
-    <div
-      class="modal fade"
-      id="loginModal"
-      tabindex="-1"
-      aria-labelledby="loginModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="loginModalLabel">Iniciar Sesión</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Cerrar"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form id="formLoginFake">
-              <div class="mb-3">
-                <label for="correo" class="form-label"
-                  >Correo electrónico</label
-                >
-                <input type="email" class="form-control" id="correo" required />
-              </div>
-              <div class="mb-3">
-                <label for="clave" class="form-label">Contraseña</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="clave"
-                  required
-                />
-              </div>
-              <div
-                id="loginError"
-                class="text-danger mb-3"
-                style="display: none"
-              ></div>
-              <div class="text-end">
-                <button type="submit" class="btn btn-primary">Ingresar</button>
-                <div class="text-center mt-3">
-                  <a
-                    href="#"
-                    data-bs-toggle="modal"
-                    data-bs-target="#recuperarModal"
-                    data-bs-dismiss="modal"
-                  >
-                    ¿Olvidaste tu contraseña?
-                  </a>
-                </div>
-              </div>
-            </form>
-          </div>
+          </form>
         </div>
       </div>
     </div>
-    <!-- modal de registro -->
-    <div
-      class="modal fade"
-      id="registroModal"
-      tabindex="-1"
-      aria-labelledby="registroModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="registroModalLabel">Crear cuenta</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Cerrar"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form
-              id="formRegistro"
-              method="POST"
-              class="needs-validation"
-              action=""
-            >
-              <div class="mb-3">
-                <label for="registroNombre" class="form-label"
-                  >Nombre de usuario</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="registroNombre"
-                  required
-                />
-                <div class="invalid-feedback">
-                  Por favor, el nombre solo debe contener letras.
-                </div>
+  </div>
+  <!-- modal de registro -->
+  <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="registroModalLabel">Crear cuenta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formRegistro" method="POST" class="needs-validation" action="">
+            <div class="mb-3">
+              <label for="registroNombre" class="form-label">Nombre de usuario</label>
+              <input type="text" class="form-control" id="registroNombre" required />
+              <div class="invalid-feedback">
+                Por favor, el nombre solo debe contener letras.
               </div>
-              <div class="mb-3">
-                <label for="registroCorreo" class="form-label"
-                  >Correo electrónico</label
-                >
-                <input
-                  type="email"
-                  class="form-control"
-                  id="registroCorreo"
-                  required
-                />
-                <div class="invalid-feedback">
-                  Por favor, el email debe ser correcto.
-                </div>
+            </div>
+            <div class="mb-3">
+              <label for="registroCorreo" class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control" id="registroCorreo" required />
+              <div class="invalid-feedback">
+                Por favor, el email debe ser correcto.
               </div>
-              <div class="mb-3">
-                <label for="registroClave" class="form-label">Contraseña</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="registroClave"
-                  required
-                />
-                <div class="invalid-feedback">
-                  Por favor, la contraseña debe ser una válida.
-                </div>
+            </div>
+            <div class="mb-3">
+              <label for="registroClave" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="registroClave" required />
+              <div class="invalid-feedback">
+                Por favor, la contraseña debe ser una válida.
               </div>
-              <div class="mb-3">
-                <label for="registroConfirmacion" class="form-label"
-                  >Confirmar contraseña</label
-                >
-                <input
-                  type="password"
-                  class="form-control"
-                  id="registroConfirmacion"
-                  required
-                />
-                <div class="invalid-feedback">
-                  Por favor, las contraseñas deben coincidir.
-                </div>
+            </div>
+            <div class="mb-3">
+              <label for="registroConfirmacion" class="form-label">Confirmar contraseña</label>
+              <input type="password" class="form-control" id="registroConfirmacion" required />
+              <div class="invalid-feedback">
+                Por favor, las contraseñas deben coincidir.
               </div>
-              <div class="text-end">
-                <button type="submit" class="btn btn-primary">
-                  Registrarse
-                </button>
-              </div>
-            </form>
-          </div>
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">
+                Registrarse
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-    <!-- modal de recuperacion de contraseña -->
-    <div
-      class="modal fade"
-      id="recuperarModal"
-      tabindex="-1"
-      aria-labelledby="recuperarModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="recuperarModalLabel">
-              Recuperar Contraseña
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Cerrar"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form id="formRecuperar">
-              <div class="mb-3">
-                <label for="recuperarCorreo" class="form-label"
-                  >Ingresa tu correo registrado</label
-                >
-                <input
-                  type="email"
-                  class="form-control"
-                  id="recuperarCorreo"
-                  required
-                />
-              </div>
-              <div class="text-end">
-                <button type="submit" class="btn btn-primary">
-                  Enviar enlace
-                </button>
-              </div>
-            </form>
-          </div>
+  </div>
+  <!-- modal de recuperacion de contraseña -->
+  <div class="modal fade" id="recuperarModal" tabindex="-1" aria-labelledby="recuperarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="recuperarModalLabel">
+            Recuperar Contraseña
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formRecuperar">
+            <div class="mb-3">
+              <label for="recuperarCorreo" class="form-label">Ingresa tu correo registrado</label>
+              <input type="email" class="form-control" id="recuperarCorreo" required />
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">
+                Enviar enlace
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-    <!-- modal de confirmacion de recuperacion de contraseña (para no usar un alert, pueden haber alternativas) -->
-    <div
-      class="modal fade"
-      id="confirmacionModal"
-      tabindex="-1"
-      aria-labelledby="confirmacionModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="confirmacionModalLabel">
-              Recuperación de Contraseña
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Cerrar"
-            ></button>
-          </div>
-          <div class="modal-body" id="confirmacionMensaje">
-            <!-- con js aqui se coloca un mensaje de confirmacion -->
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-primary"
-              data-bs-dismiss="modal"
-            >
-              Aceptar
-            </button>
-          </div>
+  </div>
+  <!-- modal de confirmacion de recuperacion de contraseña (para no usar un alert, pueden haber alternativas) -->
+  <div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmacionModalLabel">
+            Recuperación de Contraseña
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body" id="confirmacionMensaje">
+          <!-- con js aqui se coloca un mensaje de confirmacion -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            Aceptar
+          </button>
         </div>
       </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

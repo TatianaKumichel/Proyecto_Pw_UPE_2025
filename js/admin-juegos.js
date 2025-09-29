@@ -36,6 +36,9 @@ function crearFilaJuego(juego) {
       <button class="btn btn-outline-danger btn-sm btn-eliminar">
         <i class="bi bi-trash"></i>
       </button>
+      <button class="btn btn-outline-success btn-sm btn-publicar">
+                <i class="bi bi-check-circle"></i>
+              </button>
     </td>
   `;
 
