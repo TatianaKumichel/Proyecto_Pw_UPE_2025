@@ -74,7 +74,7 @@ function categoriaClick(categoria) {
 // el nombre que muestra es el valor de la variable del objeto estado
 // especificamente nombreUsuario
 function actualizarMenu(estado, menuUsuario, perfilIcono) {
-  const cerrarSesionBoton = document.getElementById("cerrarSesion");
+  
   if (estado.usuarioLogeado) {
     // con .src indico que la ruta de la imagen que quiero referenciar
     // es la de la imagen del usuario...
@@ -86,6 +86,7 @@ function actualizarMenu(estado, menuUsuario, perfilIcono) {
             <li><button class="dropdown-item text-danger" id="cerrarSesion">Cerrar sesión</button></li>
         `;
     // logica de cierre de sesion, que pasa de usuario logeado a deslogeado
+    const cerrarSesionBoton = document.getElementById("cerrarSesion");
     if (cerrarSesionBoton) {
       cerrarSesionBoton.addEventListener("click", cerrarSesionSubmit);
     }
@@ -127,7 +128,7 @@ function manejarLogin(e, estado, menuUsuario, perfilIcono) {
     // este metodo (split) divide en un arreglo el string del email
     // entonces toma la primera posicion [0] que es lo que se encuentra
     // previo al @
-    estado.nombreUsuario = correo.split("@")[0];
+    estado.nombreUsuario = correoValue.split("@")[0];
     bootstrap.Modal.getInstance(document.getElementById("loginModal")).hide();
     actualizarMenu(estado, menuUsuario, perfilIcono);
 
