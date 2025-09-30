@@ -13,7 +13,7 @@ window.onload = function () {
   const estado = {
     usuarioLogeado: false,
     nombreUsuario: "",
-/*     fotoPerfilLogeado: "./img/usuario_logeado.jpg",
+    /*     fotoPerfilLogeado: "./img/usuario_logeado.jpg",
     fotoPerfilDeslogeado: "./img/user_gray.png", */
   };
 
@@ -54,8 +54,6 @@ window.onload = function () {
       categoriaClick(this.dataset.categoria);
     });
   });
-
-
 };
 
 // funcion para filtrar juegos por categoria
@@ -81,7 +79,9 @@ function actualizarMenu(estado) {
   if (estado.usuarioLogeado) {
     nombrePerfil.textContent = estado.nombreUsuario;
   } else {
-    nombrePerfil.textContent = "Mi Perfil";
+    if (nombrePerfil) {
+      nombrePerfil.textContent = "Mi Perfil";
+    }
   }
   const cerrarSesionA = document.getElementById("cerrarSesion");
   if (cerrarSesionA) {
