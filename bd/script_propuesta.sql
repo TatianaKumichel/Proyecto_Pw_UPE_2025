@@ -1,0 +1,127 @@
+-- base de datos
+CREATE DATABASE IF NOT EXISTS UPEGaming
+  DEFAULT CHARACTER SET utf8mb4
+  -- case insensitive
+  DEFAULT COLLATE utf8mb4_general_ci;
+
+USE UPEGaming;
+
+-- TABLAS
+
+CREATE TABLE ROL (
+  id_rol INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE USUARIO (
+  id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  rol_id INT NOT NULL,
+  nombre VARCHAR(100),
+  apellido VARCHAR(100),
+  fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+  estado ENUM('activo','restringido') DEFAULT 'activo',
+  restriccion_hasta DATETIME DEFAULT NULL,
+  FOREIGN KEY (rol_id) REFERENCES ROL(id_rol)
+);
+
+CREATE TABLE EMPRESA (
+  id_empresa INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  sitio_web VARCHAR(150)
+);
+
+CREATE TABLE PLATAFORMA (
+  id_plataforma INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE GENERO (
+  id_genero INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE JUEGO (
+  id_juego INT AUTO_INCREMENT PRIMARY KEY,
+  titulo VARCHAR(150) NOT NULL,
+  descripcion TEXT,
+  fecha_lanzamiento DATE,
+  id_empresa INT NOT NULL,
+  imagen_portada VARCHAR(255),
+  FOREIGN KEY (id_empresa) REFERENCES EMPRESA(id_empresa)
+);
+
+CREATE TABLE JUEGO_GENERO (
+  id_juego INT NOT NULL,
+  id_genero INT NOT NULL,
+  PRIMARY KEY (id_juego, id_genero),
+  FOREIGN KEY (id_juego) REFERENCES JUEGO(id_juego) ON DELETE CASCADE,
+  FOREIGN KEY (id_genero) REFERENCES GENERO(id_genero) ON DELETE CASCADE
+);
+
+CREATE TABLE JUEGO_PLATAFORMA (
+  id_juego INT NOT NULL,
+  id_plataforma INT NOT NULL,
+  PRIMARY KEY (id_juego, id_plataforma),
+  FOREIGN KEY (id_juego) REFERENCES JUEGO(id_juego) ON DELETE CASCADE,
+  FOREIGN KEY (id_plataforma) REFERENCES PLATAFORMA(id_plataforma) ON DELETE CASCADE
+);
+
+CREATE TABLE FAVORITO (
+  id_usuario INT NOT NULL,
+  id_juego INT NOT NULL,
+  fecha_agregado DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_usuario, id_juego),
+  FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario) ON DELETE CASCADE,
+  FOREIGN KEY (id_juego) REFERENCES JUEGO(id_juego) ON DELETE CASCADE
+);
+
+CREATE TABLE CALIFICACION (
+  id_usuario INT NOT NULL,
+  id_juego INT NOT NULL,
+  puntuacion TINYINT NOT NULL CHECK (puntuacion BETWEEN 0 AND 5),
+  fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_usuario, id_juego),
+  FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario) ON DELETE CASCADE,
+  FOREIGN KEY (id_juego) REFERENCES JUEGO(id_juego) ON DELETE CASCADE
+);
+
+CREATE TABLE COMENTARIO (
+  id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+  id_usuario INT NOT NULL,
+  id_juego INT NOT NULL,
+  contenido TEXT NOT NULL,
+  fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+  estado ENUM('activo','reportado','eliminado') DEFAULT 'activo',
+  FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario) ON DELETE CASCADE,
+  FOREIGN KEY (id_juego) REFERENCES JUEGO(id_juego) ON DELETE CASCADE
+);
+
+CREATE TABLE REPORTE_COMENTARIO (
+  id_reporte INT AUTO_INCREMENT PRIMARY KEY,
+  id_comentario INT NOT NULL,
+  id_moderador INT NOT NULL,
+  fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+  accion ENUM('advertencia','eliminar','ignorar','restringir_usuario') NOT NULL,
+  FOREIGN KEY (id_comentario) REFERENCES COMENTARIO(id_comentario) ON DELETE CASCADE,
+  FOREIGN KEY (id_moderador) REFERENCES USUARIO(id_usuario)
+);
+
+CREATE TABLE FAQ (
+  id_faq INT AUTO_INCREMENT PRIMARY KEY,
+  pregunta VARCHAR(255) NOT NULL,
+  respuesta TEXT,
+  visible BOOLEAN DEFAULT TRUE,
+  id_autor INT NOT NULL,
+  fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_autor) REFERENCES USUARIO(id_usuario)
+);
+
+CREATE TABLE JUEGO_IMAGEN (
+  id_imagen INT AUTO_INCREMENT PRIMARY KEY,
+  id_juego INT NOT NULL,
+  url_imagen VARCHAR(255) NOT NULL,
+  FOREIGN KEY (id_juego) REFERENCES JUEGO(id_juego) ON DELETE CASCADE
+);

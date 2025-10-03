@@ -1,0 +1,45 @@
+notas XAMPP
+
+1. Iniciar el servidor MySQL en XAMPP
+En el Panel de Control de XAMPP.
+start Apache
+start MySQL
+
+2. crear bases de datos, tablas y ejecutar consultas SQL
+interfaz web phpMyAdmin 
+Desde el panel XAMPP, boton Admin de MySQL abre http://localhost/phpmyadmin/ en el navegador.
+
+---
+opcional por linea de comandos
+usuario root 
+mysql -u root -p
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'un_password';
+
+---
+CREATE DATABASE UPEGaming;
+USE UPEGaming;
+SHOW TABLES;
+
+---
+uso en php 
+
+$conexion = new mysqli("localhost", "root", "un_password", "UPEGaming");
+
+---
+crear un .php con la conexion, para incluir en las paginas:
+
+<?php
+$host = "localhost";
+$user = "root";
+$pass = ""; // la que se haya creado 
+$db   = "UPEGaming";
+
+$conn = new mysqli($host, $user, $pass, $db);
+
+if ($conn->connect_error) {
+    die("Error de conexion: " . $conn->connect_error);
+}
+?>
+
+
