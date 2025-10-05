@@ -5,6 +5,7 @@ session_start();
 /* 
  El rol se define en el login (usuario, moderador, admin, visitante (default))
  se usa para mostrar/ocultar opciones del menu
+ Debatir si el admin puede tener acceso a todas las funcionalidades
  */
 $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : 'visitante';
 
@@ -20,7 +21,7 @@ $nombreUsuario = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : 'Mi perfil';
     moderador: Ya esta logueado, oculto registarse e iniciar sesion. Ve catalogo?, perfil?, gestion comentarios y FAQ.
     admin: Ya esta logueado, oculto registarse e iniciar sesion. Ve catalogo?, perfil?, gestiones admin.
 */
-$rol = 'visitante';
+$rol = 'usuario';
 $nombreUsuario = 'Pepe';
 ?>
 
