@@ -12,7 +12,7 @@
     </div>
     <div>
         <h6 class="mb-1">Soporte</h6>
-        <a href="./faqPublico.html" class="text-white text-decoration-none"
+        <a href="./faqPublico.php" class="text-white text-decoration-none"
         >Preguntas frecuentes</a
         >
     </div>
