@@ -96,14 +96,20 @@ function ValidarGuardarFAQ(event) {
 
 
 function CargarFAQs() {
-
     fetch("./bd/gestion-faqs/obtener-FAQS.php")
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Error en la respuesta del servidor");
+            }
+            return response.json();
+        })
         .then(data => {
             MostrarFAQs(data);
         })
-        .catch(error => console.error("Error al cargar FAQs:", error));
-    MostrarError("Ocurrió un error al cargar las preguntas frecuentes. Verifique su conexión o inténtelo más tarde.");
+        .catch(error => {
+            console.error("Error al cargar FAQs:", error);
+            MostrarError("Ocurrió un error al cargar las preguntas frecuentes. Verifique su conexión o inténtelo más tarde.");
+        });
 }
 
 async function CargarFAQPorId(id) {
