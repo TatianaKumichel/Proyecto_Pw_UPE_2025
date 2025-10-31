@@ -17,7 +17,7 @@
   <main class="container my-4">
     <div class="container py-4">
       <div class="row">
-        <div id="contenedor-faqs" class="col-md-9 col-lg-10 p-4">
+        <div class="col-md-9 col-lg-10 p-4">
           <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
               <h3 class="mb-0">Gestión de Preguntas Frecuentes</h3>
@@ -30,67 +30,12 @@
             </button>
           </div>
 
-          <div class="card faq-card mb-4 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-question-circle me-1 text-primary"></i>¿Cómo
-                puedo cambiar mi contraseña?
-              </h5>
-              <p class="card-text text-muted">
-                Puedes cambiar tu contraseña desde la sección de configuración
-                en tu perfil.
-              </p>
-              <div class="d-flex gap-2">
-                <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarFAQ">
-                  <i class="bi bi-pencil-square"></i> Editar
-                </button>
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar">
-                  <i class="bi bi-trash"></i>Eliminar
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="card faq-card mb-4 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-question-circle me-1 text-primary"></i>¿Cómo
-                contacto con soporte?
-              </h5>
-              <p class="card-text text-muted">
-                Puedes enviar un correo a soporte@ejemplo.com.
-              </p>
-              <div class="d-flex gap-2">
-                <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarFAQ">
-                  <i class="bi bi-pencil-square"></i>Editar
-                </button>
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar">
-                  <i class="bi bi-trash"></i>Eliminar
-                </button>
-              </div>
-            </div>
-          </div>
+          <!--FAQS cargadas  con ajax-->
+          <div id="contenedor-faqs"></div>
 
-          <div class="card faq-card mb-4 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-question-circle me-1 text-primary"></i>¿Cómo
-                funciona el sistema de favoritos?
-              </h5>
-              <p class="card-text text-muted">
-                Puedes agregar juegos a tus favoritos haciendo clic en el
-                corazón en la tarjeta del juego. Luego puedes ver todos tus
-                favoritos en tu perfil.
-              </p>
-              <div class="d-flex gap-2">
-                <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarFAQ">
-                  <i class="bi bi-pencil-square"></i> Editar
-                </button>
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar">
-                  <i class="bi bi-trash"></i>Eliminar
-                </button>
-              </div>
-            </div>
-          </div>
+
+
+
         </div>
       </div>
     </div>
@@ -102,8 +47,7 @@
     ?>
   </footer>
 
-  <!-- modal para crear una pregunta frecuente, en un futuro se utilizara tambien para editar
-       y se mostrara la pregunta y respuesta actual-->
+  <!-- modal crear/editar-->
 
   <div class="modal fade" id="modalNuevaFAQ">
     <div class="modal-dialog modal-dialog-centered">
@@ -115,7 +59,7 @@
 
         <form id="formNuevaFAQ">
           <div class="modal-body">
-            <p class="text-muted">Crea una nueva pregunta frecuente</p>
+            <p class="text-muted" id="descripcionForm">Crea una nueva pregunta frecuente</p>
             <div class="mb-3">
               <label for="pregunta">Pregunta</label>
               <input type="text" id="pregunta" class="form-control" placeholder="Escribe la pregunta..." />
@@ -143,8 +87,8 @@
       </div>
     </div>
   </div>
-  <!--modal para confirmar eliminacion , todavia no se realiza -->
-  <div class="modal fade" id="modalEliminar">
+  <!--modal para confirmar eliminacion  -->
+  <div class="modal fade" id="modalEliminarFAQ">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -159,13 +103,18 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             Cancelar
           </button>
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
             Eliminar
           </button>
         </div>
       </div>
     </div>
   </div>
+
+  <?php
+  include './componentes/modal_exito.php';
+  include './componentes/modal_error.php';
+  ?>
 </body>
 
 </html>
