@@ -3,7 +3,6 @@
 
 <head>
   <?php require "./inc/head.php"; ?>
-  <link rel="stylesheet" href="css/admin-generos.css" />
   <script src="./js/admin-generos.js" defer></script>
 </head>
 
@@ -13,19 +12,22 @@
   </header>
 
   <main class="container my-4">
-    <h2 class="mb-4">Gestión de Géneros</h2>
+    <h2 class="mb-4">Administrar Géneros</h2>
 
+    <!-- Mensaje de error general -->
     <div id="divErroresGenerales" class="alert alert-danger d-none" role="alert"></div>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3 class="h5">Panel de géneros</h3>
-      <button id="btnAgregarGenero" class="btn btn-primary">
-        <i class="bi bi-plus-lg me-1"></i> Nuevo Género
+    <!-- Botón agregar -->
+    <div class="mb-3">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalGenero"
+        id="btnNuevoGenero">
+        <i class="bi bi-plus-circle"></i> Nuevo Género
       </button>
     </div>
 
-    <div class="table-responsive shadow rounded">
-      <table class="table table-striped align-middle text-center">
+    <!-- Tabla -->
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle text-center">
         <thead class="table-dark">
           <tr>
             <th>ID</th>
@@ -33,9 +35,7 @@
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody id="tablaGeneros">
-          <!-- Se cargan los géneros vía JS -->
-        </tbody>
+        <tbody id="tablaGeneros"></tbody>
       </table>
     </div>
   </main>
@@ -44,27 +44,26 @@
     <?php require "./inc/footer.php"; ?>
   </footer>
 
-  <!-- Modal Agregar/Editar Género -->
-  <div class="modal fade" id="modalGenero" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+  <!-- Modal de Alta/Edición -->
+  <div class="modal fade" id="modalGenero" tabindex="-1" aria-labelledby="modalGeneroLabel" aria-hidden="true">
+    <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalGeneroTitle">Nuevo Género</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-        <form id="formGenero">
+        <form id="formGenero" novalidate>
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalGeneroLabel">Nuevo Género</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
           <div class="modal-body">
+            <input type="hidden" id="idGenero" name="id_genero">
             <div class="mb-3">
-              <label for="nombreGeneroModal" class="form-label">Nombre del género</label>
-              <input type="text" class="form-control" id="nombreGeneroModal" placeholder="Ej: Acción, Aventura..."
-                required>
-              <div class="invalid-feedback" id="errorNombreModal"></div>
+              <label for="nombre" class="form-label">Nombre del género</label>
+              <input type="text" class="form-control" id="nombre" name="nombre" required minlength="3">
+              <div class="invalid-feedback">El nombre debe tener al menos 3 caracteres.</div>
             </div>
-            <input type="hidden" id="idGeneroModal" value="">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary" id="btnGuardarGenero">💾 Guardar</button>
+            <button type="submit" class="btn btn-primary" id="btnGuardarGenero">Guardar</button>
           </div>
         </form>
       </div>
@@ -72,21 +71,17 @@
   </div>
 
   <!-- Modal Confirmar Eliminación -->
-  <div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+  <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">
-            <i class="bi bi-exclamation-triangle-fill text-warning"></i> Confirmar eliminación
-          </h5>
+          <h5 class="modal-title text-danger"><i class="bi bi-trash-fill"></i> Eliminar Género</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
-        <div class="modal-body">
-          ¿Estás seguro de eliminar este género? Esta acción no se puede deshacer.
-        </div>
+        <div class="modal-body">¿Estás seguro de eliminar este género?</div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-danger" id="btnConfirmarEliminarGenero">Eliminar</button>
+          <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
         </div>
       </div>
     </div>
