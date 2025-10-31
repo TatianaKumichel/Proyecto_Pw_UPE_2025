@@ -1,83 +1,237 @@
-// --- ELEMENTOS PRINCIPALES ---
-const btnAgregarGenero = document.getElementById("btnAgregarGenero");
-const formGenero = document.getElementById("formGenero");
-const cancelarGenero = document.getElementById("cancelarGenero");
-const tablaGeneros = document.getElementById("tablaGeneros");
-const nombreGenero = document.getElementById("nombreGenero");
+window.onload = function () {
+  var btnAgregar = document.getElementById("btnAgregarGenero");
+  var formGenero = document.getElementById("formGenero");
+  var btnConfirmarEliminar = document.getElementById(
+    "btnConfirmarEliminarGenero"
+  );
+  var divErrores = document.getElementById("divErroresGenerales");
 
-let nextId = tablaGeneros.children.length + 1;
-let filaEditando = null;
+  // Abrir modal nuevo género
+  btnAgregar.addEventListener("click", function () {
+    abrirModalGenero();
+  });
 
-// --- FUNCIONES AUXILIARES ---
-function crearFilaGenero(genero) {
-  const tr = document.createElement("tr");
+  // Guardar género (insert o update)
+  formGenero.addEventListener("submit", function (e) {
+    e.preventDefault();
+    guardarGenero();
+  });
 
-  tr.innerHTML = `
-    <td>${genero.id}</td>
-    <td>${genero.nombre}</td>
-    <td>
-      <button class="btn btn-outline-warning btn-sm me-1 btn-editar">
-        <i class="bi bi-pencil-square"></i>
-      </button>
-      <button class="btn btn-outline-danger btn-sm me-1 btn-eliminar">
-        <i class="bi bi-trash"></i>
-      </button>
-    </td>
-  `;
+  // Confirmar eliminación
+  btnConfirmarEliminar.addEventListener("click", function () {
+    eliminarGenero();
+  });
 
-  asignarEventosFila(tr, genero);
-  return tr;
+  cargarGeneros();
+};
+
+// --- FUNCIONES ---
+
+function mostrarError(element, mensaje) {
+  element.classList.add("is-invalid");
+  element.nextElementSibling.textContent = mensaje;
 }
 
-// --- ASIGNAR EVENTOS A UNA FILA ---
-function asignarEventosFila(tr, genero) {
-  tr.querySelector(".btn-eliminar").addEventListener("click", () => {
-    tr.remove();
-    if (filaEditando === tr) filaEditando = null;
-  });
-
-  tr.querySelector(".btn-editar").addEventListener("click", () => {
-    formGenero.classList.remove("d-none");
-    filaEditando = tr;
-    nombreGenero.value = tr.querySelector("td:nth-child(2)").textContent;
-  });
+function limpiarError(element) {
+  element.classList.remove("is-invalid");
+  element.nextElementSibling.textContent = "";
 }
 
-// --- INICIALIZAR FILAS EXISTENTES ---
-Array.from(tablaGeneros.children).forEach((tr) => {
-  asignarEventosFila(tr, {
-    nombre: tr.querySelector("td:nth-child(2)").textContent,
-  });
-});
-
-// --- EVENTOS ---
-btnAgregarGenero.addEventListener("click", () => {
-  formGenero.classList.toggle("d-none");
-  formGenero.reset();
-  filaEditando = null;
-});
-
-formGenero.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  if (filaEditando) {
-    // Editar fila existente
-    filaEditando.querySelector("td:nth-child(2)").textContent =
-      nombreGenero.value;
+function mostrarErroresGenerales(errores, divErrores) {
+  if (errores) {
+    divErrores.textContent = errores;
+    divErrores.classList.remove("d-none");
   } else {
-    // Agregar nuevo género
-    const nuevoGenero = { id: nextId++, nombre: nombreGenero.value };
-    const fila = crearFilaGenero(nuevoGenero);
-    tablaGeneros.appendChild(fila);
+    divErrores.textContent = "";
+    divErrores.classList.add("d-none");
+  }
+}
+
+// Cargar géneros desde getGenero.php
+function cargarGeneros() {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "inc/getGenero.php", true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      try {
+        var data = JSON.parse(xhr.responseText);
+        var tbody = document.getElementById("tablaGeneros");
+        tbody.innerHTML = "";
+        for (var i = 0; i < data.length; i++) {
+          var fila = document.createElement("tr");
+
+          var tdId = document.createElement("td");
+          tdId.textContent = data[i].id_genero;
+
+          var tdNombre = document.createElement("td");
+          tdNombre.textContent = data[i].nombre;
+
+          var tdAcciones = document.createElement("td");
+          var divAcciones = document.createElement("div");
+          divAcciones.className = "d-flex justify-content-center gap-1";
+
+          var btnEditar = document.createElement("button");
+          btnEditar.className = "btn btn-outline-warning btn-sm";
+          btnEditar.title = "Editar";
+          btnEditar.innerHTML = '<i class="bi bi-pencil-square"></i>';
+          btnEditar.addEventListener(
+            "click",
+            (function (id, nombre) {
+              return function () {
+                abrirModalGenero(id, nombre);
+              };
+            })(data[i].id_genero, data[i].nombre)
+          );
+
+          var btnEliminar = document.createElement("button");
+          btnEliminar.className = "btn btn-outline-danger btn-sm";
+          btnEliminar.title = "Eliminar";
+          btnEliminar.innerHTML = '<i class="bi bi-trash"></i>';
+          btnEliminar.addEventListener(
+            "click",
+            (function (id) {
+              return function () {
+                abrirModalEliminarGenero(id);
+              };
+            })(data[i].id_genero)
+          );
+
+          divAcciones.appendChild(btnEditar);
+          divAcciones.appendChild(btnEliminar);
+          tdAcciones.appendChild(divAcciones);
+
+          fila.appendChild(tdId);
+          fila.appendChild(tdNombre);
+          fila.appendChild(tdAcciones);
+
+          tbody.appendChild(fila);
+        }
+      } catch (e) {
+        mostrarErroresGenerales(
+          "Error cargando géneros",
+          document.getElementById("divErroresGenerales")
+        );
+      }
+    }
+  };
+  xhr.send();
+}
+
+// Abrir modal agregar/editar
+function abrirModalGenero(id, nombre) {
+  var modalEl = document.getElementById("modalGenero");
+  var modal = new bootstrap.Modal(modalEl);
+  var inputNombre = document.getElementById("nombreGeneroModal");
+  var inputId = document.getElementById("idGeneroModal");
+  limpiarError(inputNombre);
+
+  if (id) {
+    document.getElementById("modalGeneroTitle").textContent = "Editar Género";
+    inputNombre.value = nombre;
+    inputId.value = id;
+  } else {
+    document.getElementById("modalGeneroTitle").textContent = "Nuevo Género";
+    inputNombre.value = "";
+    inputId.value = "";
   }
 
-  formGenero.reset();
-  formGenero.classList.add("d-none");
-  filaEditando = null;
-});
+  modal.show();
+}
 
-cancelarGenero.addEventListener("click", () => {
-  formGenero.reset();
-  formGenero.classList.add("d-none");
-  filaEditando = null;
-});
+// Abrir modal eliminar
+var generoAEliminar = null;
+function abrirModalEliminarGenero(id) {
+  generoAEliminar = id;
+  var modal = new bootstrap.Modal(
+    document.getElementById("modalConfirmarEliminar")
+  );
+  modal.show();
+}
+
+// Guardar género
+function guardarGenero() {
+  var inputNombre = document.getElementById("nombreGeneroModal");
+  var inputId = document.getElementById("idGeneroModal");
+  var nombre = inputNombre.value.trim();
+  var id = inputId.value;
+
+  if (nombre === "") {
+    mostrarError(inputNombre, "Nombre obligatorio");
+    return;
+  }
+  limpiarError(inputNombre);
+
+  var xhr = new XMLHttpRequest();
+  var url = id ? "inc/updateGenero.php" : "inc/insertGenero.php";
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      try {
+        var res = JSON.parse(xhr.responseText);
+        if (res.ok) {
+          var modal = bootstrap.Modal.getInstance(
+            document.getElementById("modalGenero")
+          );
+          modal.hide();
+          cargarGeneros();
+          mostrarErroresGenerales(
+            "",
+            document.getElementById("divErroresGenerales")
+          );
+        } else {
+          mostrarErroresGenerales(
+            res.error,
+            document.getElementById("divErroresGenerales")
+          );
+        }
+      } catch (e) {
+        mostrarErroresGenerales(
+          "Respuesta inválida del servidor",
+          document.getElementById("divErroresGenerales")
+        );
+      }
+    }
+  };
+  var params = "nombre=" + encodeURIComponent(nombre);
+  if (id) params += "&id_genero=" + encodeURIComponent(id);
+  xhr.send(params);
+}
+
+// Eliminar género
+function eliminarGenero() {
+  if (!generoAEliminar) return;
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "inc/delGenero.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      try {
+        var res = JSON.parse(xhr.responseText);
+        if (res.ok) {
+          var modal = bootstrap.Modal.getInstance(
+            document.getElementById("modalConfirmarEliminar")
+          );
+          modal.hide();
+          cargarGeneros();
+          generoAEliminar = null;
+          mostrarErroresGenerales(
+            "",
+            document.getElementById("divErroresGenerales")
+          );
+        } else {
+          mostrarErroresGenerales(
+            res.error,
+            document.getElementById("divErroresGenerales")
+          );
+        }
+      } catch (e) {
+        mostrarErroresGenerales(
+          "Respuesta inválida del servidor",
+          document.getElementById("divErroresGenerales")
+        );
+      }
+    }
+  };
+  xhr.send("id_genero=" + encodeURIComponent(generoAEliminar));
+}
