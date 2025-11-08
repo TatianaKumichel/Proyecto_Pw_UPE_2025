@@ -1,105 +1,146 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
+
+<head>
+  <?php
+  require "./inc/head.php";
+  ?>
+  <link rel="stylesheet" href="./css/admin-empresas.css" />
+  <script defer src="./js/admin-empresas.js"></script>
+</head>
+
+<body class="d-flex flex-column min-vh-100 bg-light">
+  <header>
     <?php
-    require "./inc/head.php";
+    require "./inc/menu.php";
     ?>
-    <link rel="stylesheet" href="./css/admin-empresas.css" />
-    <script src="./js/admin-empresas.js" defer></script>
-  </head>
+  </header>
 
-  <body class="d-flex flex-column min-vh-100 bg-light">
-    <header>
-      <?php
-      require "./inc/menu.php";
-      ?>
-    </header>
+  <div class=" container py-4 ">
 
-    <!-- Espaciador para navbar fija -->
-    <div style="margin-top: 70px"></div>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
 
-    <!-- Main content -->
-    <main class="container my-4 flex-fill">
-      <h1 class="mb-4 text-center">📋 Gestión de Empresas</h1>
+      <div class="d-flex align-items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-building2-icon lucide-building-2">
+          <path d="M10 12h4" />
+          <path d="M10 8h4" />
+          <path d="M14 21v-3a2 2 0 0 0-4 0v3" />
+          <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" />
+          <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" />
+        </svg>
 
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="h4">Panel de Empresas</h2>
-        <button id="btnAgregarEmpresa" class="btn btn-primary">
-          ➕ Agregar Empresa
+        <div>
+          <h2 class="fw-bold mb-0  titulo">Empresas</h2>
+          <span class="text-secondary small">Gestiona las empresas del sitio</span>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-start align-items-md-center mt-3 mt-md-0">
+        <button id="btnAgregarEmpresa" class="btn btn-primary py-2 px-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-plus">
+            <line x1="12" x2="12" y1="5" y2="19" />
+            <line x1="5" x2="19" y1="12" y2="12" />
+          </svg>
+          <span class="ms-2 small h6">Nueva Empresa</span>
         </button>
       </div>
 
-      <!-- Formulario para nueva empresa -->
-      <form id="formEmpresa" class="d-none mb-4">
-        <div class="row g-2 align-items-end">
-          <div class="col-md-6">
-            <label for="nombreEmpresa" class="form-label"
-              >Nombre de la Empresa</label
-            >
-            <input
-              type="text"
-              id="nombreEmpresa"
-              class="form-control"
-              placeholder="Ej: Ubisoft, Nintendo..."
-              required
-            />
-          </div>
-          <div class="col-md-6 text-end">
-            <button type="submit" class="btn btn-success">💾 Guardar</button>
-            <button
-              type="button"
-              id="cancelarEmpresa"
-              class="btn btn-secondary"
-            >
-              Cancelar
-            </button>
-          </div>
+    </div>
+
+
+    <!-- tabla de empresas -->
+    <div id="cardEmpresas" class="card p-3">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Empresa</th>
+            <th>Sitio web</th>
+            <th> </th>
+          </tr>
+        </thead>
+        <tbody id="tablaEmpresas">
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalNuevaEmpresa">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Nueva Empresa</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
-      </form>
 
-      <!-- Tabla de empresas -->
-      <div class="table-responsive shadow rounded">
-        <table class="table table-striped align-middle text-center">
-          <thead class="table-dark">
-            <tr>
-              <th>ID</th>
-              <th>Empresa</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tablaEmpresas">
-            <tr>
-              <td>1</td>
-              <td>Empresa de ejemplo</td>
-              <td>
-                <div class="d-flex justify-content-center gap-1">
-                  <button
-                    class="btn btn-outline-warning btn-sm btn-editar"
-                    data-bs-toggle="tooltip"
-                    title="Editar"
-                  >
-                    <i class="bi bi-pencil-square"></i>
-                  </button>
-                  <button
-                    class="btn btn-outline-danger btn-sm btn-eliminar"
-                    data-bs-toggle="tooltip"
-                    title="Eliminar"
-                  >
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <form id="formEmpresa">
+          <div class="modal-body">
+            <p class="text-muted" id="descripcionForm">Ingresa una empresa desarrolladora</p>
+
+            <div class="mb-3">
+              <label for="nombreEmpresa" class="form-label">Nombre de la Empresa</label>
+              <input type="text" id="nombreEmpresa" class="form-control" placeholder="Ej: Ubisoft, Nintendo..." />
+              <div class="valid-feedback"></div>
+              <div id="ErrornombreEmpresa" class="invalid-feedback"></div>
+            </div>
+            <div class="mb-3">
+              <label for="sitioWeb" class="form-label">Sitio Web</label>
+              <input type="text" id="sitioWeb" class="form-control" placeholder="https://www.ubisoft.com/" />
+              <div class="valid-feedback"></div>
+              <div id="ErrorsitioWeb" class="invalid-feedback"></div>
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-dark" id="btnGuardarEmpresa">Guardar</button>
+          </div>
+
+        </form>
       </div>
-    </main>
+    </div>
+  </div>
 
-    <footer class="bg-dark text-white mt-4 pt-3 pb-2">
-      <?php
-      require "./inc/footer.php";
+
+  <div class="modal fade" id="modalEliminarEmpresa">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Eliminar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          ¿Estás seguro de que deseas eliminar esta Empresa? Esta acción no se
+          puede deshacer.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <footer class="bg-dark text-white mt-4 pt-3 pb-2">
+    <?php
+    require "./inc/footer.php";
     ?>
-    </footer>
+  </footer>
+  <?php
+  include './componentes/modal_exito.php';
+  include './componentes/modal_error.php';
+  ?>
+</body>
 
-  </body>
 </html>
