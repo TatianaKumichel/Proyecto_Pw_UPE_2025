@@ -1,31 +1,37 @@
-/* Favoritos 
-#listaFavoritos .card-img-top {
-  height: 200px;
-  object-fit: cover;
+/* Efecto hover en las cards */
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
-*/
+
+.hover-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Imágenes de las cards */
 #listaFavoritos .card-img-top {
-  height: 200px;
   width: 100%;
-  object-fit: cover; /* por defecto, llena el espacio */
+  object-fit: contain;
   border-radius: 0.5rem 0.5rem 0 0;
 }
 
+/* Botón de favorito */
 .btn-favorito i {
-  margin-right: 5px;
+  margin-right: 0;
 }
 
-.favorito-img {
-  width: 100%;
-  height: 200px; /* Alto fijo para que todas tengan el mismo tamaño */
-  object-fit: cover; /* Recorta sin deformar */
-  border-radius: 0.5rem;
+/* Título de la card */
+.card-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Favoritos */
-
-/* Para logos o imágenes que no deben recortarse */
-#listaFavoritos .card-img-top.logo-img {
-  object-fit: contain; /* no recorta */
-  background-color: #000; /* fondo de relleno */
+/* Texto de la card */
+.card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

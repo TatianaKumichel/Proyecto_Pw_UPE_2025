@@ -1,8 +1,9 @@
 window.onload = function () {
   const menuUsuario = document.getElementById("menuUsuario");
   const perfilIcono = document.querySelector(".perfil-icono");
-  const formLogin = document.getElementById("formLogin");
-  const formRegistro = document.getElementById("formRegistro");
+  // NOTA: Los formularios de login y registro ahora son manejados por auth.js
+  // const formLogin = document.getElementById("formLogin");
+  // const formRegistro = document.getElementById("formRegistro");
   const formRecuperar = document.getElementById("formRecuperar");
   const categorias = document.querySelectorAll(
     ".dropdown-item[data-categoria]"
@@ -22,26 +23,28 @@ window.onload = function () {
   // si quien se logea es un admin/moderador...
   actualizarMenu(estado);
 
+  // NOTA: Login y registro ahora son manejados por auth.js con backend PHP
   // primero se verifica que exista en el DOM el formulario de login
   // o el de registro y entonces se llama al evento de submit
   // para que haga la logica del login o registro
-  if (formLogin) {
-    formLogin.addEventListener("submit", formLoginSubmit);
-  }
-  if (formRegistro) {
-    formRegistro.addEventListener("submit", formRegistroSubmit);
-  }
+  // if (formLogin) {
+  //   formLogin.addEventListener("submit", formLoginSubmit);
+  // }
+  // if (formRegistro) {
+  //   formRegistro.addEventListener("submit", formRegistroSubmit);
+  // }
+
   // similar al anterior, solo que en este caso no se necesita que
   // haya un cambio entre perfiles (visitante, usuario)
   if (formRecuperar) {
     formRecuperar.addEventListener("submit", formRecuperarClaveSubmit);
   }
-  function formLoginSubmit(e) {
-    manejarLogin(e, estado, menuUsuario, perfilIcono);
-  }
-  function formRegistroSubmit(e) {
-    manejarRegistro(e, estado, menuUsuario, perfilIcono);
-  }
+  // function formLoginSubmit(e) {
+  //   manejarLogin(e, estado, menuUsuario, perfilIcono);
+  // }
+  // function formRegistroSubmit(e) {
+  //   manejarRegistro(e, estado, menuUsuario, perfilIcono);
+  // }
   function formRecuperarClaveSubmit(e) {
     recuperarClave(e);
   }

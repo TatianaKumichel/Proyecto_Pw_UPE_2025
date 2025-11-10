@@ -19,7 +19,7 @@
     <div class="row">
       <!-- Aqui se ponen los cards de juegos en columnas -->
       <div class="col-lg-9">
-        <h3 class="mb-4">Catálogo</h3>
+        <h3 class="mb-4">Novedades</h3>
         <div class="row g-4">
           <!-- cards. Luego podrian ponerse dinamicamente tras conectar con una base de datos... -->
           <div class="col-12 col-sm-6 col-md-4" data-categoria="aventura">
@@ -88,12 +88,12 @@
   </main>
 
   <footer class="bg-dark text-white mt-4 pt-3 pb-2">
-<?php
-  require "./inc/footer.php";
-?>
+    <?php
+    require "./inc/footer.php";
+    ?>
   </footer>
 
-  
+
 </body>
 
 </html>

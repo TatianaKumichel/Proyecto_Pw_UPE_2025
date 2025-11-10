@@ -1,3 +1,8 @@
+<?php
+// Proteger página - requiere permiso de gestionar moderadores
+require_once './inc/auth.php';
+requierePermiso('gestionar_moderadores');
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -6,6 +11,7 @@
   require "./inc/head.php";
   ?>
   <link rel="stylesheet" href="./css/admin-moderadores.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <script src="./js/admin-moderadores.js" defer></script>
 </head>
 
@@ -17,91 +23,73 @@
   </header>
 
   <!-- Espaciador -->
-  <div style="margin-top: 70px"></div>
+  <div class="navbar-spacer"></div>
 
   <!-- Panel de Moderadores -->
   <main class="container my-4 flex-fill">
-    <h1 class="mb-4 text-center">📋 Gestión de Moderadores</h1>
+    <h1 class="mb-4 text-center">Gestión de Moderadores</h1>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="h4">Panel de Moderadores</h2>
-      <button id="btnAgregarModerador" class="btn btn-primary">
-        ➕ Agregar Moderador
-      </button>
+    <div class="alert alert-info">
+      <i class="bi bi-info-circle"></i>
+      Asignar o quitar el rol de moderador a los usuarios registrados.
     </div>
 
-    <!-- FORMULARIO PARA NUEVO MODERADOR (oculto al inicio) -->
-    <form id="formModerador" class="d-none mb-4">
-      <div class="row g-2 align-items-end">
-        <div class="col-md-4">
-          <label for="nombreModerador" class="form-label">Nombre de usuario</label>
-          <input type="text" id="nombreModerador" class="form-control" placeholder="Ej: ModJuan" required />
-        </div>
-        <div class="col-md-4">
-          <label for="emailModerador" class="form-label">Correo electrónico</label>
-          <input type="email" id="emailModerador" class="form-control" placeholder="juan@example.com" required />
-        </div>
-        <div class="col-md-4 text-end">
-          <button type="submit" class="btn btn-success">💾 Guardar</button>
-          <button type="button" id="cancelarModerador" class="btn btn-secondary">
-            Cancelar
-          </button>
-        </div>
-      </div>
-    </form>
-
-    <!-- Tabla de moderadores -->
+    <!-- Usuarios -->
     <div class="table-responsive shadow rounded">
-      <table class="table table-striped align-middle text-center">
+      <table class="table table-striped table-hover align-middle text-center mb-0">
         <thead class="table-dark">
           <tr>
             <th>ID</th>
             <th>Usuario</th>
             <th>Email</th>
+            <th>Roles</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="tablaModeradores">
           <tr>
-            <td>1</td>
-            <td>ModJuan</td>
-            <td>juan@example.com</td>
-            <td>
-              <button class="btn btn-sm btn-warning btn-editar">
-                Editar
-              </button>
-              <button class="btn btn-sm btn-danger btn-eliminar">
-                Eliminar
-              </button>
-              <button class="btn btn-sm btn-secondary btn-permiso">
-                Permiso OFF
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>ModAna</td>
-            <td>ana@example.com</td>
-            <td>
-              <button class="btn btn-sm btn-warning btn-editar">
-                Editar
-              </button>
-              <button class="btn btn-sm btn-danger btn-eliminar">
-                Eliminar
-              </button>
-              <button class="btn btn-sm btn-success btn-permiso">
-                Permiso ON
-              </button>
+            <td colspan="5" class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+              <p class="mt-2 text-muted">Cargando usuarios...</p>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+
   </main>
+
+  <!-- Modal de Confirmación -->
+  <div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalConfirmacionLabel">
+            <i class="bi bi-question-circle text-warning"></i> Confirmar Acción
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalConfirmacionMensaje">
+          ¿Estás seguro de realizar esta acción?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle"></i> Cancelar
+          </button>
+          <button type="button" class="btn btn-primary" id="btnConfirmarAccion">
+            <i class="bi bi-check-circle"></i> Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer class="bg-dark text-white mt-4 pt-3 pb-2">
     <?php
-      require "./inc/footer.php";
+    require "./inc/footer.php";
     ?>
   </footer>
 

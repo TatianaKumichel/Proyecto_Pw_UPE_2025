@@ -1,3 +1,7 @@
+<?php
+// Proteger la página - solo usuarios logueados
+require_once './inc/auth.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -7,6 +11,18 @@
     ?>
     <link rel="stylesheet" href="css/favoritos.css" />
     <script src="./js/favoritos.js" defer></script>
+    <style>
+        /* Mantener footer abajo cuando hay poco contenido */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+        }
+    </style>
 </head>
 
 <body>

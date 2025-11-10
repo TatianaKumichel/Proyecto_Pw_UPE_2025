@@ -14,7 +14,9 @@ async function cargarFavoritos(divErrores, contenedor, modal) {
   divErrores.innerHTML = "";
 
   try {
-    var response = await fetch("./inc/getFavoritos.php", { method: "GET" });
+    var response = await fetch("./bd/gestion-favoritos/getFavoritos.php", {
+      method: "GET",
+    });
     if (!response.ok) {
       errores["conexion"] = "Error al consultar los favoritos.";
       mostrarErrores(divErrores, errores);
@@ -30,51 +32,75 @@ async function cargarFavoritos(divErrores, contenedor, modal) {
 
     contenedor.innerHTML = "";
 
+    // Si no hay favoritos, mostrar mensaje
+    if (data.length === 0) {
+      contenedor.innerHTML = `
+        <div class="col-12 d-flex align-items-center justify-content-center" style="min-height: 60vh;">
+          <div class="text-center">
+            <i class="bi bi-heart" style="font-size: 4rem; color: #ccc;"></i>
+            <h4 class="mt-3 text-muted">No tienes juegos favoritos</h4>
+            <p class="text-muted">Explora el catálogo y agrega tus juegos favoritos</p>
+            <a href="filtros.php" class="btn btn-primary mt-3">
+              <i class="bi bi-collection"></i> Ir al Catálogo
+            </a>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
     for (var i = 0; i < data.length; i++) {
       var juego = data[i];
 
       var divCol = document.createElement("div");
-      divCol.className = "col";
+      divCol.className = "col-12 col-sm-6 col-md-4 col-lg-3 mb-4";
 
-      var divCard = document.createElement("div");
-      divCard.className = "card h-100";
+      var imagenUrl = juego.imagen_portada || "./img/juego-default.png";
 
-      var img = document.createElement("img");
-      img.src = juego.imagen_portada;
-      img.className = "card-img-top";
-      img.alt = juego.titulo;
+      divCol.innerHTML = `
+        <div class="card h-100 shadow-sm hover-card d-flex flex-column">
+          <a href="detalle.php?id_juego=${
+            juego.id_juego
+          }" class="text-decoration-none">
+            <img src="${imagenUrl}"
+                 class="card-img-top"
+                 alt="${escapeHtml(juego.titulo)}"
+                 onerror="this.src='./img/juego-default.png'">
+          </a>
+          <div class="card-body d-flex flex-column flex-grow-1">
+            <h5 class="card-title text-dark" title="${escapeHtml(
+              juego.titulo
+            )}">
+              ${truncarTexto(escapeHtml(juego.titulo), 40)}
+            </h5>
+            <p class="card-text text-muted small mb-3">
+              ${truncarTexto(
+                escapeHtml(juego.descripcion || "Sin descripción"),
+                80
+              )}
+            </p>
+            <div class="mt-auto d-flex gap-2">
+              <a href="detalle.php?id_juego=${
+                juego.id_juego
+              }" class="btn btn-primary btn-sm flex-grow-1">
+                <i class="bi bi-eye"></i> Ver Detalles
+              </a>
+              <button class="btn btn-outline-danger btn-sm btn-favorito" data-id-juego="${
+                juego.id_juego
+              }">
+              <i class="bi bi-heart-fill"></i>
+            </button>
+          </div>
+        </div>
+      `;
 
-      var divBody = document.createElement("div");
-      divBody.className = "card-body d-flex flex-column";
-
-      var h5 = document.createElement("h5");
-      h5.className = "card-title";
-      h5.textContent = juego.titulo;
-
-      var p = document.createElement("p");
-      p.className = "card-text";
-      p.textContent = juego.descripcion;
-
-      var boton = document.createElement("button");
-      boton.className = "btn btn-outline-danger mt-auto btn-favorito";
-      boton.innerHTML = '<i class="bi bi-heart-fill"></i> Quitar de favoritos';
-      // Id del juego
-      boton.setAttribute("data-id-juego", juego.id_juego);
-
-      // Evento confirmacion
-      boton.addEventListener("click", function () {
+      // Agregar evento al botón de quitar favorito
+      var botonFavorito = divCol.querySelector(".btn-favorito");
+      botonFavorito.addEventListener("click", function () {
         var idJuego = this.getAttribute("data-id-juego");
         confirmarEliminacion(idJuego, modal, divErrores, contenedor);
       });
 
-      divBody.appendChild(h5);
-      divBody.appendChild(p);
-      divBody.appendChild(boton);
-
-      divCard.appendChild(img);
-      divCard.appendChild(divBody);
-
-      divCol.appendChild(divCard);
       contenedor.appendChild(divCol);
     }
   } catch (e) {
@@ -118,7 +144,7 @@ async function eliminarFavorito(id, modal, divErrores, contenedor) {
     id: id,
   };
   try {
-    var response = await fetch("./inc/delFavoritos.php", {
+    var response = await fetch("./bd/gestion-favoritos/delFavoritos.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -133,7 +159,7 @@ async function eliminarFavorito(id, modal, divErrores, contenedor) {
     var result = await response.json();
     console.log(result);
 
-    if (result.ok) {
+    if (result.success || result.ok) {
       var bsModal = bootstrap.Modal.getInstance(modal);
       bsModal.hide();
       await cargarFavoritos(divErrores, contenedor, modal);
@@ -155,4 +181,23 @@ function mostrarErrores(divErrores, errores) {
     p.textContent = errores[clave];
     divErrores.appendChild(p);
   }
+}
+
+/**
+ * Escapar HTML para prevenir XSS
+ */
+function escapeHtml(text) {
+  if (!text) return "";
+  var div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+/**
+ * Truncar texto a una longitud máxima
+ */
+function truncarTexto(texto, maxLength) {
+  if (!texto) return "";
+  if (texto.length <= maxLength) return texto;
+  return texto.substring(0, maxLength) + "...";
 }

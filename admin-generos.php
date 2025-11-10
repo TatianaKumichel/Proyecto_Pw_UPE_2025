@@ -1,21 +1,32 @@
+<?php
+// Proteger página - requiere permiso de gestionar géneros
+require_once './inc/auth.php';
+requierePermiso('gestionar_generos');
+?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
   <?php require "./inc/head.php"; ?>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <script src="./js/admin-generos.js" defer></script>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100 bg-light">
   <header>
     <?php require "./inc/menu.php"; ?>
   </header>
 
-  <main class="container my-4">
-    <h2 class="mb-4">Administrar Géneros</h2>
+  <!-- Espaciador -->
+  <div class="navbar-spacer"></div>
 
-    <!-- Mensaje de error general -->
-    <div id="divErroresGenerales" class="alert alert-danger d-none" role="alert"></div>
+  <main class="container my-4 flex-fill">
+    <h1 class="mb-4 text-center">Gestión de Géneros</h1>
+
+    <div class="alert alert-info">
+      <i class="bi bi-info-circle"></i>
+      Administra los géneros de videojuegos.
+    </div>
 
     <!-- Botón agregar -->
     <div class="mb-3">
@@ -26,8 +37,8 @@
     </div>
 
     <!-- Tabla -->
-    <div class="table-responsive">
-      <table class="table table-striped table-hover align-middle text-center">
+    <div class="table-responsive shadow rounded">
+      <table class="table table-striped table-hover align-middle text-center mb-0">
         <thead class="table-dark">
           <tr>
             <th>ID</th>
@@ -35,7 +46,16 @@
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody id="tablaGeneros"></tbody>
+        <tbody id="tablaGeneros">
+          <tr>
+            <td colspan="3" class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+              <p class="mt-2 text-muted">Cargando géneros...</p>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </main>
@@ -46,24 +66,34 @@
 
   <!-- Modal de Alta/Edición -->
   <div class="modal fade" id="modalGenero" tabindex="-1" aria-labelledby="modalGeneroLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <form id="formGenero" novalidate>
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalGeneroLabel">Nuevo Género</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="modalGeneroLabel">
+              <i class="bi bi-plus-circle"></i> Nuevo Género
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+              aria-label="Cerrar"></button>
           </div>
           <div class="modal-body">
             <input type="hidden" id="idGenero" name="id_genero">
             <div class="mb-3">
-              <label for="nombre" class="form-label">Nombre del género</label>
-              <input type="text" class="form-control" id="nombre" name="nombre" required minlength="3">
+              <label for="nombre" class="form-label">
+                <i class="bi bi-tag-fill"></i> Nombre del género
+              </label>
+              <input type="text" class="form-control" id="nombre" name="nombre" required minlength="3"
+                placeholder="Ej: Acción, Aventura, RPG...">
               <div class="invalid-feedback">El nombre debe tener al menos 3 caracteres.</div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary" id="btnGuardarGenero">Guardar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <i class="bi bi-x-circle"></i> Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary" id="btnGuardarGenero">
+              <i class="bi bi-check-circle"></i> Guardar
+            </button>
           </div>
         </form>
       </div>
@@ -72,16 +102,28 @@
 
   <!-- Modal Confirmar Eliminación -->
   <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title text-danger"><i class="bi bi-trash-fill"></i> Eliminar Género</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title">
+            <i class="bi bi-trash-fill"></i> Eliminar Género
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
-        <div class="modal-body">¿Estás seguro de eliminar este género?</div>
+        <div class="modal-body">
+          <div class="text-center mb-3">
+            <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 3rem;"></i>
+          </div>
+          <p class="text-center mb-2">¿Estás seguro de eliminar este género?</p>
+          <p class="text-center text-muted small" id="modalEliminarNombre"></p>
+        </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle"></i> Cancelar
+          </button>
+          <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+            <i class="bi bi-trash-fill"></i> Eliminar
+          </button>
         </div>
       </div>
     </div>
