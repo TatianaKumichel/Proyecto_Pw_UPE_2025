@@ -6,7 +6,7 @@
 document.getElementById("formLogin")?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const email = document.getElementById("loginEmail").value.trim();
+  const username = document.getElementById("loginUsername").value.trim();
   const password = document.getElementById("loginPassword").value;
   const errorDiv = document.getElementById("loginError");
   const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -25,7 +25,7 @@ document.getElementById("formLogin")?.addEventListener("submit", async (e) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, password }),
     });
 
     const data = await response.json();
@@ -108,7 +108,7 @@ document
           loginModal.show();
 
           // Prellenar el email en el login
-          document.getElementById("loginEmail").value = email;
+          document.getElementById("loginUsername").value = username;
         }, 2000);
       } else {
         // Mostrar error

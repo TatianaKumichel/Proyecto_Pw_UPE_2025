@@ -5,28 +5,28 @@ header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
-    $email = trim($data['email'] ?? '');
+    $username = trim($data['username'] ?? '');
     $password = $data['password'] ?? '';
 
-    // Validaciones básicas
-    if (empty($email) || empty($password)) {
-        echo json_encode(['success' => false, 'message' => 'Email y contraseña son requeridos']);
+    // Validaciones
+    if (empty($username) || empty($password)) {
+        echo json_encode(['success' => false, 'message' => 'Usuario y contraseña son requeridos']);
         exit;
     }
 
     try {
-        // Obtener usuario por email
+        // Obtiene usuario por username
         $stmt = $conn->prepare("SELECT u.id_usuario, u.username, u.email, u.password_hash, u.estado 
                                 FROM USUARIO u 
-                                WHERE u.email = :email");
-        $stmt->execute([':email' => $email]);
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+                                WHERE u.username = :username");
+        $stmt->execute([':username' => $username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Verificar si el usuario existe y la contraseña es correcta
-        if ($usuario && password_verify($password, $usuario['password_hash'])) {
+        if ($user && password_verify($password, $user['password_hash'])) {
 
             // Verificar si el usuario está restringido
-            if ($usuario['estado'] === 'restringido') {
+            if ($user['estado'] === 'restringido') {
                 echo json_encode([
                     'success' => false,
                     'message' => 'Tu cuenta está restringida temporalmente. Contacta al administrador.'
@@ -39,13 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    FROM ROL r 
                                    INNER JOIN USUARIO_ROL ur ON r.id_rol = ur.id_rol 
                                    WHERE ur.id_usuario = :id_usuario");
-            $stmt->execute([':id_usuario' => $usuario['id_usuario']]);
+            $stmt->execute([':id_usuario' => $user['id_usuario']]);
             $roles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
             // Si no tiene roles asignados, asignar rol de usuario por defecto
             if (empty($roles)) {
                 $stmt = $conn->prepare("INSERT INTO USUARIO_ROL (id_usuario, id_rol) VALUES (:id_usuario, 1)");
-                $stmt->execute([':id_usuario' => $usuario['id_usuario']]);
+                $stmt->execute([':id_usuario' => $user['id_usuario']]);
                 $roles = ['usuario'];
             }
 
@@ -56,17 +56,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    INNER JOIN USUARIO_ROL ur ON rp.id_rol = ur.id_rol
                                    WHERE ur.id_usuario = :id_usuario
                                    ORDER BY p.nombre");
-            $stmt->execute([':id_usuario' => $usuario['id_usuario']]);
+            $stmt->execute([':id_usuario' => $user['id_usuario']]);
             $permisos = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
             // Crear sesión
-            $_SESSION['id_usuario'] = $usuario['id_usuario'];
-            $_SESSION['username'] = $usuario['username'];
-            $_SESSION['email'] = $usuario['email'];
-            $_SESSION['estado'] = $usuario['estado'];
+            $_SESSION['id_usuario'] = $user['id_usuario'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['estado'] = $user['estado'];
             $_SESSION['roles'] = $roles;
             $_SESSION['permisos'] = $permisos; // Guardar permisos en sesión
-            $_SESSION['nombre'] = $usuario['username']; // Para compatibilidad con código existente
+            $_SESSION['nombre'] = $user['username']; // Para compatibilidad con código existente
 
             // Determinar rol principal para compatibilidad
             if (in_array('admin', $roles)) {
@@ -79,14 +79,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Registrar último acceso
             $stmt = $conn->prepare("UPDATE USUARIO SET fecha_registro = NOW() WHERE id_usuario = :id_usuario");
-            $stmt->execute([':id_usuario' => $usuario['id_usuario']]);
+            $stmt->execute([':id_usuario' => $user['id_usuario']]);
 
             echo json_encode([
                 'success' => true,
                 'message' => 'Inicio de sesión exitoso',
                 'redirect' => './index.php',
                 'user' => [
-                    'username' => $usuario['username'],
+                    'username' => $user['username'],
                     'roles' => $roles,
                     'permisos' => $permisos
                 ]
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo json_encode([
                 'success' => false,
-                'message' => 'Email o contraseña incorrectos'
+                'message' => 'Usuario o contraseña incorrectos'
             ]);
         }
 
