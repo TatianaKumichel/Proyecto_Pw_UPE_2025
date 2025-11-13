@@ -1,10 +1,7 @@
 /**
- * Sistema de detalle de juego
- * Muestra información completa del juego, permite marcar favorito, calificar y comentar
+ * Detalle de juego
+ * información completa del juego, permite marcar favorito, calificar y comentar
  */
-
-// Variable global con el ID del juego (definida en detalle.php)
-// const ID_JUEGO = ...;
 
 window.addEventListener("DOMContentLoaded", () => {
   cargarDetalle();
@@ -15,8 +12,6 @@ window.addEventListener("DOMContentLoaded", () => {
  * Cargar detalle del juego
  */
 async function cargarDetalle() {
-  const contenedor = document.getElementById("contenedor-detalle");
-
   try {
     const res = await fetch(`./bd/juegos/getJuego.php?id_juego=${ID_JUEGO}`);
     const juego = await res.json();
@@ -28,157 +23,130 @@ async function cargarDetalle() {
     // Verificar si el usuario está logueado
     const estaLogueado = await verificarSesion();
 
-    const html = `
-      <div class="col-12 col-md-6">
-        ${
-          juego.imagenes && juego.imagenes.length > 0
-            ? `
-          <div id="carouselJuego" class="carousel slide mb-2" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              ${juego.imagenes
-                .map(
-                  (img, i) =>
-                    `<div class="carousel-item ${i === 0 ? "active" : ""}">
-                      <img src="${img}" class="d-block w-100 rounded" alt="${escapeHtml(
-                      juego.titulo
-                    )}"
-                           style="max-height: 400px; object-fit: cover;">
-                    </div>`
-                )
-                .join("")}
-            </div>
-            ${
-              juego.imagenes.length > 1
-                ? `
-              <button class="carousel-control-prev" type="button" data-bs-target="#carouselJuego" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carouselJuego" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-              </button>
-            `
-                : ""
-            }
-          </div>
-        `
-            : `
-          <img src="${juego.imagen_portada || "./img/juego-default.png"}" 
-               class="img-fluid rounded mb-2" 
-               alt="${escapeHtml(juego.titulo)}"
-               style="max-height: 400px; width: 100%; object-fit: cover;">
-        `
-        }
-      </div>
+    // Llenar datos básicos
+    document.getElementById("titulo").textContent = juego.titulo;
+    document.getElementById("descripcion").textContent =
+      juego.descripcion || "Sin descripción disponible";
+    document.getElementById("empresa").textContent = juego.empresa;
 
-      <div class="col-12 col-md-6">
-        <h2 class="mb-3">${escapeHtml(juego.titulo)}</h2>
-        
-        <div class="mb-3">
-          <h5><i class="bi bi-info-circle"></i> Descripción:</h5>
-          <p class="text-muted">${escapeHtml(
-            juego.descripcion || "Sin descripción disponible"
-          )}</p>
-        </div>
+    // Manejar imágenes
+    cargarImagenes(juego);
 
-        <div class="mb-2">
-          <strong><i class="bi bi-building"></i> Empresa:</strong> 
-          <span class="text-muted">${escapeHtml(juego.empresa)}</span>
-        </div>
+    // Plataformas
+    if (juego.plataformas && juego.plataformas.length > 0) {
+      document
+        .getElementById("contenedor-plataformas")
+        .classList.remove("d-none");
+      document.getElementById("plataformas").textContent =
+        juego.plataformas.join(", ");
+    }
 
-        ${
-          juego.plataformas && juego.plataformas.length > 0
-            ? `
-          <div class="mb-2">
-            <strong><i class="bi bi-display"></i> Plataformas:</strong> 
-            <span class="text-muted">${juego.plataformas
-              .map((p) => escapeHtml(p))
-              .join(", ")}</span>
-          </div>
-        `
-            : ""
-        }
+    // Géneros
+    if (juego.generos && juego.generos.length > 0) {
+      document.getElementById("contenedor-generos").classList.remove("d-none");
+      document.getElementById("generos").textContent = juego.generos.join(", ");
+    }
 
-        ${
-          juego.generos && juego.generos.length > 0
-            ? `
-          <div class="mb-2">
-            <strong><i class="bi bi-tags"></i> Géneros:</strong> 
-            <span class="text-muted">${juego.generos
-              .map((g) => escapeHtml(g))
-              .join(", ")}</span>
-          </div>
-        `
-            : ""
-        }
+    // Fecha de lanzamiento
+    if (juego.fecha_lanzamiento) {
+      document
+        .getElementById("contenedor-lanzamiento")
+        .classList.remove("d-none");
+      document.getElementById("lanzamiento").textContent = formatearFecha(
+        juego.fecha_lanzamiento
+      );
+    }
 
-        ${
-          juego.fecha_lanzamiento
-            ? `
-          <div class="mb-3">
-            <strong><i class="bi bi-calendar"></i> Lanzamiento:</strong> 
-            <span class="text-muted">${formatearFecha(
-              juego.fecha_lanzamiento
-            )}</span>
-          </div>
-        `
-            : ""
-        }
-
-        <hr>
-
-        ${
-          estaLogueado
-            ? `
-          <!-- Botón de favorito -->
-          <div class="mb-3">
-            <button id="btn-favorito" class="btn btn-outline-danger" data-id-juego="${
-              juego.id_juego
-            }">
-              <span id="texto-favorito"><i class="bi bi-heart"></i> Marcar como favorito</span>
-            </button>
-          </div>
-
-          <!-- Calificación -->
-          <div class="mb-3">
-            <h5><i class="bi bi-star"></i> Calificar este juego:</h5>
-            <div id="calificacion" class="fs-4">
-              ${[1, 2, 3, 4, 5]
-                .map(
-                  (v) =>
-                    `<i class="bi bi-star estrella" data-valor="${v}" style="cursor: pointer; color: #ffc107;"></i>`
-                )
-                .join("")}
-            </div>
-            <small class="text-muted">Haz clic en las estrellas para calificar</small>
-          </div>
-        `
-            : `
-          <div class="alert alert-info">
-            <i class="bi bi-info-circle"></i> 
-            <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Inicia sesión</a> 
-            para marcar como favorito, calificar y comentar.
-          </div>
-        `
-        }
-      </div>
-    `;
-
-    contenedor.innerHTML = html;
-
+    // Mostrar sección según estado de login
     if (estaLogueado) {
+      document.getElementById("logged-user-section").classList.remove("d-none");
+      document.getElementById("btn-favorito").dataset.idJuego = juego.id_juego;
       await configurarEventos(juego.id_juego);
       verificarFavorito(juego.id_juego);
+    } else {
+      document.getElementById("guest-section").classList.remove("d-none");
     }
   } catch (err) {
     console.error("Error al cargar detalle:", err);
-    contenedor.innerHTML = `
-      <div class="col-12">
-        <div class="alert alert-danger">
-          <i class="bi bi-exclamation-triangle"></i> Error: ${err.message}
-        </div>
-      </div>
-    `;
+    mostrarError(err.message);
   }
+}
+
+/**
+ * Cargar imágenes del juego
+ */
+function cargarImagenes(juego) {
+  const carouselContainer = document.getElementById("carousel-container");
+  const singleImage = document.getElementById("single-image");
+
+  // Obtener todas las imágenes
+  let imagenesDisponibles = [];
+
+  // Agregar imágenes del array si existen
+  if (
+    juego.imagenes &&
+    Array.isArray(juego.imagenes) &&
+    juego.imagenes.length > 0
+  ) {
+    imagenesDisponibles = [...juego.imagenes];
+  }
+
+  // Si hay imagen_portada y no está en el array, agregarla
+  if (
+    juego.imagen_portada &&
+    !imagenesDisponibles.includes(juego.imagen_portada)
+  ) {
+    imagenesDisponibles.unshift(juego.imagen_portada);
+  }
+  if (imagenesDisponibles.length > 1) {
+    // Múltiples imágenes: usar carousel
+    const carouselInner = document.getElementById("carousel-inner");
+    carouselInner.innerHTML = imagenesDisponibles
+      .map(
+        (img, i) => `
+      <div class="carousel-item ${i === 0 ? "active" : ""}">
+        <img src="${escapeHtml(
+          img
+        )}" class="d-block w-100 rounded carousel-game-image"
+             alt="${escapeHtml(juego.titulo)}">
+      </div>
+    `
+      )
+      .join("");
+
+    // Mostrar controles si hay más de una imagen
+    document.getElementById("carousel-prev").classList.remove("d-none");
+    document.getElementById("carousel-next").classList.remove("d-none");
+
+    carouselContainer.classList.remove("d-none");
+    singleImage.classList.add("d-none");
+  } else if (imagenesDisponibles.length === 1) {
+    // Una sola imagen: mostrar sin carousel
+    singleImage.src = escapeHtml(imagenesDisponibles[0]);
+    singleImage.alt = escapeHtml(juego.titulo);
+    singleImage.classList.remove("d-none");
+    carouselContainer.classList.add("d-none");
+  } else {
+    // Sin imagen
+    singleImage.src = "img/juego-sin-imagen.svg";
+    singleImage.alt = "Sin imagen disponible";
+    singleImage.classList.remove("d-none");
+    carouselContainer.classList.add("d-none");
+  }
+}
+
+/**
+ * Mostrar mensaje de error
+ */
+function mostrarError(mensaje) {
+  const contenedor = document.getElementById("contenedor-detalle");
+  contenedor.innerHTML = `
+    <div class="col-12">
+      <div class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle"></i> Error: ${escapeHtml(mensaje)}
+      </div>
+    </div>
+  `;
 }
 
 /**
@@ -244,7 +212,7 @@ async function cargarCalificacion(id_juego) {
  */
 function mostrarCalificacion(puntuacion) {
   document.querySelectorAll(".estrella").forEach((s, i) => {
-    if (i < puntuacion) {
+    if (puntuacion > 0 && i < puntuacion) {
       s.classList.remove("bi-star");
       s.classList.add("bi-star-fill");
     } else {
@@ -287,16 +255,22 @@ async function configurarEventos(id_juego) {
 
     star.addEventListener("click", async (e) => {
       const valor = parseInt(e.target.dataset.valor);
-      await calificar(id_juego, valor);
-      calificacionActual = valor; // Guardar la calificación
+
+      // Si se hace clic en la misma estrella que ya está seleccionada, quitar calificación
+      if (valor === calificacionActual) {
+        await calificar(id_juego, 0);
+        calificacionActual = 0;
+        mostrarCalificacion(0);
+      } else {
+        await calificar(id_juego, valor);
+        calificacionActual = valor;
+      }
     });
   });
 
   // Restaurar calificación guardada al salir del área
   document.getElementById("calificacion").addEventListener("mouseleave", () => {
-    if (calificacionActual > 0) {
-      mostrarCalificacion(calificacionActual);
-    }
+    mostrarCalificacion(calificacionActual);
   });
 }
 
@@ -358,10 +332,14 @@ async function calificar(id_juego, valor) {
     const data = await res.json();
 
     if (data.success || data.message) {
-      mostrarNotificacion(
-        `Calificación registrada: ${valor} estrellas`,
-        "success"
-      );
+      if (valor === 0) {
+        mostrarNotificacion("Calificación eliminada", "info");
+      } else {
+        mostrarNotificacion(
+          `Calificación registrada: ${valor} estrellas`,
+          "success"
+        );
+      }
 
       // Mostrar la calificación en las estrellas
       mostrarCalificacion(parseInt(valor));
@@ -439,7 +417,7 @@ async function cargarComentarios() {
     if (data.comentarios.length === 0) {
       html += `
         <div class="text-center text-muted py-4">
-          <i class="bi bi-chat" style="font-size: 3rem;"></i>
+          <i class="bi bi-chat empty-comments-icon"></i>
           <p class="mt-2">Aún no hay comentarios. ¡Sé el primero en comentar!</p>
         </div>
       `;
@@ -516,7 +494,7 @@ function crearHTMLComentario(comentario) {
     }">
       <div class="d-flex">
         <img src="${avatar}" alt="${escapeHtml(comentario.username)}"
-             class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+             class="rounded-circle me-3 comment-avatar">
         <div class="flex-grow-1">
           <div class="d-flex justify-content-between align-items-start">
             <div>
@@ -554,7 +532,7 @@ function crearHTMLComentario(comentario) {
           )}</p>
           
           <!-- Formulario de edición (oculto por defecto) -->
-          <div class="form-edicion mt-2" style="display: none;">
+          <div class="form-edicion mt-2 d-none">
             <textarea class="form-control mb-2" rows="3" maxlength="500">${escapeHtml(
               comentario.contenido
             )}</textarea>
@@ -685,9 +663,9 @@ function mostrarFormularioEdicion(id) {
   const formEdicion = comentarioDiv.querySelector(".form-edicion");
   const botones = comentarioDiv.querySelector(".btn-group");
 
-  textoDiv.style.display = "none";
-  botones.style.display = "none";
-  formEdicion.style.display = "block";
+  textoDiv.classList.add("d-none");
+  botones.classList.add("d-none");
+  formEdicion.classList.remove("d-none");
 }
 
 /**
@@ -698,9 +676,9 @@ function ocultarFormularioEdicion(comentarioDiv) {
   const formEdicion = comentarioDiv.querySelector(".form-edicion");
   const botones = comentarioDiv.querySelector(".btn-group");
 
-  textoDiv.style.display = "block";
-  botones.style.display = "block";
-  formEdicion.style.display = "none";
+  textoDiv.classList.remove("d-none");
+  botones.classList.remove("d-none");
+  formEdicion.classList.add("d-none");
 }
 
 /**
@@ -839,8 +817,7 @@ async function reportarComentario(id, motivo) {
  */
 function mostrarNotificacion(mensaje, tipo = "info") {
   const toast = document.createElement("div");
-  toast.className = `alert alert-${tipo} position-fixed top-0 end-0 m-3`;
-  toast.style.zIndex = "9999";
+  toast.className = `alert alert-${tipo} position-fixed top-0 end-0 m-3 toast-notification`;
   toast.innerHTML = `
     <i class="bi bi-${
       tipo === "success"

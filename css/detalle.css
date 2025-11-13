@@ -1,15 +1,15 @@
 /* css del detalle de un juego */
 
 /* ------------------------------
-   Carousel Portada
+   Carousel 
 ------------------------------ */
 #carouselJuego {
-  max-width: 600px; /* ancho máximo del carousel */
+  max-width: 600px;
   margin: 0 auto; /* centrar */
 }
 
 #carouselJuego .carousel-inner img {
-  max-height: 400px; /* altura máxima */
+  max-height: 400px;
   width: 100%; /* ocupar ancho del contenedor */
   object-fit: cover; /* recorta para llenar el contenedor */
   margin: 0 auto;
@@ -24,8 +24,8 @@
 }
 
 #miniaturas .img-thumbnail {
-  width: 80px; /* ancho miniatura */
-  height: 80px; /* alto miniatura */
+  width: 80px;
+  height: 80px;
   object-fit: cover; /* recorta si no es cuadrada */
   cursor: pointer;
   border: 2px solid transparent;
@@ -41,28 +41,33 @@
 }
 
 /* ------------------------------
-   Estrellas de calificación
+   calificacion
 ------------------------------ */
 .estrella {
   font-size: 2rem;
-  color: gray;
+  color: #ffc107;
   cursor: pointer;
   transition: color 0.2s;
 }
 
 .estrella.seleccionada {
-  color: gold;
+  color: #ffc107;
+}
+
+.star-rating {
+  cursor: pointer;
+  color: #ffc107;
 }
 
 /* ------------------------------
-   Botones favoritos
+   favoritos
 ------------------------------ */
 #btn-favorito i {
   margin-right: 5px;
 }
 
 /* ------------------------------
-   Comentarios (cards)
+   Comentarios
 ------------------------------ */
 .card {
   margin-bottom: 1rem;
@@ -77,8 +82,42 @@
 }
 
 /* ------------------------------
-   Formulario agregar comentario
+   Imagenes de juegos
+------------------------------ */
+.carousel-game-image {
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.game-cover-image {
+  max-height: 400px;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* ------------------------------
+   Comentarios - Iconos y avatares
+------------------------------ */
+.empty-comments-icon {
+  font-size: 3rem;
+}
+
+.comment-avatar {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+/* ------------------------------
+   Agregar comentario
 ------------------------------ */
 #form-comentario textarea {
   resize: none;
+}
+
+/* ------------------------------
+   Notificaciones
+------------------------------ */
+.toast-notification {
+  z-index: 9999;
 }

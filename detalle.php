@@ -24,7 +24,97 @@ if ($id_juego <= 0) {
   </header>
 
   <main class="container my-4">
-    <div id="contenedor-detalle" class="row"></div>
+    <!-- Detalle del juego -->
+    <div id="contenedor-detalle" class="row">
+
+      <!-- Imagenes del juego -->
+      <div class="col-12 col-md-6">
+        <!-- Carousel -->
+        <div id="carousel-container" class="d-none">
+          <div id="carouselJuego" class="carousel slide mb-2" data-bs-ride="carousel">
+            <div id="carousel-inner" class="carousel-inner">
+              <!-- imagenes cargadas dinámicamente -->
+            </div>
+            <button class="carousel-control-prev d-none" id="carousel-prev" type="button"
+              data-bs-target="#carouselJuego" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next d-none" id="carousel-next" type="button"
+              data-bs-target="#carouselJuego" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- si solo hay una imagen -->
+        <img id="single-image" src="" class="img-fluid rounded mb-2 game-cover-image d-none" alt="">
+      </div>
+
+      <!-- datos del juego -->
+      <div class="col-12 col-md-6">
+        <h2 id="titulo" class="mb-3"></h2>
+
+        <div class="mb-3">
+          <h5><i class="bi bi-info-circle"></i> Descripción:</h5>
+          <p id="descripcion" class="text-muted"></p>
+        </div>
+
+        <div class="mb-2">
+          <strong><i class="bi bi-building"></i> Empresa:</strong>
+          <span id="empresa" class="text-muted"></span>
+        </div>
+
+        <div id="contenedor-plataformas" class="mb-2 d-none">
+          <strong><i class="bi bi-display"></i> Plataformas:</strong>
+          <span id="plataformas" class="text-muted"></span>
+        </div>
+
+        <div id="contenedor-generos" class="mb-2 d-none">
+          <strong><i class="bi bi-tags"></i> Géneros:</strong>
+          <span id="generos" class="text-muted"></span>
+        </div>
+
+        <div id="contenedor-lanzamiento" class="mb-3 d-none">
+          <strong><i class="bi bi-calendar"></i> Lanzamiento:</strong>
+          <span id="lanzamiento" class="text-muted"></span>
+        </div>
+
+        <hr>
+
+        <!-- Para usuarios logueados -->
+        <div id="logged-user-section" class="d-none">
+
+          <div class="mb-3">
+            <button id="btn-favorito" class="btn btn-outline-danger">
+              <span id="texto-favorito">
+                <i class="bi bi-heart"></i> Marcar como favorito
+              </span>
+            </button>
+          </div>
+
+          <!-- Calificar -->
+          <div class="mb-3">
+            <h5><i class="bi bi-star"></i> Calificar este juego:</h5>
+            <div id="calificacion" class="fs-4">
+              <i class="bi bi-star estrella star-rating" data-valor="1"></i>
+              <i class="bi bi-star estrella star-rating" data-valor="2"></i>
+              <i class="bi bi-star estrella star-rating" data-valor="3"></i>
+              <i class="bi bi-star estrella star-rating" data-valor="4"></i>
+              <i class="bi bi-star estrella star-rating" data-valor="5"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección para usuarios no logueados -->
+        <div id="guest-section" class="alert alert-info d-none">
+          <i class="bi bi-info-circle"></i>
+          <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Inicia sesión</a>
+          para marcar como favorito, calificar y comentar.
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de comentarios -->
     <section id="comentarios" class="mt-4"></section>
   </main>
 
