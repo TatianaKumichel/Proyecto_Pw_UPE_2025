@@ -6,7 +6,11 @@
 document.getElementById("formLogin")?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+<<<<<<< HEAD
   const username = document.getElementById("loginUsername").value.trim();
+=======
+  const email = document.getElementById("loginEmail").value.trim();
+>>>>>>> 165ef6c (pasaron cosas con git)
   const password = document.getElementById("loginPassword").value;
   const errorDiv = document.getElementById("loginError");
   const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -25,7 +29,11 @@ document.getElementById("formLogin")?.addEventListener("submit", async (e) => {
       headers: {
         "Content-Type": "application/json",
       },
+<<<<<<< HEAD
       body: JSON.stringify({ username, password }),
+=======
+      body: JSON.stringify({ email, password }),
+>>>>>>> 165ef6c (pasaron cosas con git)
     });
 
     const data = await response.json();
@@ -108,7 +116,11 @@ document
           loginModal.show();
 
           // Prellenar el email en el login
+<<<<<<< HEAD
           document.getElementById("loginUsername").value = username;
+=======
+          document.getElementById("loginEmail").value = email;
+>>>>>>> 165ef6c (pasaron cosas con git)
         }, 2000);
       } else {
         // Mostrar error
@@ -152,3 +164,8 @@ document
     document.getElementById("registroError")?.classList.add("d-none");
     document.getElementById("registroSuccess")?.classList.add("d-none");
   });
+<<<<<<< HEAD
+=======
+
+// Made with Bob
+>>>>>>> 165ef6c (pasaron cosas con git)
