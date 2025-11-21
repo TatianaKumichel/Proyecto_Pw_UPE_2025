@@ -27,5 +27,4 @@ session_destroy();
 // Redirigir al index
 header('Location: ./index.php');
 exit;
-?>
 

@@ -8,6 +8,66 @@ function mostrarErroresGenerales(errores, divErrores) {
   }
 }
 
+/**
+ * Crea el HTML para el mensaje cuando no hay favoritos
+ */
+function crearMensajeSinFavoritos() {
+  return `
+    <div class="col-12 d-flex align-items-center justify-content-center" style="min-height: 60vh;">
+      <div class="text-center">
+        <i class="bi bi-heart" style="font-size: 4rem; color: #ccc;"></i>
+        <h4 class="mt-3 text-muted">No tienes juegos favoritos</h4>
+        <p class="text-muted">Explora el catálogo y agrega tus juegos favoritos</p>
+        <a href="filtros.php" class="btn btn-primary mt-3">
+          <i class="bi bi-collection"></i> Ir al Catálogo
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Crea y devuelve el HTML del card de un juego.
+ */
+function crearCardFavorito(juego) {
+  const imagenUrl = juego.imagen_portada || "./img/juego-default.png";
+  const tituloEscapado = escapeHtml(juego.titulo);
+  const descripcionEscapada = escapeHtml(
+    juego.descripcion || "Sin descripción"
+  );
+
+  return `
+    <div class="card h-100 shadow-sm hover-card d-flex flex-column">
+      <a href="detalle.php?id_juego=${
+        juego.id_juego
+      }" class="text-decoration-none">
+        <img src="${imagenUrl}"
+             class="card-img-top"
+             alt="${tituloEscapado}"
+             onerror="this.src='./img/juego-default.png'">
+      </a>
+      <div class="card-body d-flex flex-column flex-grow-1">
+        <h5 class="card-title text-dark" title="${tituloEscapado}">
+          ${truncarTexto(tituloEscapado, 40)}
+        </h5>
+        <p class="card-text text-muted small mb-3">
+          ${truncarTexto(descripcionEscapada, 80)}
+        </p>
+        <div class="mt-auto d-flex gap-2">
+          <a href="detalle.php?id_juego=${juego.id_juego}"
+             class="btn btn-primary btn-sm flex-grow-1">
+            <i class="bi bi-eye"></i> Ver Detalles
+          </a>
+          <button class="btn btn-outline-danger btn-sm btn-favorito"
+                  data-id-juego="${juego.id_juego}">
+            <i class="bi bi-heart-fill"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 async function cargarFavoritos(divErrores, contenedor, modal) {
   var errores = {};
   divErrores.classList.add("d-none");
@@ -34,65 +94,19 @@ async function cargarFavoritos(divErrores, contenedor, modal) {
 
     // Si no hay favoritos, mostrar mensaje
     if (data.length === 0) {
-      contenedor.innerHTML = `
-        <div class="col-12 d-flex align-items-center justify-content-center" style="min-height: 60vh;">
-          <div class="text-center">
-            <i class="bi bi-heart" style="font-size: 4rem; color: #ccc;"></i>
-            <h4 class="mt-3 text-muted">No tienes juegos favoritos</h4>
-            <p class="text-muted">Explora el catálogo y agrega tus juegos favoritos</p>
-            <a href="filtros.php" class="btn btn-primary mt-3">
-              <i class="bi bi-collection"></i> Ir al Catálogo
-            </a>
-          </div>
-        </div>
-      `;
+      contenedor.innerHTML = crearMensajeSinFavoritos();
       return;
     }
 
+    // Renderizar cada juego favorito
     for (var i = 0; i < data.length; i++) {
       var juego = data[i];
 
       var divCol = document.createElement("div");
       divCol.className = "col-12 col-sm-6 col-md-4 col-lg-3 mb-4";
 
-      var imagenUrl = juego.imagen_portada || "./img/juego-default.png";
-
-      divCol.innerHTML = `
-        <div class="card h-100 shadow-sm hover-card d-flex flex-column">
-          <a href="detalle.php?id_juego=${
-            juego.id_juego
-          }" class="text-decoration-none">
-            <img src="${imagenUrl}"
-                 class="card-img-top"
-                 alt="${escapeHtml(juego.titulo)}"
-                 onerror="this.src='./img/juego-default.png'">
-          </a>
-          <div class="card-body d-flex flex-column flex-grow-1">
-            <h5 class="card-title text-dark" title="${escapeHtml(
-              juego.titulo
-            )}">
-              ${truncarTexto(escapeHtml(juego.titulo), 40)}
-            </h5>
-            <p class="card-text text-muted small mb-3">
-              ${truncarTexto(
-                escapeHtml(juego.descripcion || "Sin descripción"),
-                80
-              )}
-            </p>
-            <div class="mt-auto d-flex gap-2">
-              <a href="detalle.php?id_juego=${
-                juego.id_juego
-              }" class="btn btn-primary btn-sm flex-grow-1">
-                <i class="bi bi-eye"></i> Ver Detalles
-              </a>
-              <button class="btn btn-outline-danger btn-sm btn-favorito" data-id-juego="${
-                juego.id_juego
-              }">
-              <i class="bi bi-heart-fill"></i>
-            </button>
-          </div>
-        </div>
-      `;
+      // Usar la función de template para crear el HTML
+      divCol.innerHTML = crearCardFavorito(juego);
 
       // Agregar evento al botón de quitar favorito
       var botonFavorito = divCol.querySelector(".btn-favorito");

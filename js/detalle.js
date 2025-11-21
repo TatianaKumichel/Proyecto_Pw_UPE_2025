@@ -835,9 +835,6 @@ function mostrarNotificacion(mensaje, tipo = "info") {
   }, 3000);
 }
 
-/**
- * Utilidades
- */
 function escapeHtml(text) {
   if (!text) return "";
   const div = document.createElement("div");
