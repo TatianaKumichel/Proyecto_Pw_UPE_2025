@@ -28,7 +28,4 @@ session_destroy();
 header('Location: ./index.php');
 exit;
 
-<<<<<<< HEAD
-=======
-// Made with Bob
->>>>>>> 165ef6c (pasaron cosas con git)
+

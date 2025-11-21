@@ -1,5 +1,4 @@
 <?php
-<<<<<<< HEAD
 session_start();
 require_once '../../inc/connection.php';
 
@@ -13,11 +12,6 @@ if (!isset($_SESSION['id_usuario'])) {
 
 // Obtener el ID del usuario logueado
 $id_usuario = $_SESSION['id_usuario'];
-=======
-include '../../inc/connection.php';
-// ejemplo: id del usuario logueado
-$id_usuario = 1;
->>>>>>> 165ef6c (pasaron cosas con git)
 
 $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
 
@@ -31,7 +25,6 @@ if (strpos($contentType, 'application/json') !== false) {
 }
 
 // Verificar si se recibieron datos
-<<<<<<< HEAD
 $id_juego = $data['id_juego'] ?? $data['id'] ?? null;
 
 if (empty($id_juego)) {
@@ -62,25 +55,3 @@ try {
 }
 
 
-=======
-if (empty($data)) {
-    header('Content-Type: application/json');
-    http_response_code(400);
-    echo json_encode([
-        'error' => 'No se recibieron datos',
-    ]);
-    exit;
-}
-
-$id_juego = $data['id'];
-header('Content-Type: application/json');
-try {
-    $stmt = $conn->prepare("DELETE FROM favorito WHERE id_usuario = :id_usuario AND id_juego = :id_juego");
-    $stmt->bindParam(':id_usuario', $id_usuario);
-    $stmt->bindParam(':id_juego', $id_juego);
-    $ok = $stmt->execute();
-    echo json_encode(['success' => $ok, 'message' => "Favorito eliminado correctamente"]);
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'message' => "No se pudo eliminar, intente mas tarde"]);
-}
->>>>>>> 165ef6c (pasaron cosas con git)

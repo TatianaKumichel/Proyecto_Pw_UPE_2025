@@ -98,11 +98,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'success' => false,
         'message' => 'Método no permitido'
     ]);
-<<<<<<< HEAD
 }
-=======
-}
-?>
-
-// Made with Bob
->>>>>>> 165ef6c (pasaron cosas con git)

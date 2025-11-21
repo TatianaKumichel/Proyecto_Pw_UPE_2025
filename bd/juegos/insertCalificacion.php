@@ -1,5 +1,4 @@
 <?php
-<<<<<<< HEAD
 session_start();
 include '../../inc/connection.php';
 header('Content-Type: application/json');
@@ -20,23 +19,10 @@ $puntuacion = $input['puntuacion'] ?? 0;
 if (!$id_juego || $puntuacion < 0 || $puntuacion > 5) {
     http_response_code(400);
     echo json_encode(['success' => false, 'error' => 'Datos inválidos. La puntuación debe estar entre 0 y 5.']);
-=======
-include '../../inc/connection.php';
-header('Content-Type: application/json');
-
-$input = json_decode(file_get_contents("php://input"), true);
-$id_usuario = $input['id_usuario'] ?? 0;
-$id_juego = $input['id_juego'] ?? 0;
-$puntuacion = $input['puntuacion'] ?? 0;
-
-if (!$id_usuario || !$id_juego || $puntuacion < 1 || $puntuacion > 5) {
-    echo json_encode(['error' => 'Datos inválidos']);
->>>>>>> 165ef6c (pasaron cosas con git)
     exit;
 }
 
 try {
-<<<<<<< HEAD
     // Verificar si ya existe una calificación
     $checkQuery = "SELECT COUNT(*) FROM calificacion WHERE id_usuario = :u AND id_juego = :j";
     $checkStmt = $conn->prepare($checkQuery);
@@ -104,36 +90,4 @@ try {
         'success' => false,
         'error' => 'Error al guardar calificación: ' . $e->getMessage()
     ]);
-=======
-    // actualizar si ya existe
-    $query = "
-        UPDATE calificacion
-        SET puntuacion = :p, fecha = NOW()
-        WHERE id_usuario = :u AND id_juego = :j
-    ";
-
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':p', $puntuacion);
-    $stmt->bindParam(':u', $id_usuario);
-    $stmt->bindParam(':j', $id_juego);
-    $stmt->execute();
-
-    // si no, insertar 
-    if ($stmt->rowCount() === 0) {
-        $query = "
-            INSERT INTO calificacion (id_usuario, id_juego, puntuacion, fecha)
-            VALUES (:u, :j, :p, NOW())
-        ";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':u', $id_usuario);
-        $stmt->bindParam(':j', $id_juego);
-        $stmt->bindParam(':p', $puntuacion);
-        $stmt->execute();
-    }
-
-    echo json_encode(array('ok' => true));
-
-} catch (PDOException $e) {
-    echo json_encode(array('ok' => false, 'error' => $e->getMessage()));
->>>>>>> 165ef6c (pasaron cosas con git)
 }

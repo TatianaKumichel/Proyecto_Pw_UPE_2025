@@ -1,10 +1,4 @@
 <?php
-<<<<<<< HEAD
-=======
-require "./inc/head.php";
-require "./inc/menu.php";
-$id_juego = 0;
->>>>>>> b633dd5 (mejoras en detalle juego)
 $id_juego = isset($_GET['id_juego']) ? intval($_GET['id_juego']) : 0;
 if ($id_juego <= 0) {
   die("Juego no especificado.");
@@ -15,16 +9,12 @@ if ($id_juego <= 0) {
 <html lang="es">
 
 <head>
-<<<<<<< HEAD
   <?php require "./inc/head.php"; ?>
-=======
->>>>>>> b633dd5 (mejoras en detalle juego)
   <link rel="stylesheet" href="./css/detalle.css" />
   <script>
     const ID_JUEGO = <?= $id_juego ?>;
   </script>
   <script src="./js/detalle.js" defer></script>
-<<<<<<< HEAD
   <script src="./js/detalle-reportar-modal.js" defer></script>
 </head>
 
@@ -125,16 +115,6 @@ if ($id_juego <= 0) {
     </div>
 
     <!-- Sección de comentarios -->
-=======
-</head>
-
-<body>
-  <header><?php require "./inc/menu.php"; ?></header>
-  <div style="margin-top:70px"></div>
-
-  <main class="container my-4">
-    <div id="contenedor-detalle" class="row"></div>
->>>>>>> b633dd5 (mejoras en detalle juego)
     <section id="comentarios" class="mt-4"></section>
   </main>
 
@@ -142,7 +122,6 @@ if ($id_juego <= 0) {
     <?php require "./inc/footer.php"; ?>
   </footer>
 
-<<<<<<< HEAD
   <!-- Modal para reportar comentario -->
   <div class="modal fade" id="modalReportarComentario" tabindex="-1" aria-labelledby="modalReportarLabel"
     aria-hidden="true">
@@ -182,10 +161,6 @@ if ($id_juego <= 0) {
       </div>
     </div>
   </div>
-=======
-  <!-- Modales -->
-  <?php include "./inc/modales_comentarios.php"; ?>
->>>>>>> b633dd5 (mejoras en detalle juego)
 </body>
 
 </html>
