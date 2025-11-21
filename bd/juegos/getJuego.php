@@ -3,7 +3,11 @@ include '../../inc/connection.php';
 header('Content-Type: application/json');
 
 $id_juego = isset($_GET['id_juego']) ? intval($_GET['id_juego']) : 0;
+<<<<<<< HEAD
 
+=======
+$id_juego = 0;
+>>>>>>> 165ef6c (pasaron cosas con git)
 if ($id_juego <= 0) {
     echo json_encode(['error' => 'ID de juego inválido']);
     exit;

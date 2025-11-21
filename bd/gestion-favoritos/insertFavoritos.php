@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 session_start();
 require_once '../../inc/connection.php';
 
@@ -12,6 +13,9 @@ if (!isset($_SESSION['id_usuario'])) {
 
 // Obtener el ID del usuario logueado
 $id_usuario = $_SESSION['id_usuario'];
+=======
+include '../../inc/connection.php';
+>>>>>>> 165ef6c (pasaron cosas con git)
 
 $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
 
@@ -25,16 +29,25 @@ if (strpos($contentType, 'application/json') !== false) {
 }
 
 // Verificar si se recibieron datos
+<<<<<<< HEAD
 if (empty($data) || !isset($data['id_juego'])) {
     header('Content-Type: application/json');
     http_response_code(400);
     echo json_encode([
         'success' => false,
         'error' => 'No se recibió el ID del juego',
+=======
+if (empty($data)) {
+    header('Content-Type: application/json');
+    http_response_code(400);
+    echo json_encode([
+        'error' => 'No se recibieron datos',
+>>>>>>> 165ef6c (pasaron cosas con git)
     ]);
     exit;
 }
 
+<<<<<<< HEAD
 $id_juego = $data['id_juego'];
 header('Content-Type: application/json');
 
@@ -72,3 +85,20 @@ try {
 }
 
 
+=======
+$query = 'INSERT INTO favorito
+SET id_juego = :id_juego,
+id_usuario = :id_usuario,
+fecha_agreagado = NOW()
+';
+
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':id_juego', $data['id_juego']);
+$stmt->bindParam(':id_usuario', $data['id_usuario']);
+$stmt->execute();
+
+$idResultante = $conn->lastInsertId();
+header('Content-Type: application/json');
+
+echo json_encode(['success' => $ok, 'message' => "Favorito agregado correctamente"]);
+>>>>>>> 165ef6c (pasaron cosas con git)

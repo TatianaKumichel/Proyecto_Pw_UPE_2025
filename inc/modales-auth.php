@@ -11,6 +11,7 @@
             <div class="modal-body">
                 <form id="formLogin">
                     <div class="mb-3">
+<<<<<<< HEAD
                         <label for="loginUsername" class="form-label">Usuario</label>
                         <input type="text" class="form-control" id="loginUsername" name="loginUsername" required
                             placeholder="Tu nombre de usuario">
@@ -19,6 +20,16 @@
                         <label for="loginPassword" class="form-label">Contraseña</label>
                         <input type="password" class="form-control" id="loginPassword" name="loginPassword" required
                             placeholder="">
+=======
+                        <label for="loginEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="loginEmail" name="email" required
+                            placeholder="tu@email.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="loginPassword" name="password" required
+                            placeholder="Mínimo 8 caracteres">
+>>>>>>> 165ef6c (pasaron cosas con git)
                     </div>
                     <div id="loginError" class="alert alert-danger d-none" role="alert"></div>
                     <div class="d-grid">
@@ -66,7 +77,11 @@
                         <label for="regPassword" class="form-label">Contraseña</label>
                         <input type="password" class="form-control" id="regPassword" name="password" required
                             placeholder="Mínimo 8 caracteres" minlength="8">
+<<<<<<< HEAD
                         <small class="form-text text-muted">Usa una contraseña segura (al menos 8 caracteres)</small>
+=======
+                        <small class="form-text text-muted">Usa una contraseña segura</small>
+>>>>>>> 165ef6c (pasaron cosas con git)
                     </div>
                     <div id="registroError" class="alert alert-danger d-none" role="alert"></div>
                     <div id="registroSuccess" class="alert alert-success d-none" role="alert"></div>
@@ -86,4 +101,10 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
 </div>
+=======
+</div>
+
+// Made with Bob
+>>>>>>> 165ef6c (pasaron cosas con git)
