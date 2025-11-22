@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /**
  * Detalle de juego
  * información completa del juego, permite marcar favorito, calificar y comentar
@@ -90,74 +89,8 @@ function cargarImagenes(juego) {
     juego.imagenes.length > 0
   ) {
     imagenesDisponibles = [...juego.imagenes];
-=======
-window.addEventListener("DOMContentLoaded", () => {
-  cargarDetalle();
-  cargarComentarios();
-});
-
-async function cargarDetalle() {
-  const contenedor = document.getElementById("contenedor-detalle");
-
-  try {
-    const res = await fetch(`./bd/juegos/getJuego.php?id_juego=${ID_JUEGO}`);
-    const juego = await res.json();
-    if (juego.error) throw new Error(juego.error);
-
-    const html = `
-      <div class="col-12 col-md-6">
-        <div id="carouselJuego" class="carousel slide mb-2" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            ${juego.imagenes
-              .map(
-                (img, i) =>
-                  `<div class="carousel-item ${i === 0 ? "active" : ""}">
-                <img src="${img}" class="d-block w-100 rounded" alt="${
-                    juego.titulo
-                  }">
-              </div>`
-              )
-              .join("")}
-          </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselJuego" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselJuego" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-          </button>
-        </div>
-      </div>
-
-      <div class="col-12 col-md-6">
-        <h2>${juego.titulo}</h2>
-        <p><strong>Descripción:</strong> ${juego.descripcion}</p>
-        <p><strong>Plataformas:</strong> ${juego.plataformas.join(", ")}</p>
-        <p><strong>Géneros:</strong> ${juego.generos.join(", ")}</p>
-        <p><strong>Empresa:</strong> ${juego.empresa}</p>
-        <p><strong>Lanzamiento:</strong> ${juego.fecha_lanzamiento}</p>
-
-        <button id="btn-favorito" class="btn btn-outline-danger mb-3">
-          <i class="bi bi-heart"></i> Marcar como favorito
-        </button>
-
-        <h5>Calificar este juego:</h5>
-        <span id="calificacion">
-          ${[1, 2, 3, 4, 5]
-            .map((v) => `<i class="bi bi-star estrella" data-valor="${v}"></i>`)
-            .join("")}
-        </span>
-      </div>
-    `;
-
-    contenedor.innerHTML = html;
-    configurarEventos(juego.id_juego);
-  } catch (err) {
-    contenedor.innerHTML = `<p class="text-danger">Error: ${err.message}</p>`;
->>>>>>> b633dd5 (mejoras en detalle juego)
   }
-}
 
-<<<<<<< HEAD
   // Si hay imagen_portada y no está en el array, agregarla
   if (
     juego.imagen_portada &&
@@ -165,6 +98,7 @@ async function cargarDetalle() {
   ) {
     imagenesDisponibles.unshift(juego.imagen_portada);
   }
+
   if (imagenesDisponibles.length > 1) {
     // Múltiples imágenes: usar carousel
     const carouselInner = document.getElementById("carousel-inner");
@@ -333,20 +267,8 @@ async function configurarEventos(id_juego) {
         calificacionActual = valor;
       }
     });
-=======
-function configurarEventos(id_juego) {
-  document
-    .getElementById("btn-favorito")
-    .addEventListener("click", () => toggleFavorito(id_juego));
-  document.querySelectorAll(".estrella").forEach((star) => {
-    star.addEventListener("click", (e) =>
-      calificar(id_juego, e.target.dataset.valor)
-    );
->>>>>>> b633dd5 (mejoras en detalle juego)
   });
-}
 
-<<<<<<< HEAD
   // Restaurar calificación guardada al salir del área
   document.getElementById("calificacion").addEventListener("mouseleave", () => {
     mostrarCalificacion(calificacionActual);
@@ -928,24 +850,4 @@ function formatearFecha(fecha) {
     month: "long",
     day: "numeric",
   });
-=======
-async function toggleFavorito(id_juego) {
-  const res = await fetch("./inc/insertFavoritos.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id_juego, id_usuario: 1 }),
-  });
-  const data = await res.json();
-  alert(data.message || "Favorito agregado.");
-}
-
-async function calificar(id_juego, valor) {
-  const res = await fetch("./bd/juegos/insertCalificacion.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id_juego, id_usuario: 1, puntuacion: valor }),
-  });
-  const data = await res.json();
-  alert(data.message || "Calificación registrada.");
->>>>>>> b633dd5 (mejoras en detalle juego)
 }
