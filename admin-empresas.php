@@ -57,8 +57,8 @@
       <table class="table align-middle">
         <thead>
           <tr>
-            <th>Empresa</th>
-            <th>Sitio web</th>
+            <th class="text-dark">Empresa</th>
+            <th class="text-dark">Sitio web</th>
             <th> </th>
           </tr>
         </thead>
