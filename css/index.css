@@ -1,0 +1,44 @@
+/* Cards de próximos lanzamientos */
+#proximosLanzamientos .card {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  #proximosLanzamientos .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+  }
+  
+  /* Carousel de tendencias */
+  #tendenciasCarousel .carousel-item img {
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  #tendenciasCarousel .carousel-caption {
+    bottom: 20px;
+  }
+  
+  #tendenciasCarousel .carousel-caption h5 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  }
+  
+  /* Estrellas de calificación */
+  .bi-star-fill,
+  .bi-star-half,
+  .bi-star {
+    font-size: 1rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    #tendenciasCarousel .carousel-item img {
+      height: 250px;
+    }
+  
+    #tendenciasCarousel .carousel-caption {
+      font-size: 0.9rem;
+    }
+  }
