@@ -1,3 +1,14 @@
+/* Mantener footer abajo cuando hay poco contenido */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
 /* Efecto hover en las cards */
 .hover-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;

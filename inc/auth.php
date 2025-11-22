@@ -22,7 +22,6 @@ if (!isset($_SESSION['id_usuario'])) {
 
 /**
  * Requiere que el usuario tenga un permiso específico
- * @param string $permiso Nombre del permiso requerido
  */
 function requierePermiso($permiso)
 {
@@ -42,7 +41,6 @@ function requierePermiso($permiso)
 
 /**
  * Requiere que el usuario tenga un rol específico
- * @param int $id_rol ID del rol requerido
  */
 function requiereRol($id_rol)
 {

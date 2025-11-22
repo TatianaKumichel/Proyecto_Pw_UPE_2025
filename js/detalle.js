@@ -414,7 +414,7 @@ function renderizarSeccionComentarios(contenedor, data, estaLogueado) {
       ${crearHeaderComentarios(data.total)}
       <div class="card-body">
         ${crearFormularioNuevoComentario(estaLogueado, usuarioTieneComentario)}
-        ${crearListaComentarios(data.comentarios)}
+        ${crearListaComentarios(data.comentarios, estaLogueado)}
       </div>
     </div>
   `;
@@ -489,15 +489,18 @@ function crearFormularioNuevoComentario(
 
 /**
  * Crear lista de comentarios
+ * @param {Array} comentarios - Array de comentarios
+ * @param {boolean} estaLogueado - Si el usuario está logueado
+ * @returns {string} HTML de la lista
  */
-function crearListaComentarios(comentarios) {
+function crearListaComentarios(comentarios, estaLogueado) {
   let html = '<div id="listaComentarios">';
 
   if (comentarios.length === 0) {
     html += crearMensajeComentariosVacios();
   } else {
     html += comentarios
-      .map((comentario) => crearHTMLComentario(comentario))
+      .map((comentario) => crearHTMLComentario(comentario, estaLogueado))
       .join("");
   }
 
@@ -542,8 +545,11 @@ function mostrarErrorComentarios(contenedor, error) {
 
 /**
  * Crear HTML para un comentario
+ * @param {Object} comentario - Datos del comentario
+ * @param {boolean} estaLogueado - Si el usuario está logueado
+ * @returns {string} HTML del comentario
  */
-function crearHTMLComentario(comentario) {
+function crearHTMLComentario(comentario, estaLogueado) {
   // Validar datos requeridos
   if (!comentario || !comentario.id_comentario) {
     console.error("Comentario inválido:", comentario);
@@ -560,7 +566,7 @@ function crearHTMLComentario(comentario) {
          data-id="${id_comentario}"
          data-es-propio="${es_propio}">
       ${crearHeaderComentario(username, fecha, avatar)}
-      ${crearBotonesAccion(id_comentario, es_propio)}
+      ${crearBotonesAccion(id_comentario, es_propio, estaLogueado)}
       ${crearContenidoComentario(contenido)}
     </div>
   `;
@@ -593,8 +599,13 @@ function crearHeaderComentario(username, fecha, avatar) {
 
 /**
  * Crear botones de acción según el tipo de usuario
+ * @param {number} id - ID del comentario
+ * @param {boolean} esPropio - Si el comentario pertenece al usuario actual
+ * @param {boolean} estaLogueado - Si el usuario está logueado
+ * @returns {string} HTML de los botones
  */
-function crearBotonesAccion(id, esPropio) {
+function crearBotonesAccion(id, esPropio, estaLogueado) {
+  // Si es comentario propio, mostrar botones de editar y eliminar
   if (esPropio) {
     return `
       <div class="btn-group btn-group-sm" role="group" aria-label="Acciones del comentario">
@@ -612,13 +623,19 @@ function crearBotonesAccion(id, esPropio) {
     `;
   }
 
-  return `
-    <button class="btn btn-outline-warning btn-sm btn-reportar"
-            data-id="${id}"
-            aria-label="Reportar comentario">
-      <i class="bi bi-flag" aria-hidden="true"></i> Reportar
-    </button>
-  `;
+  // Si no es propio y el usuario está logueado, mostrar botón reportar
+  if (estaLogueado) {
+    return `
+      <button class="btn btn-outline-warning btn-sm btn-reportar"
+              data-id="${id}"
+              aria-label="Reportar comentario">
+        <i class="bi bi-flag" aria-hidden="true"></i> Reportar
+      </button>
+    `;
+  }
+
+  // Si no está logueado, no mostrar ningún botón
+  return "";
 }
 
 /**
