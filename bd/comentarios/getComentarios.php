@@ -4,10 +4,6 @@
  * Retorna los comentarios activos con información del usuario
  */
 
-// Deshabilitar salida de errores de PHP
-error_reporting(0);
-ini_set('display_errors', 0);
-
 session_start();
 
 header('Content-Type: application/json');
@@ -49,19 +45,32 @@ try {
     $comentarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Agregar flag para identificar si el comentario es del usuario actual
+    $usuario_tiene_comentario = false;
+    $id_comentario_usuario = null;
+
     foreach ($comentarios as &$comentario) {
-        $comentario['es_propio'] = ($id_usuario_actual && $comentario['id_usuario'] == $id_usuario_actual);
+        $es_propio = ($id_usuario_actual && $comentario['id_usuario'] == $id_usuario_actual);
+        $comentario['es_propio'] = $es_propio;
+
+        // Si encontramos un comentario del usuario actual, guardamos la información
+        if ($es_propio) {
+            $usuario_tiene_comentario = true;
+            $id_comentario_usuario = $comentario['id_comentario'];
+        }
     }
 
     echo json_encode([
         'success' => true,
         'comentarios' => $comentarios,
-        'total' => count($comentarios)
+        'total' => count($comentarios),
+        'usuario_tiene_comentario' => $usuario_tiene_comentario,
+        'id_comentario_usuario' => $id_comentario_usuario
     ]);
 
 } catch (Exception $e) {
     echo json_encode([
-        'success' => true,
+        'success' => false,
+        'error' => 'Error al obtener comentarios: ' . $e->getMessage(),
         'comentarios' => [],
         'total' => 0
     ]);

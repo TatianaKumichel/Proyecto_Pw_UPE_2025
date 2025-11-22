@@ -134,11 +134,11 @@ if ($id_juego <= 0) {
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p class="text-muted">Por favor, indica el motivo por el cual deseas reportar este comentario:</p>
+
           <div class="mb-3">
-            <label for="motivoReporte" class="form-label">Motivo del reporte</label>
-            <textarea class="form-control" id="motivoReporte" rows="4" maxlength="255"
-              placeholder="Describe el motivo del reporte (máximo 255 caracteres)" required></textarea>
+            <label for="motivoReporte" class="form-label"></label>
+            <textarea class="form-control" id="motivoReporte" rows="4" maxlength="255" placeholder="Describe el motivo."
+              required></textarea>
             <div class="form-text">
               <span id="contadorReporte">0</span>/255 caracteres
             </div>
@@ -146,7 +146,7 @@ if ($id_juego <= 0) {
           <div class="alert alert-info mb-0">
             <small>
               <i class="bi bi-info-circle"></i>
-              Tu reporte será revisado por un moderador. Los reportes falsos pueden resultar en sanciones.
+              Tu reporte será revisado por un moderador.
             </small>
           </div>
         </div>
@@ -156,6 +156,110 @@ if ($id_juego <= 0) {
           </button>
           <button type="button" class="btn btn-warning" id="btnConfirmarReporte">
             <i class="bi bi-flag-fill"></i> Enviar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Agregar Comentario -->
+  <div class="modal fade" id="modalAgregarComentario" tabindex="-1" aria-labelledby="modalAgregarComentarioLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="modalAgregarComentarioLabel">
+            <i class="bi bi-chat-dots"></i> Agregar Comentario
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formAgregarComentario">
+            <div class="mb-3">
+              <label for="textoNuevoComentario" class="form-label">
+              </label>
+              <textarea id="textoNuevoComentario" class="form-control" rows="5" maxlength="500"
+                placeholder="Escribe tu comentario aquí..." required></textarea>
+              <div class="form-text">
+                <span id="contadorNuevo">0</span>/500 caracteres
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x"></i> Cancelar
+          </button>
+          <button type="button" class="btn btn-primary" id="btnPublicarComentario">
+            <i class="bi bi-send"></i> Publicar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Editar Comentario -->
+  <div class="modal fade" id="modalEditarComentario" tabindex="-1" aria-labelledby="modalEditarComentarioLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title" id="modalEditarComentarioLabel">
+            <i class="bi bi-pencil"></i> Editar Comentario
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formEditarComentario">
+            <input type="hidden" id="idComentarioEditar" />
+            <div class="mb-3">
+              <label for="textoEditarComentario" class="form-label">
+              </label>
+              <textarea id="textoEditarComentario" class="form-control" rows="5" maxlength="500" required></textarea>
+              <div class="form-text">
+                <span id="contadorEditar">0</span>/500 caracteres
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x"></i> Cancelar
+          </button>
+          <button type="button" class="btn btn-warning" id="btnGuardarEdicion">
+            <i class="bi bi-check"></i> Guardar Cambios
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Eliminar Comentario -->
+  <div class="modal fade" id="modalEliminarComentario" tabindex="-1" aria-labelledby="modalEliminarComentarioLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="modalEliminarComentarioLabel">
+            <i class="bi bi-exclamation-triangle"></i> Eliminar Comentario
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="idComentarioEliminar" />
+          <p class="mb-2">¿Estás seguro de que deseas eliminar este comentario?</p>
+          <div class="card bg-light">
+            <div class="card-body">
+              <p class="mb-0 mt-2" id="previsualizacionEliminar"></p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x"></i> Cancelar
+          </button>
+          <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+            <i class="bi bi-trash"></i> Eliminar
           </button>
         </div>
       </div>

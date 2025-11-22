@@ -52,6 +52,24 @@ try {
         exit;
     }
 
+    // Verificar que el usuario no tenga ya un comentario activo en este juego
+    $queryComentarioExistente = "SELECT id_comentario
+                                  FROM comentario
+                                  WHERE id_usuario = :id_usuario
+                                    AND id_juego = :id_juego
+                                    AND estado = 'activo'";
+    $stmtComentarioExistente = $pdo->prepare($queryComentarioExistente);
+    $stmtComentarioExistente->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+    $stmtComentarioExistente->bindParam(':id_juego', $id_juego, PDO::PARAM_INT);
+    $stmtComentarioExistente->execute();
+
+    if ($stmtComentarioExistente->rowCount() > 0) {
+        echo json_encode([
+            'error' => 'Ya tienes un comentario activo en este juego. Puedes editarlo o eliminarlo para publicar uno nuevo.'
+        ]);
+        exit;
+    }
+
     // Insertar comentario
     $query = "INSERT INTO comentario (id_usuario, id_juego, contenido, fecha, estado) 
               VALUES (:id_usuario, :id_juego, :contenido, NOW(), 'activo')";

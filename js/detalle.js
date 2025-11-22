@@ -6,6 +6,7 @@
 window.addEventListener("DOMContentLoaded", () => {
   cargarDetalle();
   cargarComentarios();
+  configurarEventosModales();
 });
 
 /**
@@ -88,6 +89,7 @@ function cargarImagenes(juego) {
     Array.isArray(juego.imagenes) &&
     juego.imagenes.length > 0
   ) {
+    // Crear copia del array
     imagenesDisponibles = [...juego.imagenes];
   }
 
@@ -96,12 +98,14 @@ function cargarImagenes(juego) {
     juego.imagen_portada &&
     !imagenesDisponibles.includes(juego.imagen_portada)
   ) {
+    // Agregar como primer elemento
     imagenesDisponibles.unshift(juego.imagen_portada);
   }
 
   if (imagenesDisponibles.length > 1) {
     // Múltiples imágenes: usar carousel
     const carouselInner = document.getElementById("carousel-inner");
+    // Por cada imagen crear bloque html
     carouselInner.innerHTML = imagenesDisponibles
       .map(
         (img, i) => `
@@ -365,101 +369,14 @@ async function cargarComentarios() {
     const estaLogueado = await verificarSesion();
 
     // Obtener comentarios
-    const response = await fetch(
-      `./bd/comentarios/getComentarios.php?id_juego=${ID_JUEGO}`
-    );
-    const data = await response.json();
+    const data = await obtenerComentarios(ID_JUEGO);
 
     if (data.error) {
       throw new Error(data.error);
     }
 
-    // Construir HTML
-    let html = `
-      <div class="card mt-4">
-        <div class="card-header bg-primary text-white">
-          <h4 class="mb-0"><i class="bi bi-chat-dots"></i> Comentarios (${data.total})</h4>
-        </div>
-        <div class="card-body">
-    `;
-
-    // Formulario para agregar comentario (solo si está logueado)
-    if (estaLogueado) {
-      html += `
-        <div class="mb-4">
-          <h5>Agregar comentario</h5>
-          <div class="mb-3">
-            <textarea id="nuevoComentario" class="form-control" rows="3"
-                      placeholder="Escribe tu comentario aquí (máximo 500 caracteres)"
-                      maxlength="500"></textarea>
-            <small class="text-muted">
-              <span id="contadorCaracteres">0</span>/500 caracteres
-            </small>
-          </div>
-          <button id="btnAgregarComentario" class="btn btn-primary">
-            <i class="bi bi-send"></i> Publicar Comentario
-          </button>
-        </div>
-        <hr>
-      `;
-    } else {
-      html += `
-        <div class="alert alert-info mb-4">
-          <i class="bi bi-info-circle"></i>
-          <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Inicia sesión</a>
-          para comentar.
-        </div>
-      `;
-    }
-
-    // Lista de comentarios
-    html += `<div id="listaComentarios">`;
-
-    if (data.comentarios.length === 0) {
-      html += `
-        <div class="text-center text-muted py-4">
-          <i class="bi bi-chat empty-comments-icon"></i>
-          <p class="mt-2">Aún no hay comentarios. ¡Sé el primero en comentar!</p>
-        </div>
-      `;
-    } else {
-      data.comentarios.forEach((comentario) => {
-        html += crearHTMLComentario(comentario);
-      });
-    }
-
-    html += `
-        </div>
-      </div>
-    </div>
-    
-    <!-- Modal de confirmación para eliminar comentario -->
-    <div class="modal fade" id="modalEliminarComentario" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header bg-danger text-white">
-            <h5 class="modal-title">
-              <i class="bi bi-exclamation-triangle"></i> Confirmar Eliminación
-            </h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <p>¿Estás seguro de que deseas eliminar este comentario?</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              <i class="bi bi-x"></i> Cancelar
-            </button>
-            <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
-              <i class="bi bi-trash"></i> Eliminar Comentario
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    `;
-
-    seccionComentarios.innerHTML = html;
+    // Renderizar sección completa
+    renderizarSeccionComentarios(seccionComentarios, data, estaLogueado);
 
     // Configurar eventos si está logueado
     if (estaLogueado) {
@@ -467,159 +384,356 @@ async function cargarComentarios() {
     }
   } catch (error) {
     console.error("Error al cargar comentarios:", error);
-    seccionComentarios.innerHTML = `
-      <div class="alert alert-danger">
-        <i class="bi bi-exclamation-triangle"></i> Error al cargar comentarios
+    mostrarErrorComentarios(seccionComentarios, error);
+  }
+}
+
+/**
+ * Obtener comentarios
+ */
+async function obtenerComentarios(idJuego) {
+  const response = await fetch(
+    `./bd/comentarios/getComentarios.php?id_juego=${idJuego}`
+  );
+
+  if (!response.ok) {
+    throw new Error(`Error HTTP: ${response.status}`);
+  }
+
+  return await response.json();
+}
+
+/**
+ * Renderizar sección completa de comentarios
+ */
+function renderizarSeccionComentarios(contenedor, data, estaLogueado) {
+  const usuarioTieneComentario = data.usuario_tiene_comentario || false;
+
+  const html = `
+    <div class="card mt-4">
+      ${crearHeaderComentarios(data.total)}
+      <div class="card-body">
+        ${crearFormularioNuevoComentario(estaLogueado, usuarioTieneComentario)}
+        ${crearListaComentarios(data.comentarios)}
+      </div>
+    </div>
+  `;
+
+  contenedor.innerHTML = html;
+}
+
+/**
+ * Crear header de la sección de comentarios
+ */
+function crearHeaderComentarios(total) {
+  return `
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">
+        <i class="bi bi-chat-dots" aria-hidden="true"></i>
+        Comentarios (${total})
+      </h4>
+    </div>
+  `;
+}
+
+/**
+ * Crear formulario para nuevo comentario o mensaje de login
+ */
+function crearFormularioNuevoComentario(
+  estaLogueado,
+  usuarioTieneComentario = false
+) {
+  if (!estaLogueado) {
+    return `
+      <div class="alert alert-info mb-4 text-center" role="alert">
+        <i class="bi bi-info-circle" aria-hidden="true"></i>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+          Inicia sesión
+        </a>
+        para comentar.
       </div>
     `;
   }
+
+  // Usuario logueado pero ya tiene un comentario
+  if (usuarioTieneComentario) {
+    return `
+      <div class="alert alert-info mb-4" role="alert">
+        <h6 class="alert-heading">
+          <i class="bi bi-info-circle"></i> Ya tienes un comentario publicado
+        </h6>
+        <div class="d-flex gap-2 flex-wrap">
+          <button class="btn btn-sm btn-outline-primary" onclick="scrollToUserComment()">
+            <i class="bi bi-arrow-down"></i> Ver mi comentario
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Usuario logueado sin comentario - mostrar botón para abrir modal
+  return `
+    <div class="mb-4 text-center">
+      <button class="btn btn-primary btn-lg"
+              data-bs-toggle="modal"
+              data-bs-target="#modalAgregarComentario">
+        <i class="bi bi-chat-dots"></i> Agregar Comentario
+      </button>
+      <p class="text-muted mt-2 small">
+        Comparte tu opinión sobre este juego
+      </p>
+    </div>
+    <hr>
+  `;
+}
+
+/**
+ * Crear lista de comentarios
+ */
+function crearListaComentarios(comentarios) {
+  let html = '<div id="listaComentarios">';
+
+  if (comentarios.length === 0) {
+    html += crearMensajeComentariosVacios();
+  } else {
+    html += comentarios
+      .map((comentario) => crearHTMLComentario(comentario))
+      .join("");
+  }
+
+  html += "</div>";
+  return html;
+}
+
+/**
+ * Crear mensaje cuando no hay comentarios
+ */
+function crearMensajeComentariosVacios() {
+  return `
+    <div class="text-center text-muted py-4" role="status">
+      <i class="bi bi-chat empty-comments-icon" aria-hidden="true"></i>
+      <p class="mt-2">Aún no hay comentarios. ¡Sé el primero en comentar!</p>
+    </div>
+  `;
+}
+
+/**
+ * Mostrar error al cargar comentarios
+ */
+function mostrarErrorComentarios(contenedor, error) {
+  contenedor.innerHTML = `
+    <div class="card mt-4">
+      <div class="card-body">
+        <div class="alert alert-danger" role="alert">
+          <h5 class="alert-heading">
+            <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+            Error al cargar comentarios
+          </h5>
+          <p class="mb-0">${escapeHtml(error.message)}</p>
+          <hr>
+          <button class="btn btn-sm btn-outline-danger" onclick="cargarComentarios()">
+            <i class="bi bi-arrow-clockwise" aria-hidden="true"></i> Reintentar
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 /**
  * Crear HTML para un comentario
  */
 function crearHTMLComentario(comentario) {
-  const fecha = new Date(comentario.fecha).toLocaleDateString("es-ES", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  // Validar datos requeridos
+  if (!comentario || !comentario.id_comentario) {
+    console.error("Comentario inválido:", comentario);
+    return "";
+  }
 
-  const avatar = comentario.avatar || "./img/user_gray.png";
+  const { id_comentario, username, fecha, contenido, avatar, es_propio } =
+    comentario;
 
-  let html = `
-    <div class="comentario mb-3 p-3 border rounded" data-id="${
-      comentario.id_comentario
-    }">
-      <div class="d-flex">
-        <img src="${avatar}" alt="${escapeHtml(comentario.username)}"
-             class="rounded-circle me-3 comment-avatar">
-        <div class="flex-grow-1">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
-              <strong>${escapeHtml(comentario.username)}</strong>
-              <small class="text-muted d-block">${fecha}</small>
-            </div>
+  return `
+    <div class="comentario mb-3 p-3 border rounded ${
+      es_propio ? "border-primary" : ""
+    }"
+         data-id="${id_comentario}"
+         data-es-propio="${es_propio}">
+      ${crearHeaderComentario(username, fecha, avatar)}
+      ${crearBotonesAccion(id_comentario, es_propio)}
+      ${crearContenidoComentario(contenido)}
+    </div>
   `;
+}
 
-  // Botones de acción
-  if (comentario.es_propio) {
-    // Comentario propio: editar y eliminar
-    html += `
-      <div class="btn-group btn-group-sm">
-        <button class="btn btn-outline-primary btn-editar" data-id="${comentario.id_comentario}">
-          <i class="bi bi-pencil"></i> Editar
+/**
+ * Crear header del comentario con avatar y datos del usuario
+ */
+function crearHeaderComentario(username, fecha, avatar) {
+  const fechaFormateada = formatearFechaComentario(fecha);
+  const avatarSeguro = avatar || "./img/user_gray.png";
+  const usernameSeguro = escapeHtml(username || "Usuario");
+
+  return `
+    <div class="d-flex">
+      <img src="${avatarSeguro}"
+           alt="Avatar de ${usernameSeguro}"
+           class="rounded-circle me-3 comment-avatar"
+           aria-hidden="true">
+      <div class="flex-grow-1">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <strong>${usernameSeguro}</strong>
+            <small class="text-muted d-block">
+              <time datetime="${fecha}">${fechaFormateada}</time>
+            </small>
+          </div>
+  `;
+}
+
+/**
+ * Crear botones de acción según el tipo de usuario
+ */
+function crearBotonesAccion(id, esPropio) {
+  if (esPropio) {
+    return `
+      <div class="btn-group btn-group-sm" role="group" aria-label="Acciones del comentario">
+        <button class="btn btn-outline-warning btn-editar"
+                onclick="abrirModalEditarComentario(${id})"
+                aria-label="Editar comentario">
+          <i class="bi bi-pencil" aria-hidden="true"></i> Editar
         </button>
-        <button class="btn btn-outline-danger btn-eliminar" data-id="${comentario.id_comentario}">
-          <i class="bi bi-trash"></i> Eliminar
+        <button class="btn btn-outline-danger btn-eliminar"
+                onclick="abrirModalEliminarComentario(${id})"
+                aria-label="Eliminar comentario">
+          <i class="bi bi-trash" aria-hidden="true"></i> Eliminar
         </button>
       </div>
     `;
-  } else {
-    // Comentario de otro: reportar
-    html += `
-      <button class="btn btn-outline-warning btn-sm btn-reportar" data-id="${comentario.id_comentario}">
-        <i class="bi bi-flag"></i> Reportar
-      </button>
-    `;
   }
 
-  html += `
+  return `
+    <button class="btn btn-outline-warning btn-sm btn-reportar"
+            data-id="${id}"
+            aria-label="Reportar comentario">
+      <i class="bi bi-flag" aria-hidden="true"></i> Reportar
+    </button>
+  `;
+}
+
+/**
+ * Crear contenido del comentario
+ */
+function crearContenidoComentario(contenido) {
+  const contenidoSeguro = escapeHtml(contenido || "");
+
+  return `
           </div>
-          <p class="mt-2 mb-0 comentario-texto">${escapeHtml(
-            comentario.contenido
-          )}</p>
-          
-          <!-- Formulario de edición (oculto por defecto) -->
-          <div class="form-edicion mt-2 d-none">
-            <textarea class="form-control mb-2" rows="3" maxlength="500">${escapeHtml(
-              comentario.contenido
-            )}</textarea>
-            <button class="btn btn-sm btn-success btn-guardar-edicion" data-id="${
-              comentario.id_comentario
-            }">
-              <i class="bi bi-check"></i> Guardar
-            </button>
-            <button class="btn btn-sm btn-secondary btn-cancelar-edicion">
-              <i class="bi bi-x"></i> Cancelar
-            </button>
-          </div>
+          <p class="mt-2 mb-0 comentario-texto">${contenidoSeguro}</p>
         </div>
       </div>
     </div>
   `;
-
-  return html;
 }
 
 /**
- * Configurar eventos de comentarios
+ * Formatear fecha para mostrar en comentarios
  */
-function configurarEventosComentarios() {
-  // Contador de caracteres
-  const textarea = document.getElementById("nuevoComentario");
-  const contador = document.getElementById("contadorCaracteres");
+function formatearFechaComentario(fecha) {
+  if (!fecha) return "Fecha no disponible";
 
-  if (textarea && contador) {
-    textarea.addEventListener("input", () => {
-      contador.textContent = textarea.value.length;
+  try {
+    return new Date(fecha).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
+  } catch (error) {
+    console.error("Error al formatear fecha:", error);
+    return "Fecha inválida";
   }
-
-  // Botón agregar comentario
-  const btnAgregar = document.getElementById("btnAgregarComentario");
-  if (btnAgregar) {
-    btnAgregar.addEventListener("click", agregarComentario);
-  }
-
-  // Botones de editar
-  document.querySelectorAll(".btn-editar").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const id = e.currentTarget.dataset.id;
-      mostrarFormularioEdicion(id);
-    });
-  });
-
-  // Botones de eliminar
-  document.querySelectorAll(".btn-eliminar").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const id = e.currentTarget.dataset.id;
-      confirmarEliminarComentario(id);
-    });
-  });
-
-  // Botones de reportar
-  document.querySelectorAll(".btn-reportar").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const id = e.currentTarget.dataset.id;
-      mostrarFormularioReporte(id);
-    });
-  });
-
-  // Botones de guardar edición
-  document.querySelectorAll(".btn-guardar-edicion").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const id = e.currentTarget.dataset.id;
-      guardarEdicionComentario(id);
-    });
-  });
-
-  // Botones de cancelar edición
-  document.querySelectorAll(".btn-cancelar-edicion").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const comentarioDiv = e.currentTarget.closest(".comentario");
-      ocultarFormularioEdicion(comentarioDiv);
-    });
-  });
 }
 
 /**
- * Agregar nuevo comentario
+ * Scroll suave al comentario del usuario y resaltarlo
  */
-async function agregarComentario() {
-  const textarea = document.getElementById("nuevoComentario");
+function scrollToUserComment() {
+  const comentarioUsuario = document.querySelector(
+    '.comentario[data-es-propio="true"]'
+  );
+  if (comentarioUsuario) {
+    comentarioUsuario.scrollIntoView({ behavior: "smooth", block: "center" });
+    comentarioUsuario.classList.add("highlight-comment");
+    setTimeout(() => {
+      comentarioUsuario.classList.remove("highlight-comment");
+    }, 2000);
+  }
+}
+
+/**
+ * Configurar eventos de los modales de comentarios
+ */
+function configurarEventosModales() {
+  // Modal Agregar Comentario
+  const modalAgregar = document.getElementById("modalAgregarComentario");
+  if (modalAgregar) {
+    // Contador de caracteres
+    const textareaAgregar = document.getElementById("textoNuevoComentario");
+    const contadorAgregar = document.getElementById("contadorNuevo");
+
+    if (textareaAgregar && contadorAgregar) {
+      textareaAgregar.addEventListener("input", () => {
+        contadorAgregar.textContent = textareaAgregar.value.length;
+      });
+    }
+
+    // Limpiar al cerrar
+    modalAgregar.addEventListener("hidden.bs.modal", () => {
+      if (textareaAgregar) {
+        textareaAgregar.value = "";
+        contadorAgregar.textContent = "0";
+      }
+    });
+
+    // Botón publicar
+    const btnPublicar = document.getElementById("btnPublicarComentario");
+    if (btnPublicar) {
+      btnPublicar.addEventListener("click", agregarComentarioModal);
+    }
+  }
+
+  // Modal Editar Comentario
+  const modalEditar = document.getElementById("modalEditarComentario");
+  if (modalEditar) {
+    const textareaEditar = document.getElementById("textoEditarComentario");
+    const contadorEditar = document.getElementById("contadorEditar");
+
+    if (textareaEditar && contadorEditar) {
+      textareaEditar.addEventListener("input", () => {
+        contadorEditar.textContent = textareaEditar.value.length;
+      });
+    }
+
+    const btnGuardar = document.getElementById("btnGuardarEdicion");
+    if (btnGuardar) {
+      btnGuardar.addEventListener("click", guardarEdicionModal);
+    }
+  }
+
+  // Modal Eliminar
+  const btnConfirmarEliminar = document.getElementById("btnConfirmarEliminar");
+  if (btnConfirmarEliminar) {
+    btnConfirmarEliminar.addEventListener("click", eliminarComentarioModal);
+  }
+}
+
+/**
+ * Agregar comentario desde modal
+ */
+async function agregarComentarioModal() {
+  const textarea = document.getElementById("textoNuevoComentario");
   const contenido = textarea.value.trim();
 
   if (!contenido) {
@@ -640,10 +754,14 @@ async function agregarComentario() {
     const data = await response.json();
 
     if (data.success) {
+      // Cerrar modal
+      const modal = bootstrap.Modal.getInstance(
+        document.getElementById("modalAgregarComentario")
+      );
+      modal.hide();
+
       mostrarNotificacion("Comentario publicado exitosamente", "success");
-      textarea.value = "";
-      document.getElementById("contadorCaracteres").textContent = "0";
-      await cargarComentarios(); // Recargar comentarios
+      await cargarComentarios();
     } else {
       throw new Error(data.error || "Error al publicar comentario");
     }
@@ -654,42 +772,42 @@ async function agregarComentario() {
 }
 
 /**
- * Mostrar formulario de edición
+ * Abrir modal para editar comentario
  */
-function mostrarFormularioEdicion(id) {
-  const comentarioDiv = document.querySelector(`.comentario[data-id="${id}"]`);
-  if (!comentarioDiv) return;
+function abrirModalEditarComentario(id = null) {
+  // Si no se pasa ID, buscar el comentario del usuario
+  const comentarioUsuario = id
+    ? document.querySelector(`.comentario[data-id="${id}"]`)
+    : document.querySelector('.comentario[data-es-propio="true"]');
 
-  const textoDiv = comentarioDiv.querySelector(".comentario-texto");
-  const formEdicion = comentarioDiv.querySelector(".form-edicion");
-  const botones = comentarioDiv.querySelector(".btn-group");
+  if (!comentarioUsuario) {
+    mostrarNotificacion("No se encontró el comentario", "danger");
+    return;
+  }
 
-  textoDiv.classList.add("d-none");
-  botones.classList.add("d-none");
-  formEdicion.classList.remove("d-none");
+  const idComentario = comentarioUsuario.dataset.id;
+  const contenidoActual =
+    comentarioUsuario.querySelector(".comentario-texto").textContent;
+
+  // Llenar modal
+  document.getElementById("idComentarioEditar").value = idComentario;
+  document.getElementById("textoEditarComentario").value = contenidoActual;
+  document.getElementById("contadorEditar").textContent =
+    contenidoActual.length;
+
+  // Abrir modal
+  const modal = new bootstrap.Modal(
+    document.getElementById("modalEditarComentario")
+  );
+  modal.show();
 }
 
 /**
- * Ocultar formulario de edición
+ * Guardar edición desde modal
  */
-function ocultarFormularioEdicion(comentarioDiv) {
-  const textoDiv = comentarioDiv.querySelector(".comentario-texto");
-  const formEdicion = comentarioDiv.querySelector(".form-edicion");
-  const botones = comentarioDiv.querySelector(".btn-group");
-
-  textoDiv.classList.remove("d-none");
-  botones.classList.remove("d-none");
-  formEdicion.classList.add("d-none");
-}
-
-/**
- * Guardar edición de comentario
- */
-async function guardarEdicionComentario(id) {
-  const comentarioDiv = document.querySelector(`.comentario[data-id="${id}"]`);
-  if (!comentarioDiv) return;
-
-  const textarea = comentarioDiv.querySelector(".form-edicion textarea");
+async function guardarEdicionModal() {
+  const id = document.getElementById("idComentarioEditar").value;
+  const textarea = document.getElementById("textoEditarComentario");
   const contenido = textarea.value.trim();
 
   if (!contenido) {
@@ -710,8 +828,13 @@ async function guardarEdicionComentario(id) {
     const data = await response.json();
 
     if (data.success) {
+      const modal = bootstrap.Modal.getInstance(
+        document.getElementById("modalEditarComentario")
+      );
+      modal.hide();
+
       mostrarNotificacion("Comentario actualizado exitosamente", "success");
-      await cargarComentarios(); // Recargar comentarios
+      await cargarComentarios();
     } else {
       throw new Error(data.error || "Error al actualizar comentario");
     }
@@ -722,47 +845,49 @@ async function guardarEdicionComentario(id) {
 }
 
 /**
- * Confirmar eliminación de comentario
+ * Abrir modal para eliminar comentario
  */
-function confirmarEliminarComentario(id) {
-  // Mostrar modal de confirmación
+function abrirModalEliminarComentario(id) {
+  const comentario = document.querySelector(`.comentario[data-id="${id}"]`);
+  if (!comentario) return;
+
+  const contenido = comentario.querySelector(".comentario-texto").textContent;
+
+  // Llenar modal
+  document.getElementById("idComentarioEliminar").value = id;
+  document.getElementById("previsualizacionEliminar").textContent =
+    contenido.length > 100 ? contenido.substring(0, 100) + "..." : contenido;
+
+  // Abrir modal
   const modal = new bootstrap.Modal(
     document.getElementById("modalEliminarComentario")
   );
   modal.show();
-
-  // Configurar botón de confirmación
-  const btnConfirmar = document.getElementById("btnConfirmarEliminar");
-
-  // Remover event listeners anteriores (si existen)
-  const nuevoBtn = btnConfirmar.cloneNode(true);
-  btnConfirmar.parentNode.replaceChild(nuevoBtn, btnConfirmar);
-
-  // Agregar nuevo event listener
-  nuevoBtn.addEventListener("click", () => {
-    modal.hide();
-    eliminarComentario(id);
-  });
 }
 
 /**
- * Eliminar comentario
+ * Eliminar comentario desde modal
  */
-async function eliminarComentario(id) {
+async function eliminarComentarioModal() {
+  const id = document.getElementById("idComentarioEliminar").value;
+
   try {
     const response = await fetch("./bd/comentarios/deleteComentario.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id_comentario: parseInt(id),
-      }),
+      body: JSON.stringify({ id_comentario: parseInt(id) }),
     });
 
     const data = await response.json();
 
     if (data.success) {
+      const modal = bootstrap.Modal.getInstance(
+        document.getElementById("modalEliminarComentario")
+      );
+      modal.hide();
+
       mostrarNotificacion("Comentario eliminado exitosamente", "success");
-      await cargarComentarios(); // Recargar comentarios
+      await cargarComentarios();
     } else {
       throw new Error(data.error || "Error al eliminar comentario");
     }
@@ -770,6 +895,19 @@ async function eliminarComentario(id) {
     console.error("Error:", error);
     mostrarNotificacion(error.message, "danger");
   }
+}
+
+/**
+ * Configurar eventos de comentarios
+ */
+function configurarEventosComentarios() {
+  // Botones de reportar
+  document.querySelectorAll(".btn-reportar").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const id = e.currentTarget.dataset.id;
+      mostrarFormularioReporte(id);
+    });
+  });
 }
 
 /**

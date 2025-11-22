@@ -121,3 +121,25 @@
 .toast-notification {
   z-index: 9999;
 }
+
+/* ------------------------------
+   Highlight animation for user's comment
+------------------------------ */
+.highlight-comment {
+  animation: highlightPulse 2s ease-in-out;
+}
+
+@keyframes highlightPulse {
+  0%,
+  100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(255, 193, 7, 0.2);
+  }
+}
+
+/* Border for user's own comment */
+.comentario.border-primary {
+  border-width: 2px !important;
+}
