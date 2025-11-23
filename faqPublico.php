@@ -17,13 +17,13 @@
   </header>
 
   <div id="faq-container">
-    <h2 class="titulo">Preguntas Frecuentes</h2>
+    <h2 class="titulo ">Preguntas Frecuentes</h2>
     <div id ="faq-list">
       <!-- Aca se carga las preguntas -->
     </div>
   </div>
 
-  <footer class="bg-dark text-white mt-4 pt-3 pb-2">
+  <footer class="bg-dark text-white mt-auto pt-3 pb-2">
     <?php
       require "./inc/footer.php";
     ?>

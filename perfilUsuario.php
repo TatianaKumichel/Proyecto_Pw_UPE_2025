@@ -104,7 +104,7 @@
     </div>
   </main>
 
-  <footer class="bg-dark text-white mt-4 pt-3 pb-2 fixed-bottom">
+  <footer class="bg-dark text-white mt-4 pt-3 pb-2">
     <?php require "./inc/footer.php"; ?>
   </footer>
 </body>
