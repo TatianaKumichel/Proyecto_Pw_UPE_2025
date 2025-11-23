@@ -19,6 +19,7 @@ try {
             j.fecha_lanzamiento,
             j.imagen_portada,
             j.publicado,
+            j.id_empresa,            -- ← AGREGADO
             e.nombre AS empresa
         FROM JUEGO j
         LEFT JOIN EMPRESA e ON j.id_empresa = e.id_empresa

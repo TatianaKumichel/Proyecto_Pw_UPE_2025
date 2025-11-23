@@ -10,7 +10,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
 }
 
 // ================================
-// Datos principales del formulario
+// Datos del formulario
 // ================================
 
 $titulo = $_POST['titulo'] ?? '';
@@ -24,16 +24,11 @@ $plataformas = isset($_POST['plataformas']) ? json_decode($_POST['plataformas'],
 
 $errores = [];
 
-if ($titulo === '')
-    $errores['titulo'] = "Debe ingresar un título.";
-if ($descripcion === '')
-    $errores['descripcion'] = "Debe ingresar una descripción.";
-if ($empresa === '')
-    $errores['empresa'] = "Debe indicar la empresa.";
-if (empty($generos))
-    $errores['genero'] = "Debe seleccionar al menos un género.";
-if (empty($plataformas))
-    $errores['plataforma'] = "Debe seleccionar al menos una plataforma.";
+if ($titulo === '')  $errores['titulo'] = "Debe ingresar un título.";
+if ($descripcion === '') $errores['descripcion'] = "Debe ingresar una descripción.";
+if ($empresa === '') $errores['empresa'] = "Debe indicar la empresa.";
+if (empty($generos)) $errores['genero'] = "Debe seleccionar al menos un género.";
+if (empty($plataformas)) $errores['plataforma'] = "Debe seleccionar al menos una plataforma.";
 
 if (!empty($errores)) {
     echo json_encode(['success' => false, 'errors' => $errores]);
@@ -45,21 +40,21 @@ try {
     // ====================================
     // EMPRESA
     // ====================================
-    $stmt = $conn->prepare("SELECT id_empresa FROM EMPRESA WHERE nombre = :nombre");
-    $stmt->execute([':nombre' => $empresa]);
+    $stmt = $conn->prepare("SELECT id_empresa FROM EMPRESA WHERE id_empresa = ?");
+    $stmt->execute([$empresa]);
     $dataEmpresa = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($dataEmpresa) {
-        $id_empresa = $dataEmpresa['id_empresa'];
-    } else {
-        $stmt = $conn->prepare("INSERT INTO EMPRESA (nombre) VALUES (:nombre)");
-        $stmt->execute([':nombre' => $empresa]);
-        $id_empresa = $conn->lastInsertId();
+    if (!$dataEmpresa) {
+        echo json_encode(['success' => false, 'error' => 'Empresa inválida']);
+        exit;
     }
+
+    $id_empresa = $empresa;
 
     // ====================================
     // IMAGEN
     // ====================================
+
     $imagen_path = null;
 
     if (!empty($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
@@ -78,49 +73,41 @@ try {
     }
 
     // ====================================
-    // UPDATE
+    // UPDATE EXISTENTE
     // ====================================
     if ($id) {
 
-        // si no se subió imagen nueva → recuperar la existente
+        // Obtener imagen existente si no se subió nueva
         if ($imagen_path === null) {
-            $row = $conn->prepare("SELECT imagen_portada FROM JUEGO WHERE id_juego = ?");
-            $row->execute([$id]);
-            $imagen_path = $row->fetchColumn();
+            $stmt = $conn->prepare("SELECT imagen_portada FROM JUEGO WHERE id_juego = ?");
+            $stmt->execute([$id]);
+            $imagen_path = $stmt->fetchColumn();
         }
 
-        $stmt = $conn->prepare("CALL SP_JUEGO_UPDATE(
-            :id, :titulo, :descripcion, :fecha, :id_empresa, :imagen, :publicado
-        )");
+        $stmt = $conn->prepare("
+            UPDATE JUEGO 
+            SET titulo = ?, descripcion = ?, fecha_lanzamiento = ?, id_empresa = ?, imagen_portada = ?, publicado = 1
+            WHERE id_juego = ?
+        ");
 
         $stmt->execute([
-            ':id' => $id,
-            ':titulo' => $titulo,
-            ':descripcion' => $descripcion,
-            ':fecha' => $fecha,
-            ':id_empresa' => $id_empresa,
-            ':imagen' => $imagen_path,
-            ':publicado' => 1
+            $titulo, $descripcion, $fecha, $id_empresa, $imagen_path, $id
         ]);
 
-        $stmt->closeCursor();
-
-        // limpiar relaciones viejas
+        // Limpiar relaciones previas
         $conn->prepare("DELETE FROM JUEGO_GENERO WHERE id_juego = ?")->execute([$id]);
         $conn->prepare("DELETE FROM JUEGO_PLATAFORMA WHERE id_juego = ?")->execute([$id]);
 
-        // insertar géneros
+        // Insertar géneros
         foreach ($generos as $g) {
-            $stmt = $conn->prepare("CALL SP_JUEGO_GENERO_PUT(:id_juego, :id_genero)");
-            $stmt->execute([':id_juego' => $id, ':id_genero' => $g]);
-            $stmt->closeCursor();
+            $stmt = $conn->prepare("INSERT INTO JUEGO_GENERO (id_juego, id_genero) VALUES (?, ?)");
+            $stmt->execute([$id, $g]);
         }
 
-        // insertar plataformas
+        // Insertar plataformas
         foreach ($plataformas as $p) {
-            $stmt = $conn->prepare("CALL SP_JUEGO_PLATAFORMA_PUT(:id_juego, :id_plataforma)");
-            $stmt->execute([':id_juego' => $id, ':id_plataforma' => $p]);
-            $stmt->closeCursor();
+            $stmt = $conn->prepare("INSERT INTO JUEGO_PLATAFORMA (id_juego, id_plataforma) VALUES (?, ?)");
+            $stmt->execute([$id, $p]);
         }
 
         echo json_encode(['success' => true, 'message' => 'Juego actualizado correctamente.']);
@@ -128,40 +115,28 @@ try {
     }
 
     // ====================================
-    // INSERT NUEVO → SP_JUEGO_PUT
+    // INSERTAR NUEVO JUEGO (sin SP)
     // ====================================
 
-    $stmt = $conn->prepare("CALL SP_JUEGO_PUT(
-        :titulo, :descripcion, :fecha, :id_empresa, :imagen, :publicado
-    )");
+    $stmt = $conn->prepare("
+        INSERT INTO JUEGO (titulo, descripcion, fecha_lanzamiento, id_empresa, imagen_portada, publicado)
+        VALUES (?, ?, ?, ?, ?, 1)
+    ");
 
-    $stmt->execute([
-        ':titulo' => $titulo,
-        ':descripcion' => $descripcion,
-        ':fecha' => $fecha,
-        ':id_empresa' => $id_empresa,
-        ':imagen' => $imagen_path,
-        ':publicado' => 1
-    ]);
+    $stmt->execute([$titulo, $descripcion, $fecha, $id_empresa, $imagen_path]);
 
-    $stmt->closeCursor();
+    $id_juego = $conn->lastInsertId(); // ← AHORA SIEMPRE FUNCIONA
 
-    // obtener ID nuevo
-    $stmt2 = $conn->query("SELECT LAST_INSERT_ID()");
-    $id_juego = $stmt2->fetchColumn();
-
-    // insertar géneros
+    // Insertar géneros
     foreach ($generos as $g) {
-        $stmt = $conn->prepare("CALL SP_JUEGO_GENERO_PUT(:id_juego, :id_genero)");
-        $stmt->execute([':id_juego' => $id_juego, ':id_genero' => $g]);
-        $stmt->closeCursor();
+        $stmt = $conn->prepare("INSERT INTO JUEGO_GENERO (id_juego, id_genero) VALUES (?, ?)");
+        $stmt->execute([$id_juego, $g]);
     }
 
-    // insertar plataformas
+    // Insertar plataformas
     foreach ($plataformas as $p) {
-        $stmt = $conn->prepare("CALL SP_JUEGO_PLATAFORMA_PUT(:id_juego, :id_plataforma)");
-        $stmt->execute([':id_juego' => $id_juego, ':id_plataforma' => $p]);
-        $stmt->closeCursor();
+        $stmt = $conn->prepare("INSERT INTO JUEGO_PLATAFORMA (id_juego, id_plataforma) VALUES (?, ?)");
+        $stmt->execute([$id_juego, $p]);
     }
 
     echo json_encode(['success' => true, 'message' => 'Juego creado correctamente.']);

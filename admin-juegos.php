@@ -1,14 +1,21 @@
+<?php
+// Proteger página - requiere permiso de gestionar géneros
+require_once './inc/auth.php';
+requierePermiso('gestionar_juegos');
+?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lista de Juegos</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+ <?php
+  require "./inc/head.php";
+  ?>
   <link rel="stylesheet" href="./css/admin-juegos.css" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Select2 -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="./js/admin-juegos.js" defer></script>
 </head>
 
@@ -54,21 +61,24 @@
             placeholder="Breve descripción..." required></textarea>
         </div>
 
+
         <div class="col-12">
           <label class="form-label">Plataformas</label>
-          <div id="checkboxPlataformas" class="d-flex flex-wrap gap-2"></div>
+          <select id="selectPlataformas" multiple class="form-select"></select>
         </div>
 
         <div class="col-12 mt-3">
           <label class="form-label">Géneros</label>
-          <div id="checkboxGeneros" class="d-flex flex-wrap gap-2"></div>
+          <select id="selectGeneros" multiple class="form-select"></select>
         </div>
 
 
-        <div class="col-md-3">
+
+        <div class="col-12">
           <label for="empresaJuego" class="form-label">Empresa</label>
-          <input type="text" id="empresaJuego" name="empresa" class="form-control" placeholder="Respawn, EA..."
-            required />
+          <select id="selectEmpresa" class="form-select" required></select>
+
+
         </div>
 
         <div class="col-md-3">
@@ -133,7 +143,57 @@
         </tbody>
       </table>
     </div>
+
+
+    <!-- MODAL PARA MENSAJES -->
+    <div class="modal fade" id="msgModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title" id="msgModalTitle">Mensaje</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body" id="msgModalBody">
+            ...
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title">Confirmar acción</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            ¿Seguro que deseas eliminar este juego?
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button id="confirmDeleteBtn" type="button" class="btn btn-danger">Eliminar</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
   </main>
+
+
 
   <footer class="bg-dark text-white mt-4 pt-3 pb-2">
     <?php

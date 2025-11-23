@@ -1,3 +1,8 @@
+<?php
+// Proteger página - requiere permiso de gestionar géneros
+require_once './inc/auth.php';
+requierePermiso('gestionar_plataformas');
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,7 +10,7 @@
   <?php
   require "./inc/head.php";
   ?>
-  <link rel="stylesheet" href="./css/admin-juegos.css" />
+  <link rel="stylesheet" href="./css/admin-plataforma.css" />
   <script src="./js/admin-plataforma.js" defer></script>
 </head>
 
@@ -74,6 +79,49 @@
       </table>
     </div>
   </main>
+
+
+  <!-- Modal Mensaje -->
+  <div class="modal fade" id="msgModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="msgModalTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="msgModalBody"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal Confirmación -->
+  <div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title">Confirmar eliminación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          ¿Seguro que deseas eliminar esta plataforma?
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="confirmNo" class="btn btn-secondary">Cancelar</button>
+          <button type="button" id="confirmYes" class="btn btn-danger">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
 
   <footer class="bg-dark text-white mt-4 pt-3 pb-2">
     <?php
