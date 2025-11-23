@@ -50,3 +50,21 @@ table .game-img img {
   /* coincide con table-dark */
   z-index: 10;
 }
+
+.acciones-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.acciones-buttons button {
+  min-width: 36px;
+}
+
+td:nth-child(3) {
+  max-width: 350px;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

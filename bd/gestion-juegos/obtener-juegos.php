@@ -1,0 +1,99 @@
+<?php
+include '../../inc/connection.php';
+header('Content-Type: application/json');
+session_start();
+
+// Solo admin
+if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
+    echo json_encode(['success' => false, 'error' => 'Acceso denegado']);
+    exit;
+}
+
+try {
+    // 1) Juegos principales
+    $stmt = $conn->prepare("
+        SELECT 
+            j.id_juego,
+            j.titulo,
+            j.descripcion,
+            j.fecha_lanzamiento,
+            j.imagen_portada,
+            j.publicado,
+            e.nombre AS empresa
+        FROM JUEGO j
+        LEFT JOIN EMPRESA e ON j.id_empresa = e.id_empresa
+        ORDER BY j.id_juego DESC
+    ");
+    $stmt->execute();
+    $juegos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (!$juegos) {
+        echo json_encode(['success' => true, 'data' => []]);
+        exit;
+    }
+
+    // 2) IDs de juegos
+    $ids = array_column($juegos, 'id_juego');
+    $idsList = implode(",", array_map('intval', $ids)); // seguro
+
+    // 3) Géneros relacionados
+    $generosStmt = $conn->prepare("
+        SELECT 
+            jg.id_juego,
+            g.id_genero,
+            g.nombre AS genero
+        FROM JUEGO_GENERO jg
+        INNER JOIN GENERO g ON jg.id_genero = g.id_genero
+        WHERE jg.id_juego IN ($idsList)
+    ");
+    $generosStmt->execute();
+    $generosRaw = $generosStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $generos = [];
+    foreach ($generosRaw as $g) {
+        $generos[$g['id_juego']][] = [
+            'id_genero' => $g['id_genero'],
+            'nombre' => $g['genero']
+        ];
+    }
+
+    // 4) Plataformas relacionadas
+    $platStmt = $conn->prepare("
+        SELECT 
+            jp.id_juego,
+            p.id_plataforma,
+            p.nombre AS plataforma
+        FROM JUEGO_PLATAFORMA jp
+        INNER JOIN PLATAFORMA p ON jp.id_plataforma = p.id_plataforma
+        WHERE jp.id_juego IN ($idsList)
+    ");
+    $platStmt->execute();
+    $plataformasRaw = $platStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $plataformas = [];
+    foreach ($plataformasRaw as $p) {
+        $plataformas[$p['id_juego']][] = [
+            'id_plataforma' => $p['id_plataforma'],
+            'nombre' => $p['plataforma']
+        ];
+    }
+
+    // 5) Mezclar todo
+    foreach ($juegos as &$j) {
+        $id = $j['id_juego'];
+        $j['generos'] = $generos[$id] ?? [];
+        $j['plataformas'] = $plataformas[$id] ?? [];
+    }
+
+    echo json_encode([
+        'success' => true,
+        'data' => $juegos
+    ]);
+
+} catch (PDOException $e) {
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+    ]);
+}
+?>

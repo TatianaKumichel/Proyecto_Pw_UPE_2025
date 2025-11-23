@@ -1,81 +1,122 @@
-// --- ELEMENTOS PRINCIPALES ---
-const btnAgregarPlataforma = document.getElementById("btnAgregarPlataforma");
-const formPlataforma = document.getElementById("formPlataforma");
-const cancelarPlataforma = document.getElementById("cancelarPlataforma");
-const tablaPlataformas = document.getElementById("tablaPlataformas");
-const nombrePlataforma = document.getElementById("nombrePlataforma");
+window.onload = function () {
+  const tabla = document.getElementById("tablaPlataformas");
+  const form = document.getElementById("formPlataforma");
+  const btnAgregar = document.getElementById("btnAgregarPlataforma");
+  const cancelar = document.getElementById("cancelarPlataforma");
 
-let nextId = tablaPlataformas.children.length + 1;
-let filaEditando = null;
+  cargarPlataformas();
 
-// --- FUNCIONES AUXILIARES ---
-function crearFilaPlataforma(plataforma) {
-  const tr = document.createElement("tr");
+  async function cargarPlataformas() {
+    const res = await fetch("./bd/gestion-juegos/obtener-plataformas.php");
+    const data = await res.json();
 
-  tr.innerHTML = `
-    <td>${plataforma.id}</td>
-    <td>${plataforma.nombre}</td>
-    <td>
-      <button class="btn btn-outline-warning btn-sm me-1 btn-editar">
-        <i class="bi bi-pencil-square"></i>
-      </button>
-      <button class="btn btn-outline-danger btn-sm me-1 btn-eliminar">
-        <i class="bi bi-trash"></i>
-      </button>
-    </td>
-  `;
+    tabla.innerHTML = "";
 
-  asignarEventosFila(tr);
-  return tr;
-}
+    if (!data.success || data.data.length === 0) {
+      tabla.innerHTML = "<tr><td colspan='3'>No hay plataformas registradas</td></tr>";
+      return;
+    }
 
-// --- ASIGNAR EVENTOS A UNA FILA ---
-function asignarEventosFila(tr) {
-  tr.querySelector(".btn-eliminar").addEventListener("click", () => {
-    tr.remove();
-    if (filaEditando === tr) filaEditando = null;
-  });
+    data.data.forEach(p => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${p.id_plataforma}</td>
+        <td>${p.nombre}</td>
+        <td>
+          <button class="btn btn-warning btn-sm btn-edit"
+                  data-id="${p.id_plataforma}"
+                  data-nombre="${p.nombre}">
+            <i class="bi bi-pencil-square"></i>
+          </button>
 
-  tr.querySelector(".btn-editar").addEventListener("click", () => {
-    formPlataforma.classList.remove("d-none");
-    filaEditando = tr;
-    nombrePlataforma.value = tr.querySelector("td:nth-child(2)").textContent;
-  });
-}
+          <button class="btn btn-danger btn-sm btn-delete"
+                  data-id="${p.id_plataforma}">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      `;
+      tabla.appendChild(tr);
+    });
 
-// --- INICIALIZAR FILAS EXISTENTES ---
-Array.from(tablaPlataformas.children).forEach((tr) => {
-  asignarEventosFila(tr);
-});
+    document.querySelectorAll(".btn-edit").forEach(btn => {
+      btn.addEventListener("click", () => editarPlataforma(btn));
+    });
 
-// --- EVENTOS ---
-btnAgregarPlataforma.addEventListener("click", () => {
-  formPlataforma.classList.toggle("d-none");
-  formPlataforma.reset();
-  filaEditando = null;
-});
-
-formPlataforma.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  if (filaEditando) {
-    // Editar fila existente
-    filaEditando.querySelector("td:nth-child(2)").textContent =
-      nombrePlataforma.value;
-  } else {
-    // Agregar nueva plataforma
-    const nuevaPlataforma = { id: nextId++, nombre: nombrePlataforma.value };
-    const fila = crearFilaPlataforma(nuevaPlataforma);
-    tablaPlataformas.appendChild(fila);
+    document.querySelectorAll(".btn-delete").forEach(btn => {
+      btn.addEventListener("click", () => eliminarPlataforma(btn.dataset.id));
+    });
   }
 
-  formPlataforma.reset();
-  formPlataforma.classList.add("d-none");
-  filaEditando = null;
-});
+  // --- BOTÓN AGREGAR ---
+  btnAgregar.addEventListener("click", () => {
+    form.classList.toggle("d-none");
+    form.reset();
+    form.dataset.mode = "create"; // modo correcto
+    delete form.dataset.id;
+  });
 
-cancelarPlataforma.addEventListener("click", () => {
-  formPlataforma.reset();
-  formPlataforma.classList.add("d-none");
-  filaEditando = null;
-});
+  cancelar.addEventListener("click", () => {
+    form.classList.add("d-none");
+    form.reset();
+    delete form.dataset.id;
+  });
+
+  // --- EDITAR ---
+  function editarPlataforma(btn) {
+    form.classList.remove("d-none");
+    form.dataset.mode = "update";  // el backend espera "update"
+    form.dataset.id = btn.dataset.id;
+
+    document.getElementById("nombrePlataforma").value = btn.dataset.nombre;
+  }
+
+  // --- GUARDAR ---
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const fd = new FormData();
+    fd.append("nombre", document.getElementById("nombrePlataforma").value);
+    fd.append("action", form.dataset.mode);
+
+    if (form.dataset.mode === "update") {
+      fd.append("id", form.dataset.id);
+    }
+
+    const res = await fetch("./bd/gestion-plataformas/guardar-plataforma.php", {
+      method: "POST",
+      body: fd,
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert(data.message);
+      form.reset();
+      form.classList.add("d-none");
+      delete form.dataset.id;
+      cargarPlataformas();
+    } else {
+      alert("Error: " + data.error);
+    }
+  });
+
+  // --- ELIMINAR ---
+  async function eliminarPlataforma(id) {
+    if (!confirm("¿Seguro que deseas eliminar esta plataforma?")) return;
+
+    const res = await fetch("./bd/gestion-plataformas/eliminar-plataforma.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert(data.message);
+      cargarPlataformas();
+    } else {
+      alert("Error: " + data.error);
+    }
+  }
+};

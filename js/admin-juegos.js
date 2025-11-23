@@ -1,127 +1,254 @@
-// admin-juegos.js
+window.onload = function () {
+  const tablaJuegos = document.getElementById("tabla-juegos");
+  const formJuego = document.getElementById("formJuego");
+  const btnAgregarJuego = document.getElementById("btnAgregarJuego");
+  const cancelarJuego = document.getElementById("cancelarJuego");
 
-//  ELEMENTOS PRINCIPALES 
-const btnAgregarJuego = document.getElementById('btnAgregarJuego');
-const formJuego = document.getElementById('formJuego');
-const cancelarJuego = document.getElementById('cancelarJuego');
-const tablaJuegos = document.getElementById('tabla-juegos');
+  // Cargar los juegos al inicio
+  cargarPlataformas();
+  cargarGeneros();
+  cargarJuegos();
 
-// Inputs del formulario
-const imagenJuego = document.getElementById('imagenJuego');
-const nombreJuego = document.getElementById('nombreJuego');
-const descripcionJuego = document.getElementById('descripcionJuego');
-const plataformaJuego = document.getElementById('plataformaJuego');
-const generoJuego = document.getElementById('generoJuego');
-const empresaJuego = document.getElementById('empresaJuego');
-const fechaJuego = document.getElementById('fechaJuego');
 
-let filaEditando = null; // Para saber si estamos editando
+  async function cargarPlataformas() {
+    const res = await fetch("./bd/gestion-juegos/obtener-plataformas.php");
+    const data = await res.json();
 
-// FUNCIONES AUXILIARES 
-function crearFilaJuego(juego) {
-  const tr = document.createElement('tr');
+    const cont = document.getElementById("checkboxPlataformas");
+    cont.innerHTML = "";
 
-  tr.innerHTML = `
-    <td class="game-img"><img src="${juego.imagen}" alt="Juego" class="img-thumbnail"></td>
-    <td>${juego.nombre}</td>
-    <td>${juego.descripcion}</td>
-    <td>${juego.plataforma}</td>
-    <td>${juego.genero}</td>
-    <td>${juego.empresa}</td>
-    <td>${juego.fecha}</td>
-    <td>
-      <button class="btn btn-outline-warning btn-sm me-1 btn-editar">
-        <i class="bi bi-pencil-square"></i>
-      </button>
-      <button class="btn btn-outline-danger btn-sm btn-eliminar">
-        <i class="bi bi-trash"></i>
-      </button>
-      <button class="btn btn-outline-success btn-sm btn-publicar">
-                <i class="bi bi-check-circle"></i>
-              </button>
-    </td>
-  `;
-
-  // Botón eliminar
-  tr.querySelector('.btn-eliminar').addEventListener('click', () => {
-    tr.remove();
-    if (filaEditando === tr) filaEditando = null;
-  });
-
-  // Botón editar
-  tr.querySelector('.btn-editar').addEventListener('click', () => {
-    formJuego.classList.remove('d-none');
-    filaEditando = tr;
-
-    // Llenamos el formulario con los datos de la fila
-    nombreJuego.value = tr.children[1].textContent;
-    descripcionJuego.value = tr.children[2].textContent;
-    plataformaJuego.value = tr.children[3].textContent;
-    generoJuego.value = tr.children[4].textContent;
-    empresaJuego.value = tr.children[5].textContent;
-    fechaJuego.value = tr.children[6].textContent;
-
-    // Imagen: no se puede rellenar input file, usamos variable temporal
-    imagenJuego.value = '';
-
-  });
-  return tr;
-}
-
-// FUNCIONES PARA GUARDAR 
-function guardarJuego(e) {
-  e.preventDefault();
-
-  let imagen = 'https://via.placeholder.com/80';
-  if (imagenJuego.files && imagenJuego.files[0]) {
-    imagen = URL.createObjectURL(imagenJuego.files[0]);
-  } else if (filaEditando) {
-    // Mantener imagen anterior si no se cambió
-    imagen = filaEditando.querySelector('td:first-child img').src;
+    data.data.forEach(p => {
+      cont.innerHTML += `
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input plataformaCheck" value="${p.id_plataforma}">
+        ${p.nombre}
+      </label>
+    `;
+    });
   }
 
-  const juego = {
-    imagen: imagen,
-    nombre: nombreJuego.value,
-    descripcion: descripcionJuego.value,
-    plataforma: plataformaJuego.value,
-    genero: generoJuego.value,
-    empresa: empresaJuego.value,
-    fecha: fechaJuego.value
-  };
+  async function cargarGeneros() {
+    const res = await fetch("./bd/gestion-juegos/obtener-genero.php");
+    const data = await res.json();
 
-  if (filaEditando) {
-    // Actualizar fila existente
-    filaEditando.querySelector('td:first-child img').src = juego.imagen;
-    filaEditando.querySelector('td:nth-child(2)').textContent = juego.nombre;
-    filaEditando.querySelector('td:nth-child(3)').textContent = juego.descripcion;
-    filaEditando.querySelector('td:nth-child(4)').textContent = juego.plataforma;
-    filaEditando.querySelector('td:nth-child(5)').textContent = juego.genero;
-    filaEditando.querySelector('td:nth-child(6)').textContent = juego.empresa;
-    filaEditando.querySelector('td:nth-child(7)').textContent = juego.fecha;
+    const cont = document.getElementById("checkboxGeneros");
+    cont.innerHTML = "";
 
-    filaEditando = null;
-  } else {
-    // Crear nueva fila
-    const nuevaFila = crearFilaJuego(juego);
-    tablaJuegos.appendChild(nuevaFila);
+    data.data.forEach(g => {
+      cont.innerHTML += `
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input generoCheck" value="${g.id_genero}">
+        ${g.nombre}
+      </label>
+    `;
+    });
   }
 
-  formJuego.reset();
-  formJuego.classList.add('d-none');
-}
 
-//  EVENTOS 
-btnAgregarJuego.addEventListener('click', () => {
-  formJuego.classList.toggle('d-none');
-  formJuego.reset();
-  filaEditando = null;
-});
 
-formJuego.addEventListener('submit', guardarJuego);
 
-cancelarJuego.addEventListener('click', () => {
-  formJuego.reset();
-  formJuego.classList.add('d-none');
-  filaEditando = null;
-});
+  // Mostrar / ocultar formulario
+  btnAgregarJuego.addEventListener("click", () => {
+    formJuego.classList.toggle("d-none");
+    formJuego.reset();
+    formJuego.dataset.mode = "create";
+    delete formJuego.dataset.id;
+  });
+
+  cancelarJuego.addEventListener("click", () => {
+    formJuego.classList.add("d-none");
+    formJuego.reset();
+  });
+
+  // Enviar formulario
+  formJuego.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const fd = new FormData(formJuego);
+
+    // Indicar si es creación o edición
+    fd.append("action", formJuego.dataset.mode === "edit" ? "update" : "create");
+
+    if (formJuego.dataset.id) {
+      fd.append("id", formJuego.dataset.id);
+    }
+
+    let plataformas = [];
+    document.querySelectorAll(".plataformaCheck:checked").forEach(c => plataformas.push(c.value));
+
+    let generos = [];
+    document.querySelectorAll(".generoCheck:checked").forEach(c => generos.push(c.value));
+
+    fd.append("plataformas", JSON.stringify(plataformas));
+    fd.append("generos", JSON.stringify(generos));
+
+
+
+
+    const res = await fetch("./bd/gestion-juegos/guardar-juego.php", {
+      method: "POST",
+      body: fd,
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      alert(data.message);
+      formJuego.reset();
+      formJuego.classList.add("d-none");
+      cargarJuegos();
+    } else {
+      console.error(data.errors || data.error);
+      alert("Error al guardar el juego.");
+    }
+  });
+
+  // Función para cargar y mostrar los juegos
+  async function cargarJuegos() {
+    try {
+      const res = await fetch("./bd/gestion-juegos/obtener-juegos.php");
+      const data = await res.json();
+
+      tablaJuegos.innerHTML = "";
+
+      if (!data.success || data.data.length === 0) {
+        tablaJuegos.innerHTML = "<tr><td colspan='8'>No hay juegos registrados</td></tr>";
+        return;
+      }
+
+      data.data.forEach((juego) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+        <td><img src="${juego.imagen_portada || './img/placeholder.png'}" style="width:70px;"></td>
+  <td>${juego.titulo}</td>
+  <td>${juego.descripcion}</td>
+  <td>${juego.plataformas.map(p => p.nombre).join(", ")}</td>
+  <td>${juego.generos.map(g => g.nombre).join(", ")}</td>
+  <td>${juego.empresa}</td>
+  <td>${juego.fecha_lanzamiento || "-"}</td>
+        <div class="acciones-buttons">
+          <button class="btn btn-warning btn-sm btn-editar" data-id="${juego.id_juego}">
+            <i class="bi bi-pencil-square"></i>
+          </button>
+          <button class="btn btn-danger btn-sm btn-eliminar" data-id="${juego.id_juego}">
+            <i class="bi bi-trash"></i>
+          </button>
+          <button class="btn btn-sm btn-publicar ${juego.publicado == 1 ? "btn-success" : "btn-danger"}"
+              data-id="${juego.id_juego}" data-publicado="${juego.publicado}">
+              ${juego.publicado == 1 ? "Publicado" : "Oculto"}
+          </button>
+
+        </div>
+      </td>
+
+      `;
+        tablaJuegos.appendChild(tr);
+      });
+
+      document.querySelectorAll(".btn-eliminar").forEach((btn) => {
+        btn.addEventListener("click", () => eliminarJuego(btn.dataset.id));
+      });
+
+      document.querySelectorAll(".btn-editar").forEach((btn) => {
+        btn.addEventListener("click", () => editarJuego(btn.dataset.id));
+      });
+
+      //Publicar Juego
+      document.querySelectorAll(".btn-publicar").forEach((btn) => {
+        btn.addEventListener("click", () => cambiarPublicacion(btn));
+      });
+
+    } catch (err) {
+      console.error("Error al cargar juegos:", err);
+      tablaJuegos.innerHTML = "<tr><td colspan='8'>Error al cargar los juegos</td></tr>";
+    }
+
+  }
+
+
+
+  // Editar juego
+  async function editarJuego(id) {
+    try {
+      const res = await fetch("./bd/gestion-juegos/obtener-juegos.php");
+      const data = await res.json();
+
+      const juego = data.data.find(j => j.id_juego == id);
+      if (!juego) return alert("Juego no encontrado");
+
+      formJuego.classList.remove("d-none");
+      formJuego.dataset.mode = "edit";
+      formJuego.dataset.id = id;
+
+      document.getElementById("nombreJuego").value = juego.titulo;
+      document.getElementById("descripcionJuego").value = juego.descripcion;
+      document.getElementById("empresaJuego").value = juego.empresa;
+      document.getElementById("fechaJuego").value = juego.fecha_lanzamiento;
+
+      // === Marcar Plataformas ===
+      const plataformasSeleccionadas = juego.plataformas.map(p => p.id_plataforma);
+      document.querySelectorAll(".plataformaCheck").forEach(chk => {
+        chk.checked = plataformasSeleccionadas.includes(parseInt(chk.value));
+      });
+
+      // === Marcar Géneros ===
+      const generosSeleccionados = juego.generos.map(g => g.id_genero);
+      document.querySelectorAll(".generoCheck").forEach(chk => {
+        chk.checked = generosSeleccionados.includes(parseInt(chk.value));
+      });
+
+    } catch (error) {
+      console.error("Error al cargar datos del juego:", error);
+    }
+  }
+
+
+  // Eliminar juego
+  async function eliminarJuego(id) {
+    if (!confirm("¿Seguro que deseas eliminar este juego?")) return;
+
+    const res = await fetch("./bd/gestion-juegos/eliminar-juego.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert(data.message);
+      cargarJuegos();
+    } else {
+      alert("Error al eliminar el juego: " + (data.error || "desconocido"));
+    }
+  }
+  async function cambiarPublicacion(btn) {
+    const id = btn.dataset.id;
+    const estadoActual = Number(btn.dataset.publicado);
+    const nuevoEstado = estadoActual === 1 ? 0 : 1;
+
+    const res = await fetch("./bd/gestion-juegos/toggle-publicar.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: id, estado: nuevoEstado })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      // actualizar boton inmediatamente
+      btn.dataset.publicado = nuevoEstado;
+      btn.textContent = nuevoEstado === 1 ? "Publicado" : "Oculto";
+      btn.classList.remove("btn-success", "btn-danger");
+      btn.classList.add(nuevoEstado === 1 ? "btn-success" : "btn-danger");
+
+      // refrescar tabla para mantener consistencia
+      cargarJuegos();
+    } else {
+      alert("Error: " + data.error);
+    }
+  }
+
+
+
+
+};
