@@ -1,3 +1,10 @@
+<?php
+// Proteger página - requiere permiso de gestionar faqs
+require_once './inc/auth.php';
+requierePermiso('gestionar_faq');
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
