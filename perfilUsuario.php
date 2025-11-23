@@ -2,15 +2,10 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Perfil de Usuario</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-  <link rel="stylesheet" href="./css/pefilUsuario.css" />
-  <link rel="stylesheet" href="./css/nav.css" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/scriptPerfilUsuario.js" defer></script>
+<?php require "inc/head.php"; ?>
+<link rel="stylesheet" href="./css/pefilUsuario.css" />
+<script src="js/scriptPerfilUsuario.js" defer></script>
+ 
 </head>
 
 <body class="bg-light">
@@ -22,7 +17,7 @@
       session_start();
   }
 
-  // Si todavía no tienen login, simulamos un usuario
+  // Si todavía no tiene login, simulamos un usuario
   if (!isset($_SESSION['id_usuario'])) {
       $_SESSION['id_usuario'] = 4;
       $_SESSION['nombre'] = 'tati';
@@ -38,6 +33,7 @@
   $_SESSION['nombre'] = $usuario['username'];
   
   ?>
+
 
   <main class="container my-4">
     <div class="container py-5">
