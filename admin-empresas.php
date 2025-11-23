@@ -1,3 +1,12 @@
+<?php
+// Proteger página - requiere permiso de gestionar empresas
+require_once './inc/auth.php';
+requierePermiso('gestionar_empresas');
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 

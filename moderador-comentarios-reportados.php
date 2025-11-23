@@ -1,3 +1,9 @@
+<?php
+// Proteger página - requiere permiso de gestionar comentarios reportados
+require_once './inc/auth.php';
+requierePermiso('moderar_comentarios');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
