@@ -10,13 +10,21 @@
   
   /* Carousel de tendencias */
   #tendenciasCarousel .carousel-item img {
-    height: 400px;
+    max-height: 400px;
+    width: 100%;
     object-fit: cover;
     border-radius: 8px;
   }
+
   
   #tendenciasCarousel .carousel-caption {
-    bottom: 20px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.75), rgba(0,0,0,0));
+    padding: 15px 10px;
+    border-radius: 0 0 10px 10px;
+    text-align: left;
   }
   
   #tendenciasCarousel .carousel-caption h5 {
