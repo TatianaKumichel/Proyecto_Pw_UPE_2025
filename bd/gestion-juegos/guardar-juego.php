@@ -38,7 +38,7 @@ if (!empty($errores)) {
 try {
 
     // ====================================
-    // EMPRESA
+    // EMPRESA (verificar que exista)
     // ====================================
     $stmt = $conn->prepare("SELECT id_empresa FROM EMPRESA WHERE id_empresa = ?");
     $stmt->execute([$empresa]);
@@ -52,16 +52,19 @@ try {
     $id_empresa = $empresa;
 
     // ====================================
-    // IMAGEN
+    // DIRECTORIO DE IMAGENES
     // ====================================
+    $uploadDir = __DIR__ . '/../../img/uploads/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
 
+    // ====================================
+    // IMAGEN PORTADA
+    // ====================================
     $imagen_path = null;
 
     if (!empty($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-
-        $uploadDir = __DIR__ . '/../../img/uploads/';
-        if (!is_dir($uploadDir))
-            mkdir($uploadDir, 0755, true);
 
         $tmp = $_FILES['imagen']['tmp_name'];
         $name = time() . "_" . basename($_FILES['imagen']['name']);
@@ -97,6 +100,7 @@ try {
         // Limpiar relaciones previas
         $conn->prepare("DELETE FROM JUEGO_GENERO WHERE id_juego = ?")->execute([$id]);
         $conn->prepare("DELETE FROM JUEGO_PLATAFORMA WHERE id_juego = ?")->execute([$id]);
+        // NOTA: las imágenes extra NO las borro acá, solo agrego nuevas
 
         // Insertar géneros
         foreach ($generos as $g) {
@@ -110,22 +114,45 @@ try {
             $stmt->execute([$id, $p]);
         }
 
+        // ===============================
+        //  IMÁGENES EXTRA (UPDATE)
+        // ===============================
+        if (!empty($_FILES['imagenesExtra']) && is_array($_FILES['imagenesExtra']['name'])) {
+            $names = $_FILES['imagenesExtra']['name'];
+            $tmpNames = $_FILES['imagenesExtra']['tmp_name'];
+            $errors = $_FILES['imagenesExtra']['error'];
+
+            foreach ($names as $idx => $nombreImg) {
+                if ($errors[$idx] === UPLOAD_ERR_OK && $tmpNames[$idx] !== '') {
+                    $safeName = time() . "_" . $idx . "_" . basename($nombreImg);
+                    $target = $uploadDir . $safeName;
+
+                    if (move_uploaded_file($tmpNames[$idx], $target)) {
+                        $url = "img/uploads/" . $safeName;
+
+                        $stmt = $conn->prepare("INSERT INTO JUEGO_IMAGEN (id_juego, url_imagen) VALUES (?, ?)");
+                        $stmt->execute([$id, $url]);
+                    }
+                }
+            }
+        }
+
         echo json_encode(['success' => true, 'message' => 'Juego actualizado correctamente.']);
         exit;
     }
 
     // ====================================
-    // INSERTAR NUEVO JUEGO (sin SP)
+    // INSERTAR NUEVO JUEGO
     // ====================================
 
     $stmt = $conn->prepare("
         INSERT INTO JUEGO (titulo, descripcion, fecha_lanzamiento, id_empresa, imagen_portada, publicado)
-        VALUES (?, ?, ?, ?, ?, 1)
+        VALUES (?, ?, ?, ?, ?, 0)
     ");
 
     $stmt->execute([$titulo, $descripcion, $fecha, $id_empresa, $imagen_path]);
 
-    $id_juego = $conn->lastInsertId(); // ← AHORA SIEMPRE FUNCIONA
+    $id_juego = $conn->lastInsertId();
 
     // Insertar géneros
     foreach ($generos as $g) {
@@ -139,9 +166,31 @@ try {
         $stmt->execute([$id_juego, $p]);
     }
 
+    // ===============================
+    //  IMÁGENES EXTRA (CREATE)
+    // ===============================
+    if (!empty($_FILES['imagenesExtra']) && is_array($_FILES['imagenesExtra']['name'])) {
+        $names = $_FILES['imagenesExtra']['name'];
+        $tmpNames = $_FILES['imagenesExtra']['tmp_name'];
+        $errors = $_FILES['imagenesExtra']['error'];
+
+        foreach ($names as $idx => $nombreImg) {
+            if ($errors[$idx] === UPLOAD_ERR_OK && $tmpNames[$idx] !== '') {
+                $safeName = time() . "_" . $idx . "_" . basename($nombreImg);
+                $target = $uploadDir . $safeName;
+
+                if (move_uploaded_file($tmpNames[$idx], $target)) {
+                    $url = "img/uploads/" . $safeName;
+
+                    $stmt = $conn->prepare("INSERT INTO JUEGO_IMAGEN (id_juego, url_imagen) VALUES (?, ?)");
+                    $stmt->execute([$id_juego, $url]);
+                }
+            }
+        }
+    }
+
     echo json_encode(['success' => true, 'message' => 'Juego creado correctamente.']);
 
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }
-?>

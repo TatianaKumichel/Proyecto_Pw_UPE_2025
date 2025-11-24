@@ -44,10 +44,36 @@ requierePermiso('gestionar_juegos');
     <form id="formJuego" class="d-none mb-4" enctype="multipart/form-data">
       <div class="row g-2 align-items-end">
 
-        <div class="col-md-2 text-center">
-          <label for="imagenJuego" class="form-label">Imagen</label>
+        <div class="col-12 ">
+          <label for="imagenJuego" class="form-label">Imagen Portada</label>
           <input type="file" id="imagenJuego" name="imagen" class="form-control" accept="image/*" />
         </div>
+
+        <!-- PREVIEW DE PORTADA -->
+        <div id="previewPortada" class="my-2 d-flex gap-2 flex-wrap"></div>
+
+
+
+        <div class="col-12">
+          <label for="imagenesExtra" class="form-label">Imágenes adicionales</label>
+          <input type="file" class="form-control" id="imagenesExtra" name="imagenesExtra[]" multiple accept="image/*" />
+          <div class="form-text">Podés seleccionar varias imágenes.</div>
+        </div>
+
+        <!-- IMÁGENES YA EXISTENTES DEL JUEGO -->
+        <div class="col-12 ">
+          <label class="form-label">Imágenes existentes</label>
+          <div id="imagenesExistentes" class="d-flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- PREVIEW DE IMÁGENES EXTRA -->
+        <div id="imagenesExistentes" class="my-2 d-flex gap-2 flex-wrap"></div>
+
+
+
+
+
+
 
         <div class="col-md-4">
           <label for="nombreJuego" class="form-label">Nombre</label>
@@ -102,7 +128,7 @@ requierePermiso('gestionar_juegos');
       <table class="table table-striped align-middle text-center">
         <thead class="table-dark">
           <tr>
-            <th>Imagen</th>
+            <th>Portada</th>
             <th>Nombre</th>
             <th>Descripción</th>
             <th>Plataforma</th>

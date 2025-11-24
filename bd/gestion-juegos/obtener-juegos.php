@@ -10,7 +10,9 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
 }
 
 try {
-    // 1) Juegos principales
+    // =====================================
+    // 1) Obtener juegos principales
+    // =====================================
     $stmt = $conn->prepare("
         SELECT 
             j.id_juego,
@@ -19,7 +21,7 @@ try {
             j.fecha_lanzamiento,
             j.imagen_portada,
             j.publicado,
-            j.id_empresa,            -- ← AGREGADO
+            j.id_empresa,
             e.nombre AS empresa
         FROM JUEGO j
         LEFT JOIN EMPRESA e ON j.id_empresa = e.id_empresa
@@ -33,11 +35,13 @@ try {
         exit;
     }
 
-    // 2) IDs de juegos
+    // Lista de IDs
     $ids = array_column($juegos, 'id_juego');
-    $idsList = implode(",", array_map('intval', $ids)); // seguro
+    $idsList = implode(",", array_map('intval', $ids));
 
-    // 3) Géneros relacionados
+    // =====================================
+    // 2) Géneros por juego
+    // =====================================
     $generosStmt = $conn->prepare("
         SELECT 
             jg.id_juego,
@@ -58,7 +62,9 @@ try {
         ];
     }
 
-    // 4) Plataformas relacionadas
+    // =====================================
+    // 3) Plataformas por juego
+    // =====================================
     $platStmt = $conn->prepare("
         SELECT 
             jp.id_juego,
@@ -79,11 +85,36 @@ try {
         ];
     }
 
-    // 5) Mezclar todo
+    // =====================================
+    // 4) IMÁGENES EXTRA por juego
+    // =====================================
+    $imgStmt = $conn->prepare("
+        SELECT 
+            id_juego,
+            id_imagen,
+            url_imagen
+        FROM JUEGO_IMAGEN
+        WHERE id_juego IN ($idsList)
+    ");
+    $imgStmt->execute();
+    $imagenesRaw = $imgStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $imagenesExtra = [];
+    foreach ($imagenesRaw as $img) {
+        $imagenesExtra[$img['id_juego']][] = [
+            'id_imagen' => $img['id_imagen'],
+            'url_imagen' => $img['url_imagen']
+        ];
+    }
+
+    // =====================================
+    // 5) Mezclar todo y enviar al front
+    // =====================================
     foreach ($juegos as &$j) {
         $id = $j['id_juego'];
         $j['generos'] = $generos[$id] ?? [];
         $j['plataformas'] = $plataformas[$id] ?? [];
+        $j['imagenes_extra'] = $imagenesExtra[$id] ?? [];
     }
 
     echo json_encode([
