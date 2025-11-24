@@ -26,21 +26,26 @@ window.onload = function () {
     delete formJuego.dataset.mode;
     delete formJuego.dataset.id;
 
+    // Limpieza de selects
     selectPlataformas.val(null).trigger("change");
     selectGeneros.val(null).trigger("change");
     selectEmpresa.val(null).trigger("change");
 
+    // Limpieza imágenes
     contenedorPortada.innerHTML = "";
     contenedorImagenesExtra.innerHTML = "";
 
+    // Inputs file
     document.getElementById("imagenJuego").value = "";
     document.getElementById("imagenesExtra").value = "";
+
+    // Reset de control transaccional
+    formJuego._imagenesAEliminar = [];
+    formJuego._portadaEliminada = false;
   }
 
 
-  // =============================
   // MODAL DE MENSAJES
-  // =============================
 
   function mostrarModal(titulo, mensaje) {
     document.getElementById("msgModalTitle").innerText = titulo;
@@ -49,9 +54,7 @@ window.onload = function () {
   }
 
 
-  // =============================
   // MODAL DE CONFIRMACIÓN
-  // =============================
 
   function confirmarAccion(mensaje) {
     return new Promise((resolve) => {
@@ -70,7 +73,6 @@ window.onload = function () {
       };
 
       btnConfirmar.addEventListener("click", confirmarHandler);
-
       btnCancelar.onclick = () => {
         modal.hide();
         resolve(false);
@@ -79,9 +81,7 @@ window.onload = function () {
   }
 
 
-  // =============================
   // CARGA INICIAL
-  // =============================
 
   cargarPlataformas();
   cargarGeneros();
@@ -89,60 +89,46 @@ window.onload = function () {
   cargarJuegos();
 
 
-  // =============================
-  // CARGAR SELECT DE PLATAFORMAS
-  // =============================
+  // CARGAR SELECT PLATAFORMAS
 
   async function cargarPlataformas() {
     const res = await fetch("./bd/gestion-juegos/obtener-plataformas.php");
     const data = await res.json();
 
     selectPlataformas.empty();
-    data.data.forEach(p => {
-      selectPlataformas.append(new Option(p.nombre, p.id_plataforma));
-    });
+    data.data.forEach(p => selectPlataformas.append(new Option(p.nombre, p.id_plataforma)));
 
     selectPlataformas.select2({ placeholder: "Seleccionar plataformas", width: "100%", allowClear: true });
   }
 
 
-  // =============================
-  // CARGAR SELECT DE GÉNEROS
-  // =============================
+  // CARGAR SELECT GÉNEROS
 
   async function cargarGeneros() {
     const res = await fetch("./bd/gestion-juegos/obtener-genero.php");
     const data = await res.json();
 
     selectGeneros.empty();
-    data.data.forEach(g => {
-      selectGeneros.append(new Option(g.nombre, g.id_genero));
-    });
+    data.data.forEach(g => selectGeneros.append(new Option(g.nombre, g.id_genero)));
 
     selectGeneros.select2({ placeholder: "Seleccionar géneros", width: "100%", allowClear: true });
   }
 
 
-  // =============================
-  // CARGAR SELECT DE EMPRESAS
-  // =============================
+  // CARGAR SELECT EMPRESAS
 
   async function cargarEmpresas() {
     const res = await fetch("./bd/gestion-juegos/obtener-empresas.php");
     const data = await res.json();
 
     selectEmpresa.empty();
-    data.data.forEach(e => {
-      selectEmpresa.append(new Option(e.nombre, e.id_empresa));
-    });
+    data.data.forEach(e => selectEmpresa.append(new Option(e.nombre, e.id_empresa)));
 
     selectEmpresa.select2({ placeholder: "Seleccionar empresa", width: "100%", allowClear: true });
   }
 
 
-  // =============================
-  // EVENTOS DEL FORMULARIO
-  // =============================
+  // EVENTOS FORM
 
   btnAgregarJuego.addEventListener("click", () => {
     const oculto = formJuego.classList.contains("d-none");
@@ -159,12 +145,19 @@ window.onload = function () {
   });
 
 
-  // =============================
-  // GUARDAR (CREATE / UPDATE)
-  // =============================
+  // GUARDAR
 
   formJuego.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    // Validar portada obligatoria en CREATE
+    if (formJuego.dataset.mode === "create") {
+      const portadaInput = document.getElementById("imagenJuego");
+      if (!portadaInput.files || portadaInput.files.length === 0) {
+        mostrarModal("Error", "Debes seleccionar una imagen de portada.");
+        return;
+      }
+    }
 
     const fd = new FormData(formJuego);
 
@@ -173,19 +166,32 @@ window.onload = function () {
 
     if (isEdit) fd.append("id", formJuego.dataset.id);
 
-    const plataformas = selectPlataformas.val() || [];
-    const generos = selectGeneros.val() || [];
-    const empresaSel = selectEmpresa.val();
+    // Arrays del formulario
+    fd.append("plataformas", JSON.stringify(selectPlataformas.val() || []));
+    fd.append("generos", JSON.stringify(selectGeneros.val() || []));
+    fd.append("empresa", selectEmpresa.val());
 
-    fd.append("plataformas", JSON.stringify(plataformas));
-    fd.append("generos", JSON.stringify(generos));
-    fd.append("empresa", empresaSel);
+
+
+    //  NUEVO — ENVÍO DE IMÁGENES A ELIMINAR 
+
+    if (formJuego._portadaEliminada) {
+      fd.append("eliminarPortada", "1");
+    }
+
+    if (formJuego._imagenesAEliminar && formJuego._imagenesAEliminar.length > 0) {
+      fd.append("imagenesAEliminar", JSON.stringify(formJuego._imagenesAEliminar));
+    }
+
+
+
+    //////////////////////////////////////////////
 
     const res = await fetch("./bd/gestion-juegos/guardar-juego.php", { method: "POST", body: fd });
     const data = await res.json();
 
     if (!data.success) {
-      mostrarModal("Error", "Error al guardar el juego.");
+      mostrarModal("Error", data.error || "Error al guardar el juego.");
       return;
     }
 
@@ -197,9 +203,10 @@ window.onload = function () {
   });
 
 
-  // =============================
-  // CARGAR TABLA DE JUEGOS
-  // =============================
+
+
+
+  // CARGAR TABLA
 
   async function cargarJuegos() {
     const res = await fetch("./bd/gestion-juegos/obtener-juegos.php");
@@ -216,12 +223,7 @@ window.onload = function () {
       const tr = document.createElement("tr");
 
       tr.innerHTML = `
-        <td>
-          <div class="img-container">
-            <img src="${juego.imagen_portada || './img/placeholder.png'}" class="img-thumb">
-          </div>
-        </td>
-
+        <td><div class="img-container"><img src="${juego.imagen_portada || './img/placeholder.png'}" class="img-thumb"></div></td>
         <td>${juego.titulo}</td>
         <td>${juego.descripcion}</td>
         <td>${juego.plataformas.map(p => p.nombre).join(", ")}</td>
@@ -239,10 +241,9 @@ window.onload = function () {
               <i class="bi bi-trash"></i>
             </button>
 
-            <button class="btn btn-sm btn-publicar ${
-              juego.publicado == 1 ? "btn-success" : "btn-danger"
-            }" data-id="${juego.id_juego}" data-publicado="${juego.publicado}">
-              ${juego.publicado == 1 ? "Publicado" : "Oculto"}
+            <button class="btn btn-sm btn-publicar ${juego.publicado == 1 ? "btn-success" : "btn-danger"}"
+                    data-id="${juego.id_juego}" data-publicado="${juego.publicado}">
+               ${juego.publicado == 1 ? "Publicado" : "Publicar"}
             </button>
           </div>
         </td>
@@ -265,9 +266,10 @@ window.onload = function () {
   }
 
 
-  // =============================
-  // EDITAR JUEGO (CARGAR DATOS)
-  // =============================
+
+
+
+  // EDITAR JUEGO
 
   async function editarJuego(id) {
     resetForm();
@@ -285,6 +287,9 @@ window.onload = function () {
     formJuego.dataset.mode = "edit";
     formJuego.dataset.id = id;
 
+    formJuego._imagenesAEliminar = [];
+    formJuego._portadaEliminada = false;
+
     document.getElementById("nombreJuego").value = juego.titulo;
     document.getElementById("descripcionJuego").value = juego.descripcion;
     document.getElementById("fechaJuego").value = juego.fecha_lanzamiento;
@@ -293,80 +298,71 @@ window.onload = function () {
     selectGeneros.val(juego.generos.map(g => g.id_genero)).trigger("change");
     selectEmpresa.val(juego.id_empresa).trigger("change");
 
-    // Cargar portada
-if (juego.imagen_portada) {
-  const div = document.createElement("div");
-  div.className = "img-extra-box";
-
-  div.innerHTML = `
-    <img src="${juego.imagen_portada}">
-    <button type="button" class="btn-delete-img" data-portada="1">&times;</button>
-  `;
-
-  contenedorPortada.appendChild(div);
-
-  div.querySelector(".btn-delete-img").onclick = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const ok = await confirmarAccion("¿Eliminar la imagen de portada?");
-    if (!ok) return;
-
-    const res = await fetch("./bd/gestion-juegos/eliminar-imagen-portada.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id })
-    });
-
-    const data = await res.json();
-    if (data.success) div.remove();
-    else mostrarModal("Error", data.error);
-  };
-}
 
 
-    // Cargar imágenes extra
-if (juego.imagenes_extra) {
-  juego.imagenes_extra.forEach(img => {
-    const div = document.createElement("div");
-    div.className = "img-extra-box";
 
-    div.innerHTML = `
-      <img src="${img.url_imagen}">
-      <button type="button" class="btn-delete-img" data-id="${img.id_imagen}">&times;</button>
-    `;
 
-    contenedorImagenesExtra.appendChild(div);
+    // IMAGEN DE PORTADA (Transaccional)
 
-    div.querySelector(".btn-delete-img").onclick = async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+    if (juego.imagen_portada) {
+      const div = document.createElement("div");
+      div.className = "img-extra-box";
 
-      const ok = await confirmarAccion("¿Eliminar esta imagen?");
-      if (!ok) return;
+      div.innerHTML = `
+        <img src="${juego.imagen_portada}">
+        <button type="button" class="btn-delete-img" data-portada="1">&times;</button>
+      `;
 
-      const res = await fetch("./bd/gestion-juegos/eliminar-imagen.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: img.id_imagen })
+      contenedorPortada.appendChild(div);
+
+      div.querySelector(".btn-delete-img").onclick = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const ok = await confirmarAccion("¿Eliminar la imagen de portada?");
+        if (!ok) return;
+
+        div.remove();
+        formJuego._portadaEliminada = true; // ← NO la elimina en DB aún
+      };
+    }
+
+
+
+
+
+
+    // IMÁGENES EXTRA (Transaccional)
+
+    if (juego.imagenes_extra) {
+      juego.imagenes_extra.forEach(img => {
+        const div = document.createElement("div");
+        div.className = "img-extra-box";
+
+        div.innerHTML = `
+          <img src="${img.url_imagen}">
+          <button type="button" class="btn-delete-img" data-id="${img.id_imagen}">&times;</button>
+        `;
+
+        contenedorImagenesExtra.appendChild(div);
+
+        div.querySelector(".btn-delete-img").onclick = async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const ok = await confirmarAccion("¿Eliminar esta imagen?");
+          if (!ok) return;
+
+          div.remove();
+          formJuego._imagenesAEliminar.push(img.id_imagen); // ← GUARDAMOS EL ID PARA EL BACKEND
+        };
       });
-
-      const data = await res.json();
-      if (data.success) div.remove();
-      else mostrarModal("Error", data.error);
-    };
-  });
-}
-
-
-
-
+    }
   }
 
 
-  // =============================
+
   // ELIMINAR JUEGO
-  // =============================
 
   async function eliminarJuego(id) {
     const ok = await confirmarAccion("¿Seguro que deseas eliminar este juego?");
@@ -389,14 +385,21 @@ if (juego.imagenes_extra) {
   }
 
 
-  // =============================
-  // CAMBIAR ESTADO PUBLICADO
-  // =============================
+  //     PUBLICAR / OCULTAR (con confirmación)
 
   async function cambiarPublicacion(btn) {
+
     const id = btn.dataset.id;
     const estadoActual = Number(btn.dataset.publicado);
     const nuevoEstado = estadoActual === 1 ? 0 : 1;
+
+    const mensaje = nuevoEstado === 1
+      ? "¿Seguro que deseas PUBLICAR este juego?"
+      : "¿Seguro que deseas OCULTAR este juego?";
+
+    // Confirmación antes de ejecutar
+    const ok = await confirmarAccion(mensaje);
+    if (!ok) return;
 
     const res = await fetch("./bd/gestion-juegos/toggle-publicar.php", {
       method: "POST",
@@ -411,8 +414,10 @@ if (juego.imagenes_extra) {
       return;
     }
 
+    // Actualizar botón
     btn.dataset.publicado = nuevoEstado;
     btn.textContent = nuevoEstado === 1 ? "Publicado" : "Oculto";
+
     btn.classList.toggle("btn-success", nuevoEstado === 1);
     btn.classList.toggle("btn-danger", nuevoEstado === 0);
 

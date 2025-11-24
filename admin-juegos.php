@@ -7,7 +7,7 @@ requierePermiso('gestionar_juegos');
 <html lang="es">
 
 <head>
- <?php
+  <?php
   require "./inc/head.php";
   ?>
   <link rel="stylesheet" href="./css/admin-juegos.css" />
@@ -40,7 +40,7 @@ requierePermiso('gestionar_juegos');
       </button>
     </div>
 
-    <!-- FORMULARIO PARA NUEVO JUEGO (oculto al inicio) -->
+    <!-- FORMULARIO PARA NUEVO JUEGO -->
     <form id="formJuego" class="d-none mb-4" enctype="multipart/form-data">
       <div class="row g-2 align-items-end">
 
@@ -51,7 +51,6 @@ requierePermiso('gestionar_juegos');
 
         <!-- PREVIEW DE PORTADA -->
         <div id="previewPortada" class="my-2 d-flex gap-2 flex-wrap"></div>
-
 
 
         <div class="col-12">
@@ -68,11 +67,6 @@ requierePermiso('gestionar_juegos');
 
         <!-- PREVIEW DE IMÁGENES EXTRA -->
         <div id="imagenesExistentes" class="my-2 d-flex gap-2 flex-wrap"></div>
-
-
-
-
-
 
 
         <div class="col-md-4">
@@ -171,6 +165,13 @@ requierePermiso('gestionar_juegos');
     </div>
 
 
+
+
+
+
+
+
+
     <!-- MODAL PARA MENSAJES -->
     <div class="modal fade" id="msgModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -208,8 +209,8 @@ requierePermiso('gestionar_juegos');
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button id="confirmDeleteBtn" type="button" class="btn btn-danger">Eliminar</button>
+            <button type="button" class="btn btn-secondary " data-bs-dismiss="modal ">Cancelar</button>
+            <button id="confirmDeleteBtn" type="button" class="btn btn-danger">Aceptar</button>
           </div>
 
         </div>

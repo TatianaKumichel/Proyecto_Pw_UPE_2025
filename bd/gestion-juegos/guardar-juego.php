@@ -9,9 +9,11 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
     exit;
 }
 
-// ================================
+
+
+
 // Datos del formulario
-// ================================
+
 
 $titulo = $_POST['titulo'] ?? '';
 $descripcion = $_POST['descripcion'] ?? '';
@@ -24,11 +26,16 @@ $plataformas = isset($_POST['plataformas']) ? json_decode($_POST['plataformas'],
 
 $errores = [];
 
-if ($titulo === '')  $errores['titulo'] = "Debe ingresar un título.";
-if ($descripcion === '') $errores['descripcion'] = "Debe ingresar una descripción.";
-if ($empresa === '') $errores['empresa'] = "Debe indicar la empresa.";
-if (empty($generos)) $errores['genero'] = "Debe seleccionar al menos un género.";
-if (empty($plataformas)) $errores['plataforma'] = "Debe seleccionar al menos una plataforma.";
+if ($titulo === '')
+    $errores['titulo'] = "Debe ingresar un título.";
+if ($descripcion === '')
+    $errores['descripcion'] = "Debe ingresar una descripción.";
+if ($empresa === '')
+    $errores['empresa'] = "Debe indicar la empresa.";
+if (empty($generos))
+    $errores['genero'] = "Debe seleccionar al menos un género.";
+if (empty($plataformas))
+    $errores['plataforma'] = "Debe seleccionar al menos una plataforma.";
 
 if (!empty($errores)) {
     echo json_encode(['success' => false, 'errors' => $errores]);
@@ -37,9 +44,9 @@ if (!empty($errores)) {
 
 try {
 
-    // ====================================
+
     // EMPRESA (verificar que exista)
-    // ====================================
+
     $stmt = $conn->prepare("SELECT id_empresa FROM EMPRESA WHERE id_empresa = ?");
     $stmt->execute([$empresa]);
     $dataEmpresa = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -51,17 +58,19 @@ try {
 
     $id_empresa = $empresa;
 
-    // ====================================
+
+
     // DIRECTORIO DE IMAGENES
-    // ====================================
+
     $uploadDir = __DIR__ . '/../../img/uploads/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0755, true);
     }
 
-    // ====================================
+
+
     // IMAGEN PORTADA
-    // ====================================
+
     $imagen_path = null;
 
     if (!empty($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
@@ -75,9 +84,10 @@ try {
         }
     }
 
-    // ====================================
+
+
     // UPDATE EXISTENTE
-    // ====================================
+
     if ($id) {
 
         // Obtener imagen existente si no se subió nueva
@@ -87,6 +97,22 @@ try {
             $imagen_path = $stmt->fetchColumn();
         }
 
+        if (!$id && empty($_FILES['imagen']['name'])) {
+            echo json_encode(['success' => false, 'error' => 'Debes subir una imagen de portada.']);
+            exit;
+        }
+
+
+        if (!empty($_POST['imagenesAEliminar'])) {
+            $lista = json_decode($_POST['imagenesAEliminar'], true);
+            foreach ($lista as $idImg) {
+                $stmt = $conn->prepare("DELETE FROM JUEGO_IMAGEN WHERE id_imagen = ?");
+                $stmt->execute([$idImg]);
+            }
+        }
+
+
+
         $stmt = $conn->prepare("
             UPDATE JUEGO 
             SET titulo = ?, descripcion = ?, fecha_lanzamiento = ?, id_empresa = ?, imagen_portada = ?, publicado = 1
@@ -94,13 +120,18 @@ try {
         ");
 
         $stmt->execute([
-            $titulo, $descripcion, $fecha, $id_empresa, $imagen_path, $id
+            $titulo,
+            $descripcion,
+            $fecha,
+            $id_empresa,
+            $imagen_path,
+            $id
         ]);
 
         // Limpiar relaciones previas
         $conn->prepare("DELETE FROM JUEGO_GENERO WHERE id_juego = ?")->execute([$id]);
         $conn->prepare("DELETE FROM JUEGO_PLATAFORMA WHERE id_juego = ?")->execute([$id]);
-        // NOTA: las imágenes extra NO las borro acá, solo agrego nuevas
+        // NOTA: las imágenes extra NO se borran aca, solo se agregan nuevas
 
         // Insertar géneros
         foreach ($generos as $g) {
@@ -114,9 +145,9 @@ try {
             $stmt->execute([$id, $p]);
         }
 
-        // ===============================
+
+
         //  IMÁGENES EXTRA (UPDATE)
-        // ===============================
         if (!empty($_FILES['imagenesExtra']) && is_array($_FILES['imagenesExtra']['name'])) {
             $names = $_FILES['imagenesExtra']['name'];
             $tmpNames = $_FILES['imagenesExtra']['tmp_name'];
@@ -141,10 +172,11 @@ try {
         exit;
     }
 
-    // ====================================
-    // INSERTAR NUEVO JUEGO
-    // ====================================
 
+
+
+
+    // INSERTAR NUEVO JUEGO
     $stmt = $conn->prepare("
         INSERT INTO JUEGO (titulo, descripcion, fecha_lanzamiento, id_empresa, imagen_portada, publicado)
         VALUES (?, ?, ?, ?, ?, 0)
@@ -166,9 +198,9 @@ try {
         $stmt->execute([$id_juego, $p]);
     }
 
-    // ===============================
+
+
     //  IMÁGENES EXTRA (CREATE)
-    // ===============================
     if (!empty($_FILES['imagenesExtra']) && is_array($_FILES['imagenesExtra']['name'])) {
         $names = $_FILES['imagenesExtra']['name'];
         $tmpNames = $_FILES['imagenesExtra']['tmp_name'];
