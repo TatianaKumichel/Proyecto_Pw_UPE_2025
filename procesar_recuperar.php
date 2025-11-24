@@ -1,82 +1,65 @@
 <?php
-require_once "connection.php";
-session_start();
+require_once './inc/connection.php';
+header('Content-Type: application/json');
 
-$errores = [];
+// Leer input JSON
+$data = json_decode(file_get_contents('php://input'), true);
+$action = $data['action'] ?? '';
 
-// ----------------------------------------------------
-// 1. VERIFICAR EMAIL
-// ----------------------------------------------------
-if (isset($_POST["verificar_email"])) {
+try {
+    if ($action === 'verificar_email') {
+        $email = trim($data['email'] ?? '');
 
-    $email = trim($_POST["email"]);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo json_encode(['success' => false, 'message' => 'Formato de email inválido.']);
+            exit;
+        }
 
-    // Validación
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errores["email"] = "Formato de email inválido.";
-    }
-
-    if (empty($errores)) {
-        // Buscar usuario
         $stmt = $conn->prepare("SELECT id_usuario FROM usuario WHERE email = ?");
         $stmt->execute([$email]);
 
-        if ($stmt->rowCount() === 0) {
-            $errores["email"] = "ingrese un mail valido.";
+        if ($stmt->rowCount() > 0) {
+            echo json_encode(['success' => true]);
         } else {
-            $_SESSION["email_recuperar"] = $email;
-            $_SESSION["mostrar_pass"] = true;
-            header("Location: recuperar.php");
+            echo json_encode(['success' => false, 'message' => 'El email no está registrado.']);
+        }
+        exit;
+
+    } elseif ($action === 'actualizar_pass') {
+        $email = trim($data['email'] ?? '');
+        $password = $data['password'] ?? '';
+        $passwordConfirm = $data['passwordConfirm'] ?? '';
+
+        if (strlen($password) < 6) {
+            echo json_encode(['success' => false, 'message' => 'La contraseña debe tener al menos 6 caracteres.']);
             exit;
         }
-    }
 
-    $_SESSION["errores"] = $errores;
-    header("Location: recuperar.php");
-    exit;
-}
+        if ($password !== $passwordConfirm) {
+            echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden.']);
+            exit;
+        }
 
+        // Verificar que el email siga existiendo (seguridad básica)
+        $stmt = $conn->prepare("SELECT id_usuario FROM usuario WHERE email = ?");
+        $stmt->execute([$email]);
+        if ($stmt->rowCount() === 0) {
+            echo json_encode(['success' => false, 'message' => 'Email inválido.']);
+            exit;
+        }
 
-
-// ----------------------------------------------------
-// 2. ACTUALIZAR CONTRASEÑA
-// ----------------------------------------------------
-if (isset($_POST["actualizar_pass"])) {
-
-    $password = $_POST["password"];
-    $password2 = $_POST["password2"];
-
-    if (strlen($password) < 6) {
-        $errores["password"] = "La contraseña debe tener al menos 6 caracteres.";
-    }
-
-    if ($password !== $password2) {
-        $errores["password2"] = "Las contraseñas no coinciden.";
-    }
-
-    if (!isset($_SESSION["email_recuperar"])) {
-        $errores["general"] = "Sesión inválida. Volvé a comenzar.";
-    }
-
-    if (empty($errores)) {
-
-        $email = $_SESSION["email_recuperar"];
         $hash = password_hash($password, PASSWORD_DEFAULT);
-
-        $stmt = $conn->prepare("UPDATE usuario SET password_hash=? WHERE email=?");
+        $stmt = $conn->prepare("UPDATE usuario SET password_hash = ? WHERE email = ?");
         $stmt->execute([$hash, $email]);
 
-        unset($_SESSION["email_recuperar"]);
-
-        $_SESSION["exito"] = "Tu contraseña fue actualizada correctamente.";
-        header("Location: recuperar.php");
+        echo json_encode(['success' => true, 'message' => 'Contraseña actualizada correctamente.']);
         exit;
+
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Acción no válida.']);
     }
 
-    $_SESSION["errores"] = $errores;
-    $_SESSION["mostrar_pass"] = true;
-    header("Location: recuperar.php");
-    exit;
+} catch (PDOException $e) {
+    error_log("Error en recuperar_ajax.php: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Error en el servidor.']);
 }
-
-?>
