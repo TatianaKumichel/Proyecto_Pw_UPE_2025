@@ -17,7 +17,7 @@ document.getElementById("formLogin")?.addEventListener("submit", async (e) => {
     '<span class="spinner-border spinner-border-sm me-2"></span>Ingresando...';
 
   try {
-    const response = await fetch("./login.php", {
+    const response = await fetch("./inc/login.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +64,7 @@ document
       '<span class="spinner-border spinner-border-sm me-2"></span>Registrando...';
 
     try {
-      const response = await fetch("./registro.php", {
+      const response = await fetch("./inc/registro.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -148,7 +148,7 @@ document.getElementById("formRecuperarPaso1")?.addEventListener("submit", async 
   submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Verificando...';
 
   try {
-    const response = await fetch("./procesar_recuperar.php", {
+    const response = await fetch("./inc/procesar_recuperar.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "verificar_email", email: email }),
@@ -197,7 +197,7 @@ document.getElementById("formRecuperarPaso2")?.addEventListener("submit", async 
   submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Actualizando...';
 
   try {
-    const response = await fetch("./procesar_recuperar.php", {
+    const response = await fetch("./inc/procesar_recuperar.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

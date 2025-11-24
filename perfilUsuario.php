@@ -3,8 +3,7 @@
 
 <head>
 <?php require "inc/head.php"; ?>
-<link rel="stylesheet" href="./css/pefilUsuario.css" />
-<script src="js/scriptPerfilUsuario.js" defer></script>
+<script src="./js/scriptPerfilUsuario.js" defer></script>
  
 </head>
 

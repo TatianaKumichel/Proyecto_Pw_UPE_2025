@@ -52,7 +52,7 @@ formularioEditarNombre.addEventListener("submit", async (evento) => {
   errorNombre.classList.add("d-none");
 
   try {
-    const respuesta = await fetch("actualizarUsuario.php", {
+    const respuesta = await fetch("inc/actualizarUsuario.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -104,7 +104,7 @@ formularioCambiarContrasena.addEventListener("submit", async (evento) => {
   errorContrasena.classList.add("d-none");
 
   try {
-    const respuesta = await fetch("actualizarContraseña.php", {
+    const respuesta = await fetch("inc/actualizarContraseña.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

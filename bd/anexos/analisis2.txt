@@ -1,5 +1,0 @@
-un juego tiene la imagen portada y ademas tiene mas de una imagen para el carrousel que se muestra en el detalle. 
-tener en cuenta que un juego puede ser calificado por muchos usuarios. Y en algun lado se podra consultar un promedio de calificaciones de un juego.
-se debe diferencias los comentarios de otros usuarios a los propios comentarios.
-Tener en cuenta que el moderador puede eliminar el comentario reportado (ignorar) o restringir al usuario que creó el comentario que ha sido reportado.
-Adicionalmente, considerar cuando el administrador publica un juego, se notificará la novedad a los usuarios de esta manera: notificar a usuarios (vía mail) sobre la publicación de un juego que, en función del género de sus favoritos, podría interesarle. Es decir, analizar los favoritos y definir los dos géneros de más interés del usuario y, en base a eso, notificar.

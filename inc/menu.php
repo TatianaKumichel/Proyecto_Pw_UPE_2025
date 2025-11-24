@@ -163,7 +163,7 @@ if ($usuarioLogueado) {
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a id="cerrarSesion" class="dropdown-item text-danger" href="./logout.php">
+                            <li><a id="cerrarSesion" class="dropdown-item text-danger" href="./inc/logout.php">
                                     <i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a>
                             </li>
                         </ul>

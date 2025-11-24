@@ -3,18 +3,30 @@
  * información completa del juego, permite marcar favorito, calificar y comentar
  */
 
-window.addEventListener("DOMContentLoaded", () => {
-  cargarDetalle();
-  cargarComentarios();
-  configurarEventosModales();
+window.addEventListener("DOMContentLoaded", async () => {
+  // Obtener ID del juego de la URL
+  const params = new URLSearchParams(window.location.search);
+  const idJuego = params.get("id_juego");
+
+  if (!idJuego) {
+    mostrarError("No se especificó un ID de juego válido.");
+    return;
+  }
+  
+  const exito = await cargarDetalle(idJuego);
+  
+  if (exito) {
+    cargarComentarios(idJuego);
+    configurarEventosModales(idJuego);
+  }
 });
 
 /**
  * Cargar detalle del juego
  */
-async function cargarDetalle() {
+async function cargarDetalle(idJuego) {
   try {
-    const res = await fetch(`./bd/juegos/getJuego.php?id_juego=${ID_JUEGO}`);
+    const res = await fetch(`./bd/juegos/getJuego.php?id_juego=${idJuego}`);
     const juego = await res.json();
 
     if (juego.error) {
@@ -67,9 +79,11 @@ async function cargarDetalle() {
     } else {
       document.getElementById("guest-section").classList.remove("d-none");
     }
+    return true;
   } catch (err) {
     console.error("Error al cargar detalle:", err);
     mostrarError(err.message);
+    return false;
   }
 }
 
@@ -360,7 +374,7 @@ async function calificar(id_juego, valor) {
 /**
  * Cargar comentarios del juego
  */
-async function cargarComentarios() {
+async function cargarComentarios(idJuego) {
   const seccionComentarios = document.getElementById("comentarios");
   if (!seccionComentarios) return;
 
@@ -369,7 +383,7 @@ async function cargarComentarios() {
     const estaLogueado = await verificarSesion();
 
     // Obtener comentarios
-    const data = await obtenerComentarios(ID_JUEGO);
+    const data = await obtenerComentarios(idJuego);
 
     if (data.error) {
       throw new Error(data.error);
@@ -380,11 +394,11 @@ async function cargarComentarios() {
 
     // Configurar eventos si está logueado
     if (estaLogueado) {
-      configurarEventosComentarios();
+      configurarEventosComentarios(idJuego);
     }
   } catch (error) {
     console.error("Error al cargar comentarios:", error);
-    mostrarErrorComentarios(seccionComentarios, error);
+    mostrarErrorComentarios(seccionComentarios, error, idJuego);
   }
 }
 
@@ -523,7 +537,7 @@ function crearMensajeComentariosVacios() {
 /**
  * Mostrar error al cargar comentarios
  */
-function mostrarErrorComentarios(contenedor, error) {
+function mostrarErrorComentarios(contenedor, error, idJuego) {
   contenedor.innerHTML = `
     <div class="card mt-4">
       <div class="card-body">
@@ -534,7 +548,7 @@ function mostrarErrorComentarios(contenedor, error) {
           </h5>
           <p class="mb-0">${escapeHtml(error.message)}</p>
           <hr>
-          <button class="btn btn-sm btn-outline-danger" onclick="cargarComentarios()">
+          <button class="btn btn-sm btn-outline-danger" onclick="cargarComentarios(${idJuego})">
             <i class="bi bi-arrow-clockwise" aria-hidden="true"></i> Reintentar
           </button>
         </div>
@@ -692,7 +706,7 @@ function scrollToUserComment() {
 /**
  * Configurar eventos de los modales de comentarios
  */
-function configurarEventosModales() {
+function configurarEventosModales(idJuego) {
   // Modal Agregar Comentario
   const modalAgregar = document.getElementById("modalAgregarComentario");
   if (modalAgregar) {
@@ -717,7 +731,7 @@ function configurarEventosModales() {
     // Botón publicar
     const btnPublicar = document.getElementById("btnPublicarComentario");
     if (btnPublicar) {
-      btnPublicar.addEventListener("click", agregarComentarioModal);
+      btnPublicar.addEventListener("click", () => agregarComentarioModal(idJuego));
     }
   }
 
@@ -735,21 +749,21 @@ function configurarEventosModales() {
 
     const btnGuardar = document.getElementById("btnGuardarEdicion");
     if (btnGuardar) {
-      btnGuardar.addEventListener("click", guardarEdicionModal);
+      btnGuardar.addEventListener("click", () => guardarEdicionModal(idJuego));
     }
   }
 
   // Modal Eliminar
   const btnConfirmarEliminar = document.getElementById("btnConfirmarEliminar");
   if (btnConfirmarEliminar) {
-    btnConfirmarEliminar.addEventListener("click", eliminarComentarioModal);
+    btnConfirmarEliminar.addEventListener("click", () => eliminarComentarioModal(idJuego));
   }
 }
 
 /**
  * Agregar comentario desde modal
  */
-async function agregarComentarioModal() {
+async function agregarComentarioModal(idJuego) {
   const textarea = document.getElementById("textoNuevoComentario");
   const contenido = textarea.value.trim();
 
@@ -763,7 +777,7 @@ async function agregarComentarioModal() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        id_juego: ID_JUEGO,
+        id_juego: idJuego,
         contenido: contenido,
       }),
     });
@@ -778,7 +792,7 @@ async function agregarComentarioModal() {
       modal.hide();
 
       mostrarNotificacion("Comentario publicado exitosamente", "success");
-      await cargarComentarios();
+      await cargarComentarios(idJuego);
     } else {
       throw new Error(data.error || "Error al publicar comentario");
     }
@@ -822,7 +836,7 @@ function abrirModalEditarComentario(id = null) {
 /**
  * Guardar edición desde modal
  */
-async function guardarEdicionModal() {
+async function guardarEdicionModal(idJuego) {
   const id = document.getElementById("idComentarioEditar").value;
   const textarea = document.getElementById("textoEditarComentario");
   const contenido = textarea.value.trim();
@@ -851,7 +865,7 @@ async function guardarEdicionModal() {
       modal.hide();
 
       mostrarNotificacion("Comentario actualizado exitosamente", "success");
-      await cargarComentarios();
+      await cargarComentarios(idJuego);
     } else {
       throw new Error(data.error || "Error al actualizar comentario");
     }
@@ -885,7 +899,7 @@ function abrirModalEliminarComentario(id) {
 /**
  * Eliminar comentario desde modal
  */
-async function eliminarComentarioModal() {
+async function eliminarComentarioModal(idJuego) {
   const id = document.getElementById("idComentarioEliminar").value;
 
   try {
@@ -904,7 +918,7 @@ async function eliminarComentarioModal() {
       modal.hide();
 
       mostrarNotificacion("Comentario eliminado exitosamente", "success");
-      await cargarComentarios();
+      await cargarComentarios(idJuego);
     } else {
       throw new Error(data.error || "Error al eliminar comentario");
     }
@@ -917,12 +931,12 @@ async function eliminarComentarioModal() {
 /**
  * Configurar eventos de comentarios
  */
-function configurarEventosComentarios() {
+function configurarEventosComentarios(idJuego) {
   // Botones de reportar
   document.querySelectorAll(".btn-reportar").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const id = e.currentTarget.dataset.id;
-      mostrarFormularioReporte(id);
+      mostrarFormularioReporte(id, idJuego);
     });
   });
 }
@@ -930,20 +944,20 @@ function configurarEventosComentarios() {
 /**
  * Mostrar formulario de reporte
  */
-function mostrarFormularioReporte(id) {
+function mostrarFormularioReporte(id, idJuego) {
   const motivo = prompt(
     "¿Por qué deseas reportar este comentario?\n(Máximo 255 caracteres)"
   );
 
   if (motivo && motivo.trim()) {
-    reportarComentario(id, motivo.trim());
+    reportarComentario(id, motivo.trim(), idJuego);
   }
 }
 
 /**
  * Reportar comentario
  */
-async function reportarComentario(id, motivo) {
+async function reportarComentario(id, motivo, idJuego) {
   try {
     const response = await fetch("./bd/comentarios/reportarComentario.php", {
       method: "POST",
@@ -958,7 +972,7 @@ async function reportarComentario(id, motivo) {
 
     if (data.success) {
       mostrarNotificacion(data.message, "success");
-      await cargarComentarios(); // Recargar comentarios
+      await cargarComentarios(idJuego); // Recargar comentarios
     } else {
       throw new Error(data.error || "Error al reportar comentario");
     }

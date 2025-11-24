@@ -1,19 +1,9 @@
-<?php
-$id_juego = isset($_GET['id_juego']) ? intval($_GET['id_juego']) : 0;
-if ($id_juego <= 0) {
-  die("Juego no especificado.");
-}
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
   <?php require "./inc/head.php"; ?>
   <link rel="stylesheet" href="./css/detalle.css" />
-  <script>
-    const ID_JUEGO = <?= $id_juego ?>;
-  </script>
   <script src="./js/detalle.js" defer></script>
   <script src="./js/detalle-reportar-modal.js" defer></script>
 </head>
