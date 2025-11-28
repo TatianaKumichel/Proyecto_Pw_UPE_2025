@@ -1,8 +1,8 @@
+<?php
 /*
  * Obtiene todas las preguntas frecuentes
  * para FAQ publico
  */
-<?php
 require_once "../../inc/connection.php";
 
 header('Content-Type: application/json');
