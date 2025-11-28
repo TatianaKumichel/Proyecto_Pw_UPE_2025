@@ -40,10 +40,12 @@
 
   col.innerHTML = `
     <div class="card h-100 shadow-sm">
-      <img src="${imagenUrl}" 
+    <a href="detalle.php?id_juego=${
+      juego.id_juego
+    }" class="text-decoration-none"> <img src="${imagenUrl}" 
            class="card-img-top" 
            alt="${escapeHtml(juego.titulo)}"
-           onerror="this.src='./img/juego-default.png'">
+           onerror="this.src='./img/juego-default.png'"> </a>
       <div class="card-body">
         <h5 class="card-title">${escapeHtml(juego.titulo)}</h5>
         <p class="card-text text-muted small mb-2">
