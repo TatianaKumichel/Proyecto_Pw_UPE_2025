@@ -1,13 +1,8 @@
 <?php
-include '../../inc/connection.php';
-header('Content-Type: application/json');
-session_start();
+require_once '../../inc/auth.php';
+requierePermisoAPI('gestionar_juegos');
 
-// Solo admin
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
-    echo json_encode(['success' => false, 'error' => 'Acceso denegado']);
-    exit;
-}
+require_once '../../inc/connection.php';
 
 
 

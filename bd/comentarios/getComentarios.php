@@ -2,10 +2,10 @@
 /**
  * Obtener comentarios de un juego
  * Retorna los comentarios activos con información del usuario
+ * Es publico, no valida permisos
  */
 
 session_start();
-
 header('Content-Type: application/json');
 
 try {
@@ -16,7 +16,7 @@ try {
     $id_juego = isset($_GET['id_juego']) ? intval($_GET['id_juego']) : 0;
 
     if ($id_juego <= 0) {
-        echo json_encode(['error' => 'ID de juego inválido']);
+        echo json_encode(['success' => false, 'error' => 'ID de juego inválido']);
         exit;
     }
 

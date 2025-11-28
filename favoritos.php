@@ -1,6 +1,7 @@
 <?php
 // Proteger la página - solo usuarios logueados
 require_once './inc/auth.php';
+requiereLogin();
 ?>
 <!DOCTYPE html>
 <html lang="es">

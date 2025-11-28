@@ -1,13 +1,16 @@
 <?php
-session_start();
-include '../../inc/connection.php';
+require_once '../../inc/auth.php';
+//requierePermisoAPI('calificar_juego');
+require_once '../../inc/connection.php';
 header('Content-Type: application/json');
 
 // Verificar que el usuario esté logueado
+
 if (!isset($_SESSION['id_usuario'])) {
-    echo json_encode(['calificacion' => null]);
+    echo json_encode(['calificacion' => null]); 
     exit;
 }
+
 
 $id_usuario = $_SESSION['id_usuario'];
 $id_juego = isset($_GET['id_juego']) ? intval($_GET['id_juego']) : 0;

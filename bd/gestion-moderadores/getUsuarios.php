@@ -3,10 +3,9 @@
  * Obtiene todos los usuarios con sus roles
  * Retorna lista de usuarios indicando si tienen rol de moderador
  */
-
-header('Content-Type: application/json');
+require_once '../../inc/auth.php';
+requierePermisoAPI('gestionar_moderadores');
 require_once '../../inc/connection.php';
-
 try {
     // Obtener todos los usuarios con información de sus roles
     $stmt = $conn->prepare("

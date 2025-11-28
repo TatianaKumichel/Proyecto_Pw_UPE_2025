@@ -1,8 +1,7 @@
 <?php
-session_start();
-include '../../inc/connection.php';
-header('Content-Type: application/json');
-
+require_once '../../inc/auth.php';
+requierePermisoAPI('moderar_comentarios');
+require_once '../../inc/connection.php';
 
 if (!isset($_SESSION['id_usuario'])) {
     http_response_code(401);

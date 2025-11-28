@@ -5,7 +5,6 @@
   <?php require "./inc/head.php"; ?>
   <link rel="stylesheet" href="./css/detalle.css" />
   <script src="./js/detalle.js" defer></script>
-  <script src="./js/detalle-reportar-modal.js" defer></script>
 </head>
 
 <body>

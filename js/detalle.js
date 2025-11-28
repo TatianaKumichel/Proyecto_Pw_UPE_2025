@@ -613,10 +613,6 @@ function crearHeaderComentario(username, fecha, avatar) {
 
 /**
  * Crear botones de acción según el tipo de usuario
- * @param {number} id - ID del comentario
- * @param {boolean} esPropio - Si el comentario pertenece al usuario actual
- * @param {boolean} estaLogueado - Si el usuario está logueado
- * @returns {string} HTML de los botones
  */
 function crearBotonesAccion(id, esPropio, estaLogueado) {
   // Si es comentario propio, mostrar botones de editar y eliminar
@@ -944,7 +940,7 @@ function configurarEventosComentarios(idJuego) {
 /**
  * Mostrar formulario de reporte
  */
-function mostrarFormularioReporte(id, idJuego) {
+function mostrarFormularioReporteOld(id, idJuego) {
   const motivo = prompt(
     "¿Por qué deseas reportar este comentario?\n(Máximo 255 caracteres)"
   );
@@ -952,6 +948,64 @@ function mostrarFormularioReporte(id, idJuego) {
   if (motivo && motivo.trim()) {
     reportarComentario(id, motivo.trim(), idJuego);
   }
+}
+
+function mostrarFormularioReporte(id, idJuego) {
+  // Obtener elementos del modal
+  const modal = new bootstrap.Modal(
+    document.getElementById("modalReportarComentario")
+  );
+  const textarea = document.getElementById("motivoReporte");
+  const contador = document.getElementById("contadorReporte");
+  const btnConfirmar = document.getElementById("btnConfirmarReporte");
+
+  // Limpiar textarea
+  textarea.value = "";
+  contador.textContent = "0";
+
+  // Remover event listener anterior si existe
+  const oldListener = textarea.getAttribute("data-listener");
+  if (oldListener) {
+    textarea.removeEventListener("input", window[oldListener]);
+  }
+
+  // Crear función para actualizar contador
+  const updateCounter = () => {
+    contador.textContent = textarea.value.length;
+  };
+
+  // Guardar referencia y agregar event listener
+  window.updateCounterReporte = updateCounter;
+  textarea.setAttribute("data-listener", "updateCounterReporte");
+  textarea.addEventListener("input", updateCounter);
+
+  // Mostrar modal
+  modal.show();
+
+  // Remover event listeners anteriores del botón confirmar
+  const nuevoBtn = btnConfirmar.cloneNode(true);
+  btnConfirmar.parentNode.replaceChild(nuevoBtn, btnConfirmar);
+
+  // Agregar nuevo event listener
+  nuevoBtn.addEventListener("click", () => {
+    const motivo = textarea.value.trim();
+
+    if (!motivo) {
+      mostrarNotificacion("Debes indicar un motivo para el reporte", "warning");
+      return;
+    }
+
+    if (motivo.length < 10) {
+      mostrarNotificacion(
+        "El motivo debe tener al menos 10 caracteres",
+        "warning"
+      );
+      return;
+    }
+
+    modal.hide();
+    reportarComentario(id, motivo, idJuego);
+  });
 }
 
 /**

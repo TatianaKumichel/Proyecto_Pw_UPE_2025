@@ -1,13 +1,8 @@
 <?php
-session_start();
-include '../../inc/connection.php';
+require_once '../../inc/auth.php';
+requierePermisoAPI('marcar_favorito');
+require_once '../../inc/connection.php';
 header('Content-Type: application/json');
-
-// Verificar que el usuario esté logueado
-if (!isset($_SESSION['id_usuario'])) {
-    echo json_encode(['esFavorito' => false, 'error' => 'Usuario no logueado']);
-    exit;
-}
 
 $id_usuario = $_SESSION['id_usuario'];
 $id_juego = isset($_GET['id_juego']) ? intval($_GET['id_juego']) : 0;

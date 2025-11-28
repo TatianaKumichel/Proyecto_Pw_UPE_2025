@@ -1,55 +1,66 @@
 <?php
-include '../../inc/connection.php';
-header('Content-Type: application/json');
+require_once '../../inc/auth.php';
+requierePermisoAPI('gestionar_plataformas');
 
-$nombre = trim($_POST['nombre'] ?? "");
-$action = $_POST['action'] ?? null;
+require_once '../../inc/connection.php';
+
+$nombre = trim($_POST['nombre'] ?? '');
 $id = $_POST['id'] ?? null;
 
-if ($nombre === "" || !$action) {
-    echo json_encode(['success' => false, 'error' => 'Datos incompletos']);
+$errores = [];
+
+if ($nombre === '') {
+    $errores['nombre'] = "Debe ingresar el nombre de la plataforma.";
+} elseif (strlen($nombre) < 2) {
+    $errores['nombre'] = "El nombre debe tener al menos 2 caracteres.";
+}
+
+if (!empty($errores)) {
+    echo json_encode(['success' => false, 'errors' => $errores]);
     exit;
 }
 
 try {
-    if ($action === "create") {
+    // Verificar si ya existe
+    if ($id) {
+        $sqlCheck = "SELECT COUNT(*) FROM plataforma WHERE nombre = :nombre AND id_plataforma <> :id";
+        $stmtCheck = $conn->prepare($sqlCheck);
+        $stmtCheck->bindParam(':nombre', $nombre);
+        $stmtCheck->bindParam(':id', $id);
+    } else {
+        $sqlCheck = "SELECT COUNT(*) FROM plataforma WHERE nombre = :nombre";
+        $stmtCheck = $conn->prepare($sqlCheck);
+        $stmtCheck->bindParam(':nombre', $nombre);
+    }
 
-        $stmt = $conn->prepare("INSERT INTO PLATAFORMA(nombre) VALUES(:nombre)");
-        $stmt->execute(['nombre' => $nombre]);
+    $stmtCheck->execute();
+    $existe = $stmtCheck->fetchColumn();
 
-        echo json_encode([
-            'success' => true,
-            'message' => 'Plataforma creada correctamente'
-        ]);
+    if ($existe > 0) {
+        echo json_encode(['success' => false, 'errors' => ['nombre' => 'Ya existe una plataforma con ese nombre.']]);
         exit;
     }
 
-    if ($action === "update") {
-
-        if (!$id) {
-            echo json_encode(['success' => false, 'error' => 'ID faltante']);
-            exit;
-        }
-
-        $stmt = $conn->prepare("UPDATE PLATAFORMA SET nombre = :nombre WHERE id_plataforma = :id");
-        $stmt->execute(['nombre' => $nombre, 'id' => $id]);
-
-        echo json_encode([
-            'success' => true,
-            'message' => 'Plataforma actualizada correctamente'
-        ]);
-        exit;
+    if ($id) {
+        // EDITAR
+        $sql = "UPDATE plataforma SET nombre = :nombre WHERE id_plataforma = :id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id', $id);
+    } else {
+        // CREAR
+        $sql = "INSERT INTO plataforma (nombre) VALUES (:nombre)";
+        $stmt = $conn->prepare($sql);
     }
 
-    // Si llega acá, acción incorrecta
-    echo json_encode(['success' => false, 'error' => 'Acción desconocida']);
-    exit;
-
-} catch (PDOException $e) {
+    $stmt->bindParam(':nombre', $nombre);
+    $ok = $stmt->execute();
 
     echo json_encode([
-        'success' => false,
-        'error' => $e->getMessage()
+        'success' => $ok,
+        'message' => $id ? "Plataforma actualizada correctamente." : "Plataforma creada correctamente."
     ]);
-    exit;
+
+} catch (PDOException $e) {
+    echo json_encode(['success' => false, 'errors' => ['general' => 'Error en la base de datos: ' . $e->getMessage()]]);
 }
+?>

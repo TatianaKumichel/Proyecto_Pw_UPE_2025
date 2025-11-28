@@ -3,10 +3,6 @@
 require_once './inc/auth.php';
 requierePermiso('gestionar_empresas');
 ?>
-
-
-
-
 <!DOCTYPE html>
 <html lang="es">
 

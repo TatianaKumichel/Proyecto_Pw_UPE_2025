@@ -1,4 +1,8 @@
 <?php
+/**
+ * Obtiene los juegos próximos a su lanzamiento
+ * Uso publico
+ */
 require_once __DIR__ . '/../../inc/connection.php';
 
 try {

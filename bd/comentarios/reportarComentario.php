@@ -4,18 +4,11 @@
  * Crea un registro en la tabla REPORTE_COMENTARIO
  */
 
-session_start();
-
-header('Content-Type: application/json');
-
-// Verificar que el usuario esté logueado
-if (!isset($_SESSION['id_usuario'])) {
-    echo json_encode(['error' => 'Debes iniciar sesión para reportar comentarios']);
-    exit;
-}
+require_once '../../inc/auth.php';
+requierePermisoAPI('reportar_comentarios');
+require_once '../../inc/connection.php';
 
 try {
-    require_once '../../inc/connection.php';
     $pdo = $conn;
 
     // Obtener datos del POST

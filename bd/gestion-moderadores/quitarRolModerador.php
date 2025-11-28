@@ -3,8 +3,8 @@
  * Quita el rol de moderador a un usuario
  * POST: id_usuario
  */
-
-header('Content-Type: application/json');
+require_once '../../inc/auth.php';
+requierePermisoAPI('gestionar_moderadores');
 require_once '../../inc/connection.php';
 
 // Verificar método POST

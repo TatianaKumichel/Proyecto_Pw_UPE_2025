@@ -1,14 +1,8 @@
 <?php
-session_start();
+require_once '../../inc/auth.php';
+requierePermisoAPI('marcar_favorito');
 require_once '../../inc/connection.php';
 header('Content-Type: application/json');
-
-// Verificar que el usuario esté logueado
-if (!isset($_SESSION['id_usuario'])) {
-    http_response_code(401);
-    echo json_encode(['error' => 'No autorizado. Debes iniciar sesión.']);
-    exit;
-}
 
 // Obtener el ID del usuario logueado
 $id_usuario = $_SESSION['id_usuario'];

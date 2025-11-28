@@ -1,6 +1,7 @@
 <?php
-include '../../inc/connection.php';
-header('Content-Type: application/json');
+require_once '../../inc/auth.php';
+requierePermisoAPI('gestionar_faq');
+require_once '../../inc/connection.php';
 
 $pregunta = $_POST['pregunta'] ?? '';
 $respuesta = $_POST['respuesta'] ?? '';

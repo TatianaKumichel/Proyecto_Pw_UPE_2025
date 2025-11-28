@@ -41,18 +41,16 @@ if ($usuarioLogueado) {
             <ul class="navbar-nav ms-auto align-items-lg-center">
                 <li class="nav-item">
                     <a class="nav-link" href="./index.php">
-                        <i class="bi bi-house"></i><span class="d-lg-none"> Inicio</span>
+                        <i class="bi bi-house"></i><span> Inicio</span>
                     </a>
                 </li>
 
-                <?php if ($usuarioLogueado && Permisos::tienePermiso('ver_juegos', $idUsuario)): ?>
-                    <!-- Catálogo solo para usuarios con permiso -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="./filtros.php">
-                            <i class="bi bi-collection"></i> <span>Catálogo</span>
-                        </a>
-                    </li>
-                <?php endif; ?>
+                <!-- Catálogo se puede usar permiso ver_juegos -->
+                <li class="nav-item">
+                    <a class="nav-link" href="./filtros.php">
+                        <i class="bi bi-collection"></i><span> Catálogo</span>
+                    </a>
+                </li>
 
                 <?php if (!$usuarioLogueado): ?>
                     <!-- Visitante no logueado -->

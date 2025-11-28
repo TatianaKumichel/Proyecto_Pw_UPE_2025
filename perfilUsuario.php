@@ -1,3 +1,8 @@
+<?php
+// Proteger página - solo usuarios logueados  
+require_once './inc/auth.php';
+requiereLogin();
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -11,20 +16,7 @@
   <?php
   require "./inc/menu.php";
 
-  //Simulacion de sesion de usuario
-  if (session_status() === PHP_SESSION_NONE) {
-      session_start();
-  }
-
-  // Si todavía no tiene login, simulamos un usuario
-  if (!isset($_SESSION['id_usuario'])) {
-      $_SESSION['id_usuario'] = 4;
-      $_SESSION['nombre'] = 'tati';
-      $_SESSION['email'] = 'tati@mail.com';
-  }
-
-  // carga desde la base de datos 
-
+  // Cargar datos del usuario desde la base de datos
   require "./inc/connection.php";
   $stmt = $conn->prepare("SELECT * FROM USUARIO WHERE id_usuario = ?");
   $stmt->execute([$_SESSION['id_usuario']]);

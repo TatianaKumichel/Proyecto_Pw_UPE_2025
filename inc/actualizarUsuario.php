@@ -1,8 +1,8 @@
 <?php
+require_once "./auth.php";
+requiereLoginAPI();
 require_once "./connection.php";
 header("Content-Type: application/json");
-
-session_start();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
    

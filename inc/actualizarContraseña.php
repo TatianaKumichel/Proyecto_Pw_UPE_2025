@@ -1,6 +1,7 @@
 <?php
+require_once "./auth.php";
+requiereLoginAPI();
 require_once "./connection.php";
-session_start();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     

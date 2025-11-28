@@ -1,5 +1,9 @@
 <?php
-include '../../inc/connection.php';
+/**
+ * Obtiene todos las plataformas de la base de datos
+ * Uso publico
+ */
+require_once '../../inc/connection.php';
 header('Content-Type: application/json');
 
 try {

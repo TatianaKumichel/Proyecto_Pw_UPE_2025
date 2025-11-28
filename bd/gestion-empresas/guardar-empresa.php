@@ -1,13 +1,14 @@
 <?php
-include '../../inc/connection.php';
-header('Content-Type: application/json');
+require_once '../../inc/auth.php';
+requierePermisoAPI('gestionar_empresas');
+
+require_once '../../inc/connection.php';
 
 $nombre = trim($_POST['nombre_empresa'] ?? '');
 $sitio_web = trim($_POST['sitio_web'] ?? '');
 $id = $_POST['id'] ?? null;
 
 $errores = [];
-
 
 if ($nombre === '') {
     $errores['nombre_empresa'] = "Debe ingresar el nombre de la empresa.";

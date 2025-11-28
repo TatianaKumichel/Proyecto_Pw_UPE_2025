@@ -1,14 +1,7 @@
 <?php
-session_start();
-include '../../inc/connection.php';
-header('Content-Type: application/json');
-
-if (!isset($_SESSION['id_usuario'])) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'No autorizado. Debes iniciar sesión.']);
-    exit;
-}
-
+require_once '../../inc/auth.php';
+requierePermisoAPI('moderar_comentarios');
+require_once '../../inc/connection.php';
 
 $idModerador = $_SESSION['id_usuario'];
 

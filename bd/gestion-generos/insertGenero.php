@@ -1,5 +1,7 @@
 <?php
-header('Content-Type: application/json');
+require_once '../../inc/auth.php';
+requierePermisoAPI('gestionar_generos');
+
 require_once __DIR__ . '/../../inc/connection.php';
 
 // Obtener datos JSON

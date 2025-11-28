@@ -3,19 +3,11 @@
  * Actualizar un comentario propio
  * Solo el autor puede editar su comentario
  */
-
-session_start();
-
-header('Content-Type: application/json');
-
-// Verificar que el usuario esté logueado
-if (!isset($_SESSION['id_usuario'])) {
-    echo json_encode(['error' => 'Debes iniciar sesión para editar comentarios']);
-    exit;
-}
+require_once '../../inc/auth.php';
+requierePermisoAPI('gestionar_comentarios_propios');
+require_once '../../inc/connection.php';
 
 try {
-    require_once '../../inc/connection.php';
     $pdo = $conn;
 
     // Obtener datos del POST

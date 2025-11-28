@@ -1,6 +1,8 @@
 <?php
-include '../../inc/connection.php';
-header('Content-Type: application/json');
+require_once '../../inc/auth.php';
+requierePermisoAPI('gestionar_juegos');
+
+require_once '../../inc/connection.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 $id = $data['id'] ?? null;

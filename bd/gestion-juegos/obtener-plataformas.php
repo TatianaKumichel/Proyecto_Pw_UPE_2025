@@ -1,4 +1,6 @@
 <?php
+require_once '../../inc/auth.php';
+requierePermisoAPI('gestionar_juegos');
 include '../../inc/connection.php';
 header('Content-Type: application/json');
 

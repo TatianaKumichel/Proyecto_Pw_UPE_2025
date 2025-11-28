@@ -1,4 +1,8 @@
 <?php
+/**
+ * Obtiene los juegos con mejor calificación
+ * Uso publico
+ */
 require_once __DIR__ . '/../../inc/connection.php';
 header('Content-Type: application/json');
 

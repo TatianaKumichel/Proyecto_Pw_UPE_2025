@@ -1,8 +1,7 @@
 <?php
-
-include '../../inc/connection.php';
-header('Content-Type: application/json');
-
+require_once '../../inc/auth.php';
+requierePermisoAPI('moderar_comentarios');
+require_once '../../inc/connection.php';
 
 $sql = "
     SELECT 

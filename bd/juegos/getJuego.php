@@ -1,5 +1,9 @@
 <?php
-include '../../inc/connection.php';
+/**
+ * Obtiene un juego por su ID
+ * Uso publico
+ */
+require_once '../../inc/connection.php';
 header('Content-Type: application/json');
 
 $id_juego = isset($_GET['id_juego']) ? intval($_GET['id_juego']) : 0;

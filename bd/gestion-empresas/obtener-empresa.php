@@ -1,6 +1,7 @@
 <?php
-include '../../inc/connection.php';
-header('Content-Type: application/json');
+require_once '../../inc/auth.php';
+requierePermisoAPI('gestionar_empresas');
+require_once '../../inc/connection.php';
 
 $id = isset($_GET['id_empresa']) ? intval($_GET['id_empresa']) : 0;
 

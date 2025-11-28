@@ -1,4 +1,8 @@
 <?php
+/**
+ * Verifica si el usuario está logueado
+ * Uso publico
+ */
 session_start();
 header('Content-Type: application/json');
 
