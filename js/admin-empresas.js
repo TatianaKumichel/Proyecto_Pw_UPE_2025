@@ -177,33 +177,32 @@ function MostrarEmpresas(empresas) {
   }
   empresas.forEach(empresa => {
     contenedor.innerHTML += `
-        <tr>
-      <td>${empresa.nombre}</td>
-  <td>${empresa.sitio_web ? `<a href="${empresa.sitio_web}" target="_blank">${empresa.sitio_web}</a>` : '-'}</td>
-  <td class="text-end">
-    <div class="dropdown">
-      <button class="btn btn-link  p-0" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-three-dots-vertical fs-5"></i>
+  <tr>
+    <td>${empresa.nombre}</td>
+
+    <td>
+      ${empresa.sitio_web
+        ? `<a href="${empresa.sitio_web}" target="_blank">${empresa.sitio_web}</a>`
+        : "-"
+      }
+    </td>
+
+    <td class="text-center">
+
+      <button class="btn btn-warning btn-sm btnEditarEmpresa" data-id="${empresa.id_empresa}">
+        <i class="bi bi-pencil-square"></i>
       </button>
-      <ul class="dropdown-menu dropdown-menu-end">
-        <li>
-          <button class="dropdown-item btnEditarEmpresa" data-id="${empresa.id_empresa}">
-            <i class="bi bi-pencil me-2 text-primary"></i>Editar
-          </button>
-        </li>
-        <li>
-          <button class="dropdown-item text-danger btnEliminarEmpresa" 
-                  data-bs-toggle="modal" 
-                  data-bs-target="#modalEliminarEmpresa" 
-                  data-id="${empresa.id_empresa}">
-            <i class="bi bi-trash me-2"></i>Eliminar
-          </button>
-        </li>
-      </ul>
-    </div>
-  </td>
+
+      <button class="btn btn-danger btn-sm btnEliminarEmpresa"
+              data-bs-toggle="modal"
+              data-bs-target="#modalEliminarEmpresa"
+              data-id="${empresa.id_empresa}">
+        <i class="bi bi-trash"></i>
+      </button>
+
+    </td>
   </tr>
- ` ;
+`;
   });
 }
 

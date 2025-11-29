@@ -2,9 +2,10 @@ body {
   background-color: #121212;
 }
 
+/*
 .navbar {
   background-color: #000;
-}
+}*/
 
 .panel {
   background-color: #1e1e1e;
@@ -30,18 +31,19 @@ table {
   z-index: 1;
 }
 
-/* Efecto hover en sidebar */
+/* Efecto hover en sidebar 
 .sidebar-link:hover {
   background-color: #343a40;
   text-decoration: none;
 }
 
-/* Link activo */
+/* Link activo 
 .sidebar-link.active {
   background-color: #0d6efd;
-}
+}*/
 
 /* Sidebar fijo en pantallas grandes (>=992px) */
+/*REPETIDO EN CSS: MODERADORES , PLATAFORMAS, GENEROS */
 @media (min-width: 992px) {
   .sidebar-nav {
     position: fixed;
@@ -58,7 +60,7 @@ table {
   }
 }
 
-/* Estilo links */
+/* Estilo links 
 .sidebar-nav .nav-link {
   padding: 10px 20px;
   border-radius: 5px;
@@ -70,7 +72,7 @@ table {
 
 .sidebar-nav .nav-link:hover {
   background-color: #343a40;
-}
+}*/
 
 .table-responsive {
   max-height: 40vh;

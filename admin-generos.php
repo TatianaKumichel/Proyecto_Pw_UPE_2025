@@ -21,7 +21,11 @@ requierePermiso('gestionar_generos');
   <div class="navbar-spacer"></div>
 
   <main class="container my-4 flex-fill">
-    <h1 class="mb-4 text-center">Gestión de Géneros</h1>
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
+      <i class="bi bi-tags fs-1 text-secondary"></i>
+      <h1 class="m-0 fw-bold">Gestión de Géneros</h1>
+    </div>
+
 
     <div class="alert alert-info">
       <i class="bi bi-info-circle"></i>
@@ -32,7 +36,7 @@ requierePermiso('gestionar_generos');
     <div class="mb-3">
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalGenero"
         id="btnNuevoGenero">
-        <i class="bi bi-plus-circle"></i> Nuevo Género
+        <i class="bi bi-plus-lg me-2"></i> Nuevo Género
       </button>
     </div>
 

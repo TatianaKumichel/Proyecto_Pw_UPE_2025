@@ -24,12 +24,15 @@ requierePermiso('gestionar_plataformas');
   <div style="margin-top: 70px"></div>
 
   <main class="container my-4 flex-fill">
-    <h1 class="mb-4 text-center">📋 Gestión de Plataformas</h1>
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
+      <i class="bi bi-display fs-1 text-secondary"></i>
+      <h1 class="m-0 fw-bold">Gestión de Plataformas</h1>
+    </div>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="h4">Panel de Plataformas</h2>
       <button id="btnAgregarPlataforma" class="btn btn-primary">
-        ➕ Agregar Plataforma
+        <i class="bi bi-plus-lg me-2"></i> Agregar Plataforma
       </button>
     </div>
 

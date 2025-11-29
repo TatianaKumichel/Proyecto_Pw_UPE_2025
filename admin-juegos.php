@@ -36,7 +36,7 @@ requierePermiso('gestionar_juegos');
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="h4">Gestión de Juegos</h2>
       <button id="btnAgregarJuego" class="btn btn-primary">
-        ➕ Agregar Juego
+        <i class="bi bi-plus-lg me-2"></i> Agregar Juego
       </button>
     </div>
 
