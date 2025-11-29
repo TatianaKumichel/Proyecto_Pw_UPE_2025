@@ -1,9 +1,15 @@
+/* ===========================
+   CONTENEDOR
+=========================== */
 #faq-container {
-  max-width: 900px;
+  max-width: 850px;
   margin: 40px auto;
   padding: 20px;
 }
 
+/* ===========================
+   TÍTULO
+=========================== */
 .titulo {
   font-size: 40px;
   font-weight: 800;
@@ -13,59 +19,9 @@
   letter-spacing: 1px;
 }
 
-
-.faq-item {
-  border-bottom: 1px solid #ccc;
-  padding: 18px 0;
-  cursor: pointer;
-}
-
-
-.faq-question {
-  font-size: 20px;
-  font-weight: 600;
-  color: #111;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.faq-question:hover {
-  color: #555;
-}
-
-/* flechita */
-.arrow {
-  font-size: 18px;
-  transition: transform .3s ease;
-}
-
-/* Cuando se abre la respuesta , gira */
-.faq-item.active .arrow {
-  transform: rotate(180deg);
-}
-
-
-.faq-answer {
-  max-height: 0;
-  overflow: hidden;
-
-  background: #fff;
-  border-radius: 6px;
-  margin-top: 10px;
-  padding: 0 20px;
-  font-size: 16px;
-  color: #333;
-  line-height: 1.6;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-.faq-item.active .faq-answer {
-  max-height: 2000px;
-  padding: 20px;
-}
-
-
+/* ===========================
+   FAQ VACÍO (Cuando no hay preguntas)
+=========================== */
 .faq-empty {
   text-align: center;
   padding: 45px 25px;
@@ -80,4 +36,103 @@
   color: #666;
   margin-bottom: 12px;
   display: block;
+}
+
+/* ===========================
+   FAQ CARD
+=========================== */
+.faq-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.faq-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* ===========================
+   BOOTSTRAP ACCORDION
+=========================== */
+
+.accordion-item {
+  border: none;
+  border-radius: 14px !important;
+  overflow: hidden;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  transition: box-shadow .25s ease;
+  border-left: 4px solid #0d6efd15;
+}
+
+.accordion-item .accordion-collapse.show {
+  box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+}
+
+.accordion-button {
+  padding: 20px 24px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: background .25s ease;
+}
+
+.accordion-button:hover {
+  background-color: #f7f7f7 !important;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #f1f1f1 !important;
+  color: #222 !important;
+  box-shadow: none !important;
+  border-left-color: #0d6efd85;
+}
+
+/* El icono previo a la pregunta */
+.accordion-button::before {
+  font-family: "bootstrap-icons";
+  content: "\F4D6";
+  font-size: 18px;
+  margin-right: 12px;
+  opacity: .65;
+}
+
+/* Reemplaza la flecha hacia abajo del accordion por un icono de "+", y al colapsar el "+" por uno de "-" */
+.accordion-button::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%23222' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='12' x2='12' y2='6'/%3E%3Cline x1='9' y1='9' x2='15' y2='9'/%3E%3C/svg%3E") !important;
+}
+
+.accordion-button:not(.collapsed)::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%23222' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='6' y1='9' x2='18' y2='9'/%3E%3C/svg%3E") !important;
+}
+
+.accordion-body {
+  background: #fff;
+  padding: 18px 25px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 700px;
+  animation: fadeIn .25s ease;
+  color: #333;
+  font-weight: 600;
+}
+
+.accordion-collapse {
+  transition: height .25s ease !important;
+}
+
+/* ===========================
+   ANIMACIÓN DEL ICONO "+" AL "-" Y VICEVERSA
+=========================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

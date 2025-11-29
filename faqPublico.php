@@ -16,12 +16,19 @@
     ?>
   </header>
 
-  <div id="faq-container">
+
+  <div id="faq-container" class="container my-5">
+  <h2 class="titulo text-center mb-4">Preguntas Frecuentes</h2>
+
+  <!-- Contenedor donde JS carga las tarjetas -->
+  <div class="accordion" id="faqAccordion">
+  </div>
+</div>
+  <!-- <div id="faq-container">
     <h2 class="titulo ">Preguntas Frecuentes</h2>
     <div id ="faq-list">
-      <!-- Aca se carga las preguntas -->
     </div>
-  </div>
+  </div> -->
 
   <footer class="bg-dark text-white mt-auto pt-3 pb-2">
     <?php
