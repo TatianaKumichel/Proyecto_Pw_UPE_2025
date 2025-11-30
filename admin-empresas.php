@@ -26,7 +26,7 @@ requierePermiso('gestionar_empresas');
 
     <div class="d-flex justify-content-center">
       <div class="d-flex align-items-center gap-2 mb-4">
-        <i class="bi bi-building fs-1 text-secondary"></i>
+
         <h1 class="fw-bold m-0">Gestión de Empresas</h1>
       </div>
     </div>

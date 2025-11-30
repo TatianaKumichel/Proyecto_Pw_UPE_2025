@@ -133,7 +133,25 @@ window.onload = function () {
       delete form.dataset.id;
       cargarPlataformas();
     } else {
-      mostrarModal("Error", data.error);
+      /* mostrarModal("Error", data.error);*/
+      /*agregue esta forma  de mostrar los errores ya que  agregue mas validaciones y en el modal quedaban como undefined */
+      let mensaje = "";
+
+      if (data.errors) {
+        if (typeof data.errors === "string") {
+
+          mensaje = data.errors;
+        } else {
+
+          for (let campo in data.errors) {
+            mensaje += `<p>${data.errors[campo]}</p>`;
+          }
+        }
+      } else {
+        mensaje = "Ocurrió un error desconocido.";
+      }
+
+      mostrarModal("Error", mensaje);
     }
   });
 

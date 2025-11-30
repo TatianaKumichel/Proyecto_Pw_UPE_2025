@@ -5,16 +5,53 @@ requierePermisoAPI('gestionar_plataformas');
 require_once '../../inc/connection.php';
 
 $nombre = trim($_POST['nombre'] ?? '');
+$action = $_POST['action'] ?? null;
 $id = $_POST['id'] ?? null;
+/* antigua validacion
+if ($nombre === "" || !$action) {
+    echo json_encode(['success' => false, 'error' => 'Datos incompletos']);
+    exit;
+}
+*/
 
 $errores = [];
-
-if ($nombre === '') {
-    $errores['nombre'] = "Debe ingresar el nombre de la plataforma.";
-} elseif (strlen($nombre) < 2) {
-    $errores['nombre'] = "El nombre debe tener al menos 2 caracteres.";
+if (!$action || !in_array($action, ['create', 'update'])) {
+    $errores['general'] = "Acción inválida.";
 }
 
+// se valida que si se va a editar el id este
+if ($action === 'update' && (!$id || !ctype_digit(strval($id)))) {
+    $errores['id'] = "Ocurrio un error para editar.";
+}
+
+if (!empty($errores)) {
+    echo json_encode(['success' => false, 'errors' => $errores]);
+    exit;
+}
+
+
+
+if ($nombre === "") {
+    $errores['nombre'] = "Debe ingresar el nombre de la plataforma.";
+} else {
+
+
+    if (strlen($nombre) < 2) {
+        $errores['nombre'] = "El nombre debe tener al menos 2 caracteres.";
+    }
+
+    if (strlen($nombre) > 50) {
+        $errores['nombre'] = "El nombre no puede superar los 50 caracteres.";
+    }
+
+    if (!preg_match('/^[A-Za-z0-9\sáéíóúÁÉÍÓÚñÑ.,-]+$/', $nombre)) {
+        $errores['nombre'] = "El nombre contiene caracteres inválidos.";
+    }
+
+    if (ctype_digit($nombre)) {
+        $errores['nombre'] = "El nombre no puede ser solo números.";
+    }
+}
 if (!empty($errores)) {
     echo json_encode(['success' => false, 'errors' => $errores]);
     exit;

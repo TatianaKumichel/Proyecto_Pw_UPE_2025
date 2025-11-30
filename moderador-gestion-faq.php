@@ -32,7 +32,7 @@ requierePermiso('gestionar_faq');
                 Administra las preguntas frecuentes del sitio
               </p>
             </div>
-            <button class="btn btn-dark" id="btnNuevaFaq">
+            <button class="btn btn-primary" id="btnNuevaFaq">
               <i class="bi bi-plus-lg me-1"></i>Nueva FAQ
             </button>
           </div>
