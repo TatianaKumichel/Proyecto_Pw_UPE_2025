@@ -25,7 +25,6 @@ requierePermiso('gestionar_plataformas');
 
   <main class="container my-4 flex-fill">
     <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
-      <i class="bi bi-display fs-1 text-secondary"></i>
       <h1 class="m-0 fw-bold">Gestión de Plataformas</h1>
     </div>
 

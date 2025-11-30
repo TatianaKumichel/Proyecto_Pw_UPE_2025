@@ -22,7 +22,7 @@ requierePermiso('gestionar_generos');
 
   <main class="container my-4 flex-fill">
     <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
-      <i class="bi bi-tags fs-1 text-secondary"></i>
+
       <h1 class="m-0 fw-bold">Gestión de Géneros</h1>
     </div>
 

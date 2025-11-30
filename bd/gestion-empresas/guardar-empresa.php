@@ -10,18 +10,44 @@ $id = $_POST['id'] ?? null;
 
 $errores = [];
 
-if ($nombre === '') {
+if ($nombre === "") {
     $errores['nombre_empresa'] = "Debe ingresar el nombre de la empresa.";
-} elseif (strlen($nombre) < 2) {
-    $errores['nombre_empresa'] = "El nombre debe tener al menos 2 caracteres.";
+} else {
+
+    if (strlen($nombre) < 2) {
+        $errores['nombre_empresa'] = "El nombre debe tener al menos 2 caracteres.";
+    }
+
+    if (strlen($nombre) > 100) {
+        $errores['nombre_empresa'] = "El nombre no puede superar los 100 caracteres.";
+    }
+
+    if (!preg_match('/^[A-Za-z0-9\sáéíóúÁÉÍÓÚñÑ.,-]+$/', $nombre)) {  /*para que no ingrese algo como tipo $#%&*/
+        $errores['nombre_empresa'] = "El nombre contiene caracteres inválidos.";
+    }
 }
 
-if ($sitio_web === '') {
+if ($sitio_web === "") {
     $errores['sitio_web'] = "Debe ingresar el sitio web.";
-} elseif (!filter_var($sitio_web, FILTER_VALIDATE_URL)) {
-    $errores['sitio_web'] = "Debe ingresar una URL válida (ejemplo: https://www.ejemplo.com).";
-}
+} else {
 
+    if (!filter_var($sitio_web, FILTER_VALIDATE_URL)) {
+        $errores['sitio_web'] = "Debe ingresar una URL valida (ejemplo: https://www.ejemplo.com).";
+    }
+
+    if (strlen($sitio_web) > 255) {
+        $errores['sitio_web'] = "La URL no puede superar los 255 caracteres.";  /*maximo*/
+    }
+
+    if (!preg_match('/^https?:\/\//', $sitio_web)) {
+        $errores['sitio_web'] = "La URL debe comenzar con http:// o https://.";
+    }
+
+    $host = parse_url($sitio_web, PHP_URL_HOST);
+    if ($host && strpos($host, '.') === false) {
+        $errores['sitio_web'] = "Debe ingresar un dominio valido (ej: empresa.com).";
+    }
+}
 if (!empty($errores)) {
     echo json_encode([
         'success' => false,
