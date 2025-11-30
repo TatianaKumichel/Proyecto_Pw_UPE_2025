@@ -44,10 +44,6 @@ if ($nombre === "") {
         $errores['nombre'] = "El nombre no puede superar los 50 caracteres.";
     }
 
-    if ($nombre !== trim($nombre)) {
-        $errores['nombre'] = "El nombre no puede iniciar o terminar con espacios.";
-    }
-
     if (!preg_match('/^[A-Za-z0-9\sáéíóúÁÉÍÓÚñÑ.,-]+$/', $nombre)) {
         $errores['nombre'] = "El nombre contiene caracteres inválidos.";
     }

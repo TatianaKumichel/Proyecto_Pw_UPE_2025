@@ -23,7 +23,7 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `upegaming` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `upegaming`;
 
-- --------------------------------------------------------
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `calificacion`
@@ -233,7 +233,7 @@ CREATE TABLE `juego` (
 INSERT INTO `juego` (`id_juego`, `titulo`, `descripcion`, `fecha_lanzamiento`, `id_empresa`, `imagen_portada`, `publicado`) VALUES
 (1, 'Apex Legends', 'Apex Legends es el galardonado juego gratuito de acción en primera persona...', NULL, 1, 'img/hapex.jpg', 1),
 (2, 'Age of Empires IV', 'La galardonada franquicia de estrategia continúa...', NULL, 2, 'img/hage.jpg', 1),
-(3, 'Assassin\'s Creed Origins', 'Explora el antiguo Egipto en este juego de acción...', NULL, 3, 'img/hassasin.jpg', 1),
+(3, 'Assassin\s Creed Origins', 'Explora el antiguo Egipto en este juego de acción...', NULL, 3, 'img/hassasin.jpg', 1),
 (4, 'Call of Duty: Black Ops 7', 'La entrega más alucinante de Black Ops hasta la fecha...', NULL, 4, 'img/hcall.jpg', 1),
 (5, 'Counter Strike 2', 'El próximo capítulo en la historia de CS está a punto de comenzar.', NULL, 5, 'img/hcs.jpg', 1),
 (6, 'Diablo IV', 'Únete a la lucha por Santuario en Diablo IV...', NULL, 6, 'img/hdiablo.jpg', 1),
