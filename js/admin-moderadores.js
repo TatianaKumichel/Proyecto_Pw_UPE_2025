@@ -1,27 +1,82 @@
-/**
- * Gestión de Moderadores - Admin
- * Permite asignar y quitar el rol de moderador a usuarios
- */
-
 document.addEventListener("DOMContentLoaded", () => {
   const tabla = document.getElementById("tablaModeradores");
 
-  // Referencias al modal
   const modalConfirmacion = new bootstrap.Modal(
     document.getElementById("modalConfirmacion")
   );
   const modalMensaje = document.getElementById("modalConfirmacionMensaje");
   const btnConfirmar = document.getElementById("btnConfirmarAccion");
 
-  // Variable para almacenar la acción pendiente
   let accionPendiente = null;
-
-  // Cargar usuarios al iniciar
   cargarUsuarios();
 
-  /**
-   * Carga todos los usuarios desde el backend
-   */
+  const modalNuevoModerador = new bootstrap.Modal(document.getElementById('modalNuevoModerador'));
+  const formNuevoModerador = document.getElementById('formNuevoModerador');
+  const btnAgregarModerador = document.getElementById('btnAgregarModerador');
+  const modError = document.getElementById('modError');
+  const modSuccess = document.getElementById('modSuccess');
+
+  if (btnAgregarModerador) {
+    btnAgregarModerador.addEventListener('click', () => {
+      formNuevoModerador.reset();
+      modError.classList.add('d-none');
+      modSuccess.classList.add('d-none');
+      modalNuevoModerador.show();
+    });
+  }
+
+  if (formNuevoModerador) {
+    formNuevoModerador.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(formNuevoModerador);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Limpiar mensajes previos
+      modError.classList.add('d-none');
+      modSuccess.classList.add('d-none');
+      
+      try {
+        const response = await fetch('./bd/gestion-moderadores/guardarModerador.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          modSuccess.textContent = result.message;
+          modSuccess.classList.remove('d-none');
+          formNuevoModerador.reset();
+          
+          // Actualizar tabla
+          setTimeout(() => {
+            modalNuevoModerador.hide();
+            modSuccess.classList.add('d-none');
+            cargarUsuarios();
+            mostrarExito(result.message);
+          }, 1500);
+          
+        } else {
+          // Mostrar error
+          let errorMsg = result.message || 'Error al crear moderador';
+          if (result.errors) {
+            errorMsg = Object.values(result.errors)[0];
+          }
+          modError.textContent = errorMsg;
+          modError.classList.remove('d-none');
+        }
+        
+      } catch (error) {
+        modError.textContent = 'Error de conexión: ' + error.message;
+        modError.classList.remove('d-none');
+      }
+    });
+  }
+
   async function cargarUsuarios() {
     try {
       const response = await fetch("./bd/gestion-moderadores/getUsuarios.php");
@@ -55,18 +110,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Determinar el estado del botón según si es moderador
       const btnModeradorClass = usuario.es_moderador
-        ? "btn-success"
-        : "btn-secondary";
+        ? "btn-danger"
+        : "btn-success";
       const btnModeradorText = usuario.es_moderador
-        ? "Moderador ON"
-        : "Moderador OFF";
+        ? "Quitar rol de moderador "
+        : "Asignar rol de moderador";
       const btnModeradorIcon = usuario.es_moderador
-        ? "bi-shield-check"
-        : "bi-shield-x";
+        ? "bi-shield-x"
+        : "bi-shield-check";
 
       // No mostrar botón si es admin (los admins no se gestionan aquí)
       const btnModerador = usuario.es_admin
-        ? '<span class="badge bg-danger">Administrador</span>'
+        ? '<span class="badge bg-secondary">Administrador</span>'
         : `<button class="btn btn-sm ${btnModeradorClass} btn-toggle-moderador" 
                    data-id="${usuario.id_usuario}" 
                    data-es-moderador="${usuario.es_moderador}">

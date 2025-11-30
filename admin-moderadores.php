@@ -25,13 +25,13 @@ requierePermiso('gestionar_moderadores');
   <!-- Espaciador -->
   <div class="navbar-spacer"></div>
 
-  <!-- Panel de Moderadores -->
   <main class="container my-4 flex-fill">
     <h1 class="mb-4 text-center">Gestión de Moderadores</h1>
 
-    <div class="alert alert-info">
-      <i class="bi bi-info-circle"></i>
-      Asignar o quitar el rol de moderador a los usuarios registrados.
+    <div class="d-flex justify-content-end mb-3">
+      <button id="btnAgregarModerador" class="btn btn-primary">
+        <i class="bi bi-person-plus-fill me-2"></i>Agregar Moderador
+      </button>
     </div>
 
     <!-- Usuarios -->
@@ -61,6 +61,46 @@ requierePermiso('gestionar_moderadores');
 
   </main>
 
+  <!-- Modal Nuevo Moderador -->
+  <div class="modal fade" id="modalNuevoModerador" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-person-plus"></i> Nuevo Moderador
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formNuevoModerador">
+            <div class="mb-3">
+              <label for="modUsername" class="form-label">Nombre de usuario</label>
+              <input type="text" class="form-control" id="modUsername" name="username" required
+                placeholder="Mínimo 3 caracteres" minlength="3" maxlength="50">
+            </div>
+            <div class="mb-3">
+              <label for="modEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="modEmail" name="email" required
+                placeholder="moderador@ejemplo.com">
+            </div>
+            <div class="mb-3">
+              <label for="modPassword" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="modPassword" name="password" required
+                placeholder="Mínimo 8 caracteres" minlength="8">
+            </div>
+            <div id="modError" class="alert alert-danger d-none" role="alert"></div>
+            <div id="modSuccess" class="alert alert-success d-none" role="alert"></div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal de Confirmación -->
   <div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel"
     aria-hidden="true">
@@ -68,7 +108,7 @@ requierePermiso('gestionar_moderadores');
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modalConfirmacionLabel">
-            <i class="bi bi-question-circle text-warning"></i> Confirmar Acción
+            <i class="bi bi-question-circle text-warning"></i> Confirmar
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
