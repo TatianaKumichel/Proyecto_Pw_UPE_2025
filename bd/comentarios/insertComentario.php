@@ -33,14 +33,20 @@ try {
         exit;
     }
 
-    // Verificar que el juego existe
-    $queryJuego = "SELECT id_juego FROM juego WHERE id_juego = :id_juego";
+    // Verificar que el juego existe y está publicado
+    $queryJuego = "SELECT id_juego, publicado FROM juego WHERE id_juego = :id_juego";
     $stmtJuego = $pdo->prepare($queryJuego);
     $stmtJuego->bindParam(':id_juego', $id_juego, PDO::PARAM_INT);
     $stmtJuego->execute();
 
     if ($stmtJuego->rowCount() === 0) {
         echo json_encode(['error' => 'El juego no existe']);
+        exit;
+    }
+
+    $juego = $stmtJuego->fetch(PDO::FETCH_ASSOC);
+    if ($juego['publicado'] != 1) {
+        echo json_encode(['error' => 'El juego no está publicado, no se pueden agregar comentarios']);
         exit;
     }
 

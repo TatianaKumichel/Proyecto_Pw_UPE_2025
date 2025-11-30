@@ -34,7 +34,7 @@ try {
     }
 
     // Verificar que el comentario existe y pertenece al usuario
-    $queryVerificar = "SELECT id_usuario FROM comentario WHERE id_comentario = :id_comentario";
+    $queryVerificar = "SELECT id_usuario, estado FROM comentario WHERE id_comentario = :id_comentario";
     $stmtVerificar = $pdo->prepare($queryVerificar);
     $stmtVerificar->bindParam(':id_comentario', $id_comentario, PDO::PARAM_INT);
     $stmtVerificar->execute();
@@ -48,6 +48,11 @@ try {
 
     if ($comentario['id_usuario'] != $id_usuario) {
         echo json_encode(['error' => 'No tienes permiso para editar este comentario']);
+        exit;
+    }
+
+    if ($comentario['estado'] === 'eliminado' || $comentario['estado'] === 'reportado') {
+        echo json_encode(['error' => 'No se puede editar el comentario porque ha sido eliminado o reportado']);
         exit;
     }
 
