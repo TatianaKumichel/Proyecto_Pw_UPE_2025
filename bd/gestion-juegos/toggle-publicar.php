@@ -20,6 +20,14 @@ if ($estado != 0 && $estado != 1) {
 }
 
 try {
+    // Verificar existencia
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM JUEGO WHERE id_juego = :id");
+    $stmt->execute([':id' => $id]);
+    if ($stmt->fetchColumn() == 0) {
+        echo json_encode(['success' => false, 'error' => 'El juego no existe']);
+        exit;
+    }
+
     $stmt = $conn->prepare("UPDATE JUEGO SET publicado = :estado WHERE id_juego = :id");
     $stmt->execute([
         ':estado' => $estado,

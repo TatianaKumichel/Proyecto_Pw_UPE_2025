@@ -3,19 +3,13 @@ require_once '../../inc/auth.php';
 requierePermisoAPI('gestionar_juegos');
 
 require_once '../../inc/connection.php';
-
-
-
-
 // Datos del formulario
-
-
 $titulo = $_POST['titulo'] ?? '';
 $descripcion = $_POST['descripcion'] ?? '';
 $fecha = $_POST['fecha'] ?? null;
 $empresa = $_POST['empresa'] ?? '';
 $id = $_POST['id'] ?? null;
-
+// generos y plataformas vienen como lista
 $generos = isset($_POST['generos']) ? json_decode($_POST['generos'], true) : [];
 $plataformas = isset($_POST['plataformas']) ? json_decode($_POST['plataformas'], true) : [];
 
@@ -23,14 +17,47 @@ $errores = [];
 
 if ($titulo === '')
     $errores['titulo'] = "Debe ingresar un título.";
+elseif (strlen($titulo) > 150)
+    $errores['titulo'] = "El título no puede exceder los 150 caracteres.";
+
 if ($descripcion === '')
     $errores['descripcion'] = "Debe ingresar una descripción.";
+// validacion de fecha
+if ($fecha === null || $fecha === '') {
+    $errores['fecha'] = "Debe ingresar una fecha de lanzamiento.";
+} else {
+    $d = DateTime::createFromFormat('Y-m-d', $fecha);
+    if (!($d && $d->format('Y-m-d') === $fecha)) {
+        $errores['fecha'] = "Formato de fecha inválido.";
+    }
+}
+
 if ($empresa === '')
     $errores['empresa'] = "Debe indicar la empresa.";
-if (empty($generos))
+
+if (empty($generos)) {
     $errores['genero'] = "Debe seleccionar al menos un género.";
-if (empty($plataformas))
+} else {
+    // Verificar que existan los géneros
+    $valores = implode(',', array_fill(0, count($generos), '?'));
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM genero WHERE id_genero IN ($valores)");
+    $stmt->execute($generos);
+    if ($stmt->fetchColumn() != count($generos)) {
+        $errores['genero'] = "Uno o más géneros seleccionados no son válidos.";
+    }
+}
+
+if (empty($plataformas)) {
     $errores['plataforma'] = "Debe seleccionar al menos una plataforma.";
+} else {
+    // Verificar que existan las plataformas
+    $valores = implode(',', array_fill(0, count($plataformas), '?'));
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM plataforma WHERE id_plataforma IN ($valores)");
+    $stmt->execute($plataformas);
+    if ($stmt->fetchColumn() != count($plataformas)) {
+        $errores['plataforma'] = "Una o más plataformas seleccionadas no son válidas.";
+    }
+}
 
 if (!empty($errores)) {
     echo json_encode(['success' => false, 'errors' => $errores]);
@@ -40,8 +67,7 @@ if (!empty($errores)) {
 try {
 
 
-    // EMPRESA (verificar que exista)
-
+    // Verificar que exista la empresa
     $stmt = $conn->prepare("SELECT id_empresa FROM EMPRESA WHERE id_empresa = ?");
     $stmt->execute([$empresa]);
     $dataEmpresa = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -53,16 +79,12 @@ try {
 
     $id_empresa = $empresa;
 
-
-
     // DIRECTORIO DE IMAGENES
 
     $uploadDir = __DIR__ . '/../../img/uploads/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0755, true);
     }
-
-
 
     // IMAGEN PORTADA
 
@@ -78,8 +100,6 @@ try {
             $imagen_path = "img/uploads/" . $name;
         }
     }
-
-
 
     // UPDATE EXISTENTE
 
@@ -97,7 +117,6 @@ try {
             exit;
         }
 
-
         if (!empty($_POST['imagenesAEliminar'])) {
             $lista = json_decode($_POST['imagenesAEliminar'], true);
             foreach ($lista as $idImg) {
@@ -105,8 +124,6 @@ try {
                 $stmt->execute([$idImg]);
             }
         }
-
-
 
         $stmt = $conn->prepare("
             UPDATE JUEGO 
@@ -140,8 +157,6 @@ try {
             $stmt->execute([$id, $p]);
         }
 
-
-
         //  IMÁGENES EXTRA (UPDATE)
         if (!empty($_FILES['imagenesExtra']) && is_array($_FILES['imagenesExtra']['name'])) {
             $names = $_FILES['imagenesExtra']['name'];
@@ -167,10 +182,6 @@ try {
         exit;
     }
 
-
-
-
-
     // INSERTAR NUEVO JUEGO
     $stmt = $conn->prepare("
         INSERT INTO JUEGO (titulo, descripcion, fecha_lanzamiento, id_empresa, imagen_portada, publicado)
@@ -192,8 +203,6 @@ try {
         $stmt = $conn->prepare("INSERT INTO JUEGO_PLATAFORMA (id_juego, id_plataforma) VALUES (?, ?)");
         $stmt->execute([$id_juego, $p]);
     }
-
-
 
     //  IMÁGENES EXTRA (CREATE)
     if (!empty($_FILES['imagenesExtra']) && is_array($_FILES['imagenesExtra']['name'])) {

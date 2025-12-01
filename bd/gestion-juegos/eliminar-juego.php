@@ -4,7 +4,6 @@ requierePermisoAPI('gestionar_juegos');
 
 require_once '../../inc/connection.php';
 
-// 📌 Datos enviados desde fetch
 $input = json_decode(file_get_contents('php://input'), true);
 $id = $input['id'] ?? null;
 
@@ -15,33 +14,24 @@ if (!$id || !is_numeric($id)) {
 
 try {
     // ============================
-    // 1️⃣ Obtener la imagen para borrarla después
+    // Verificar existencia del juego
     // ============================
-    $stmt = $conn->prepare("SELECT imagen_portada FROM JUEGO WHERE id_juego = :id");
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM JUEGO WHERE id_juego = :id");
     $stmt->execute([':id' => $id]);
-    $imagen = $stmt->fetchColumn();
+    if ($stmt->fetchColumn() == 0) {
+        echo json_encode(['success' => false, 'error' => 'El juego no existe']);
+        exit;
+    }
 
     // ============================
-    // 2️⃣ Borrar relaciones en tablas puente
+    // Borrar el juego
     // ============================
-    $stmt = $conn->prepare("DELETE FROM JUEGO_GENERO WHERE id_juego = :id");
-    $stmt->execute([':id' => $id]);
-
-    $stmt = $conn->prepare("DELETE FROM JUEGO_PLATAFORMA WHERE id_juego = :id");
-    $stmt->execute([':id' => $id]);
-
-    // ============================
-    // 3️⃣ Finalmente borrar el juego
-    // ============================
+    // Las relaciones en tablas (juego_genero, juego_plataforma, juego_imagen,
+    // comentarios, calificaciones, favoritos, notificaciones) se eliminan automáticamente
+    // gracias a la restricción ON DELETE CASCADE definida en la base de datos.
+    // Sin esa restricción, simplemente se tendría que eliminar manualmente cada una de las relaciones.
     $stmt = $conn->prepare("DELETE FROM JUEGO WHERE id_juego = :id");
     $stmt->execute([':id' => $id]);
-
-    // ============================
-    // 4️⃣ Borrar imagen del servidor
-    // ============================
-    if ($imagen && file_exists(__DIR__ . '/../../' . $imagen)) {
-        unlink(__DIR__ . '/../../' . $imagen);
-    }
 
     echo json_encode([
         'success' => true,
