@@ -47,6 +47,7 @@ requierePermiso('gestionar_juegos');
         <div class="col-12 ">
           <label for="imagenJuego" class="form-label">Imagen Portada</label>
           <input type="file" id="imagenJuego" name="imagen" class="form-control" accept="image/*" />
+          <div class="invalid-feedback"></div>
         </div>
 
         <!-- PREVIEW DE PORTADA -->
@@ -57,6 +58,7 @@ requierePermiso('gestionar_juegos');
           <label for="imagenesExtra" class="form-label">Imágenes adicionales</label>
           <input type="file" class="form-control" id="imagenesExtra" name="imagenesExtra[]" multiple accept="image/*" />
           <div class="form-text">Podés seleccionar varias imágenes.</div>
+          <div class="invalid-feedback"></div>
         </div>
 
         <!-- IMÁGENES YA EXISTENTES DEL JUEGO -->
@@ -65,7 +67,7 @@ requierePermiso('gestionar_juegos');
           <div id="imagenesExistentes" class="d-flex flex-wrap gap-2"></div>
         </div>
 
-        <!-- PREVIEW DE IMÁGENES EXTRA -->
+        <!-- PREVIEW DE IMÁGENES ADICIONALES -->
         <div id="imagenesExistentes" class="my-2 d-flex gap-2 flex-wrap"></div>
 
 
@@ -73,37 +75,35 @@ requierePermiso('gestionar_juegos');
           <label for="nombreJuego" class="form-label">Nombre</label>
           <input type="text" id="nombreJuego" name="titulo" class="form-control" placeholder="Nombre del juego"
             required />
+          <div class="invalid-feedback"></div>
         </div>
 
         <div class="col-md-6">
           <label for="descripcionJuego" class="form-label">Descripción</label>
           <textarea id="descripcionJuego" name="descripcion" class="form-control" rows="2"
             placeholder="Breve descripción..." required></textarea>
+          <div class="invalid-feedback"></div>
         </div>
-
 
         <div class="col-12">
           <label class="form-label">Plataformas</label>
-          <select id="selectPlataformas" multiple class="form-select"></select>
+          <select id="selectPlataformas" multiple class="form-select" ></select>
         </div>
 
         <div class="col-12 mt-3">
           <label class="form-label">Géneros</label>
-          <select id="selectGeneros" multiple class="form-select"></select>
+          <select id="selectGeneros" multiple class="form-select" ></select>
         </div>
-
-
 
         <div class="col-12">
           <label for="empresaJuego" class="form-label">Empresa</label>
-          <select id="selectEmpresa" class="form-select" required></select>
-
-
+          <select id="selectEmpresa" class="form-select" ></select>
+          
         </div>
 
         <div class="col-md-3">
           <label for="fechaJuego" class="form-label">Fecha</label>
-          <input type="date" id="fechaJuego" name="fecha" class="form-control" required />
+          <input type="date" id="fechaJuego" name="fecha" class="form-control" />
         </div>
 
         <div class="col-12 text-end mt-2">
@@ -163,14 +163,6 @@ requierePermiso('gestionar_juegos');
         </tbody>
       </table>
     </div>
-
-
-
-
-
-
-
-
 
     <!-- MODAL PARA MENSAJES -->
     <div class="modal fade" id="msgModal" tabindex="-1" aria-hidden="true">

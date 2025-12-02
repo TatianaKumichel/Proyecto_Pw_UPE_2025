@@ -191,7 +191,17 @@ window.onload = function () {
     const data = await res.json();
 
     if (!data.success) {
-      mostrarModal("Error", data.error || "Error al guardar el juego.");
+      if (data.errors) {
+        // lista de errores
+        let errorMsg = "<ul>";
+        for (const error in data.errors) {
+          errorMsg += `<li>${data.errors[error]}</li>`;
+        }
+        errorMsg += "</ul>";
+        mostrarModal("Error", errorMsg);
+      } else {
+        mostrarModal("Error", data.error || "Error al guardar el juego.");
+      }
       return;
     }
 
@@ -302,7 +312,7 @@ window.onload = function () {
 
 
 
-    // IMAGEN DE PORTADA (Transaccional)
+    // IMAGEN DE PORTADA
 
     if (juego.imagen_portada) {
       const div = document.createElement("div");
@@ -323,7 +333,7 @@ window.onload = function () {
         if (!ok) return;
 
         div.remove();
-        formJuego._portadaEliminada = true; // ← NO la elimina en DB aún
+        formJuego._portadaEliminada = true; 
       };
     }
 
@@ -332,7 +342,7 @@ window.onload = function () {
 
 
 
-    // IMÁGENES EXTRA (Transaccional)
+    // IMÁGENES ADICIONALES
 
     if (juego.imagenes_extra) {
       juego.imagenes_extra.forEach(img => {
@@ -354,7 +364,7 @@ window.onload = function () {
           if (!ok) return;
 
           div.remove();
-          formJuego._imagenesAEliminar.push(img.id_imagen); // ← GUARDAMOS EL ID PARA EL BACKEND
+          formJuego._imagenesAEliminar.push(img.id_imagen); 
         };
       });
     }
@@ -385,7 +395,7 @@ window.onload = function () {
   }
 
 
-  //     PUBLICAR / OCULTAR (con confirmación)
+  // PUBLICAR / OCULTAR 
 
   async function cambiarPublicacion(btn) {
 
@@ -414,7 +424,7 @@ window.onload = function () {
       return;
     }
 
-    // Actualizar botón
+    // Actualizar botón publicar/ocultar
     btn.dataset.publicado = nuevoEstado;
     btn.textContent = nuevoEstado === 1 ? "Publicado" : "Oculto";
 

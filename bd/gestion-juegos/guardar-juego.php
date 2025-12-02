@@ -32,8 +32,16 @@ if ($fecha === null || $fecha === '') {
     }
 }
 
-if ($empresa === '')
-    $errores['empresa'] = "Debe indicar la empresa.";
+if ($empresa === '') {
+    $errores['empresa'] = "Debe seleccionar una empresa.";
+} else {
+    // Verificar que exista la empresa
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM EMPRESA WHERE id_empresa = ?");
+    $stmt->execute([$empresa]);
+    if ($stmt->fetchColumn() == 0) {
+        $errores['empresa'] = "Debe seleccionar una empresa.";
+    }
+}
 
 if (empty($generos)) {
     $errores['genero'] = "Debe seleccionar al menos un género.";
@@ -59,23 +67,81 @@ if (empty($plataformas)) {
     }
 }
 
+// =============================================================================
+// VALIDACIÓN DE IMÁGENES (Portada y Adicionales)
+// =============================================================================
+// valores aceptados
+$maxSize = 140 * 1024; // 140 KB
+$maxWidth = 600;
+$maxHeight = 338;
+
+// 1. Validar Portada
+if (!empty($_FILES['imagen']['name'])) {
+    if ($_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+        // Validar Peso
+        if ($_FILES['imagen']['size'] > $maxSize) {
+            $errores['imagen'] = "La imagen de portada excede el peso máximo de 140KB.";
+        } else {
+            // Validar Dimensiones
+            $dims = getimagesize($_FILES['imagen']['tmp_name']);
+            if ($dims) {
+                if ($dims[0] > $maxWidth || $dims[1] > $maxHeight) {
+                    $errores['imagen'] = "La portada excede las dimensiones permitidas ({$maxWidth}x{$maxHeight}px).";
+                }
+            } else {
+                $errores['imagen'] = "El archivo de portada no es una imagen válida.";
+            }
+        }
+        // Validar Tipo (MIME)
+        $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = finfo_file($finfo, $_FILES['imagen']['tmp_name']);
+        finfo_close($finfo);
+        if (!in_array($mime, $allowedMimes)) {
+            $errores['imagen'] = "Formato de imagen no válido.";
+        }
+    } else {
+        $errores['imagen'] = "Error al subir la imagen.";
+    }
+} elseif (!$id) {
+    // Si no hay imagen
+    $errores['imagen'] = "Debe subir una imagen.";
+}
+
+// 2. Validar Imágenes adicionales
+if (!empty($_FILES['imagenesExtra']['name'][0])) {
+    foreach ($_FILES['imagenesExtra']['name'] as $key => $name) {
+        if ($_FILES['imagenesExtra']['error'][$key] === UPLOAD_ERR_OK) {
+            $tmpName = $_FILES['imagenesExtra']['tmp_name'][$key];
+            
+            // Peso
+            if ($_FILES['imagenesExtra']['size'][$key] > $maxSize) {
+                $errores['imagenesExtra'] = "Una o más imágenes adicionales exceden los 140KB.";
+            }
+            // Dimensiones
+            $dims = getimagesize($tmpName);
+            if ($dims) {
+                if ($dims[0] > $maxWidth || $dims[1] > $maxHeight) {
+                    $errores['imagenesExtra'] = "Una o más imágenes adicionales exceden {$maxWidth}x{$maxHeight}px.";
+                }
+            }
+             // MIME
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $tmpName);
+            finfo_close($finfo);
+            if (!in_array($mime, ['image/jpeg', 'image/png', 'image/webp'])) {
+                $errores['imagenesExtra'] = "Una o más imágenes adicionales tienen formato inválido.";
+            }
+        }
+    }
+}
+
 if (!empty($errores)) {
     echo json_encode(['success' => false, 'errors' => $errores]);
     exit;
 }
 
 try {
-
-
-    // Verificar que exista la empresa
-    $stmt = $conn->prepare("SELECT id_empresa FROM EMPRESA WHERE id_empresa = ?");
-    $stmt->execute([$empresa]);
-    $dataEmpresa = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$dataEmpresa) {
-        echo json_encode(['success' => false, 'error' => 'Empresa inválida']);
-        exit;
-    }
 
     $id_empresa = $empresa;
 
@@ -101,7 +167,7 @@ try {
         }
     }
 
-    // UPDATE EXISTENTE
+    // JUEGO EXISTENTE
 
     if ($id) {
 
@@ -127,7 +193,7 @@ try {
 
         $stmt = $conn->prepare("
             UPDATE JUEGO 
-            SET titulo = ?, descripcion = ?, fecha_lanzamiento = ?, id_empresa = ?, imagen_portada = ?, publicado = 1
+            SET titulo = ?, descripcion = ?, fecha_lanzamiento = ?, id_empresa = ?, imagen_portada = ?
             WHERE id_juego = ?
         ");
 
@@ -143,21 +209,20 @@ try {
         // Limpiar relaciones previas
         $conn->prepare("DELETE FROM JUEGO_GENERO WHERE id_juego = ?")->execute([$id]);
         $conn->prepare("DELETE FROM JUEGO_PLATAFORMA WHERE id_juego = ?")->execute([$id]);
-        // NOTA: las imágenes extra NO se borran aca, solo se agregan nuevas
 
-        // Insertar géneros
+        // géneros
         foreach ($generos as $g) {
             $stmt = $conn->prepare("INSERT INTO JUEGO_GENERO (id_juego, id_genero) VALUES (?, ?)");
             $stmt->execute([$id, $g]);
         }
 
-        // Insertar plataformas
+        // plataformas
         foreach ($plataformas as $p) {
             $stmt = $conn->prepare("INSERT INTO JUEGO_PLATAFORMA (id_juego, id_plataforma) VALUES (?, ?)");
             $stmt->execute([$id, $p]);
         }
 
-        //  IMÁGENES EXTRA (UPDATE)
+        //  Imagenes adicionales
         if (!empty($_FILES['imagenesExtra']) && is_array($_FILES['imagenesExtra']['name'])) {
             $names = $_FILES['imagenesExtra']['name'];
             $tmpNames = $_FILES['imagenesExtra']['tmp_name'];
@@ -182,7 +247,7 @@ try {
         exit;
     }
 
-    // INSERTAR NUEVO JUEGO
+    // nuevo juego
     $stmt = $conn->prepare("
         INSERT INTO JUEGO (titulo, descripcion, fecha_lanzamiento, id_empresa, imagen_portada, publicado)
         VALUES (?, ?, ?, ?, ?, 0)
@@ -192,19 +257,19 @@ try {
 
     $id_juego = $conn->lastInsertId();
 
-    // Insertar géneros
+    // géneros
     foreach ($generos as $g) {
         $stmt = $conn->prepare("INSERT INTO JUEGO_GENERO (id_juego, id_genero) VALUES (?, ?)");
         $stmt->execute([$id_juego, $g]);
     }
 
-    // Insertar plataformas
+    // plataformas
     foreach ($plataformas as $p) {
         $stmt = $conn->prepare("INSERT INTO JUEGO_PLATAFORMA (id_juego, id_plataforma) VALUES (?, ?)");
         $stmt->execute([$id_juego, $p]);
     }
 
-    //  IMÁGENES EXTRA (CREATE)
+    //  Imagenes adicionales
     if (!empty($_FILES['imagenesExtra']) && is_array($_FILES['imagenesExtra']['name'])) {
         $names = $_FILES['imagenesExtra']['name'];
         $tmpNames = $_FILES['imagenesExtra']['tmp_name'];
