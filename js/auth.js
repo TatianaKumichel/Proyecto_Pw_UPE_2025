@@ -44,7 +44,7 @@ document.getElementById("formLogin")?.addEventListener("submit", async (e) => {
   }
 });
 
-// ormulario de registro
+// Formulario de registro
 document
   .getElementById("formRegistro")
   ?.addEventListener("submit", async (e) => {
