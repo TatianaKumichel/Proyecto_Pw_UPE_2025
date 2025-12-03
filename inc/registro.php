@@ -28,8 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($password)) {
         $errores['password'] = 'La contraseña es requerida';
-    } elseif (strlen($password) < 8) {
-        $errores['password'] = 'La contraseña debe tener al menos 8 caracteres';
+    } elseif (strlen($password) < 6) {
+        $errores['password'] = 'La contraseña debe tener al menos 6 caracteres';
     }
 
     // Si hay errores de validación, retornar
