@@ -27,7 +27,7 @@ botonCambiarContrasena.addEventListener("click", () => {
   errorContrasena.textContent = "";
 });
 
-// 🟩 Actualizar nombre con validación y array de errores
+// Actualizar nombre con validación y array de errores
 formularioEditarNombre.addEventListener("submit", async (evento) => {
   evento.preventDefault();
   const nombre = campoNombre.value.trim();
@@ -63,10 +63,13 @@ formularioEditarNombre.addEventListener("submit", async (evento) => {
     });
 
     const data = await respuesta.json();
-    if (data.exito) {
+    if (data.success) {
       mostrarNombre.textContent = nombre;
       formularioEditarNombre.classList.add("d-none");
       campoNombre.value = "";
+
+      const modal = new bootstrap.Modal(document.getElementById("modalExito"));
+      modal.show();
     } else {
       errorNombre.textContent =
         data.mensaje || "Error al actualizar el nombre.";
@@ -115,9 +118,12 @@ formularioCambiarContrasena.addEventListener("submit", async (evento) => {
     });
 
     const data = await respuesta.json();
-    if (data.exito) {
+    if (data.success) {
       formularioCambiarContrasena.classList.add("d-none");
       campoContrasena.value = "";
+
+      const modal = new bootstrap.Modal(document.getElementById("modalExito"));
+      modal.show();
     } else {
       errorContrasena.textContent =
         data.mensaje || "Error al actualizar la contraseña.";

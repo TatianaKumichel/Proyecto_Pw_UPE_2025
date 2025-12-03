@@ -15,7 +15,7 @@ if ($nombre === "" || !$action) {
 */
 
 $errores = [];
-if (!$action || !in_array($action, ['create', 'update'])) {
+if (!$action || !in_array($action, ['create', 'edit'])) {
     $errores['general'] = "Acción inválida.";
 }
 

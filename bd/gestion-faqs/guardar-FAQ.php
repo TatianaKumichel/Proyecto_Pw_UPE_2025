@@ -12,7 +12,7 @@ $pregunta = $_POST['pregunta'] ?? '';
 $respuesta = $_POST['respuesta'] ?? '';
 $id = $_POST['id'] ?? null;
 
-$id_autor = 1; // en la creacion se deberia guardar el id del moderador de la session, cuando se implemente
+$id_autor = $_SESSION['id_usuario'];
 
 // La pregunta empieza con '¿', termina con '?', se aceptan letras, numeros y simbolos, entre 5 y 255 caracteres.
 $regexPregunta = '/^¿[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 !"#$%&\'()*+,.\-\/:;<=>@\[\]\^_`{|}~]{5,255}\?$/u';

@@ -23,13 +23,13 @@
 
       <!-- Filtros -->
       <div class="row mb-4">
-        <div class="col-md-4 mb-2">
+        <div class="col-md-3 mb-2">
           <label for="filtroNombre" class="form-label">
             <i class="bi bi-search"></i> Buscar por nombre
           </label>
           <input type="text" id="filtroNombre" class="form-control" placeholder="Escribe el nombre del juego..." />
         </div>
-        <div class="col-md-4 mb-2">
+        <div class="col-md-3 mb-2">
           <label for="filtroGenero" class="form-label">
             <i class="bi bi-tags"></i> Género
           </label>
@@ -38,12 +38,22 @@
             <!-- Se cargan dinámicamente desde la BD -->
           </select>
         </div>
-        <div class="col-md-4 mb-2">
+        <div class="col-md-3 mb-2">
           <label for="filtroPlataforma" class="form-label">
             <i class="bi bi-display"></i> Plataforma
           </label>
           <select id="filtroPlataforma" class="form-select">
             <option value="">Todas las plataformas</option>
+            <!-- Se cargan dinámicamente desde la BD -->
+          </select>
+        </div>
+
+         <div class="col-md-3 mb-2">
+          <label for="filtroEmpresa" class="form-label">
+            <i class="bi bi-display"></i> Empresa
+          </label>
+          <select id="filtroEmpresa" class="form-select">
+            <option value="">Todas las Empresas</option>
             <!-- Se cargan dinámicamente desde la BD -->
           </select>
         </div>
