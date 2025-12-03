@@ -7,6 +7,7 @@
 const inputNombre = document.getElementById("filtroNombre");
 const selectGenero = document.getElementById("filtroGenero");
 const selectPlataforma = document.getElementById("filtroPlataforma");
+const selectEmpresa = document.getElementById("filtroEmpresa");
 const contenedorResultados = document.getElementById("contenedorResultados");
 const contadorResultados = document.getElementById("contadorResultados");
 
@@ -20,7 +21,7 @@ let juegosFiltrados = [];
 async function inicializar() {
   try {
     // Cargar géneros y plataformas para los filtros
-    await Promise.all([cargarGeneros(), cargarPlataformas()]);
+    await Promise.all([cargarGeneros(), cargarPlataformas(), cargarEmpresas()]);
 
     // Cargar todos los juegos
     await cargarJuegos();
@@ -76,6 +77,27 @@ async function cargarPlataformas() {
 }
 
 /**
+ * Cargar géneros desde la BD
+ */
+async function cargarEmpresas() {
+  try {
+    const response = await fetch("./bd/juegos/getEmpresas.php");
+    const data = await response.json();
+
+    if (data.success && data.empresas) {
+      data.empresas.forEach((empresa) => {
+        const option = document.createElement("option");
+        option.value = empresa.id_empresa;
+        option.textContent = empresa.nombre;
+        selectEmpresa.appendChild(option);
+      });
+    }
+  } catch (error) {
+    console.error("Error al cargar Empresa:", error);
+  }
+}
+
+/**
  * Cargar juegos desde la BD con filtros opcionales
  */
 async function cargarJuegos() {
@@ -86,10 +108,12 @@ async function cargarJuegos() {
     const nombre = inputNombre.value.trim();
     const genero = selectGenero.value;
     const plataforma = selectPlataforma.value;
+    const empresa = selectEmpresa.value;
 
     if (nombre) params.append("nombre", nombre);
     if (genero) params.append("id_genero", genero);
     if (plataforma) params.append("id_plataforma", plataforma);
+    if (empresa) params.append("id_empresa", empresa);
 
     const url = `./bd/juegos/getJuegos.php${
       params.toString() ? "?" + params.toString() : ""
@@ -251,6 +275,11 @@ function configurarEventos() {
 
   // Filtrar al cambiar plataforma
   selectPlataforma.addEventListener("change", () => {
+    cargarJuegos();
+  });
+
+  // Filtrar al cambiar plataforma
+  selectEmpresa.addEventListener("change", () => {
     cargarJuegos();
   });
 }
