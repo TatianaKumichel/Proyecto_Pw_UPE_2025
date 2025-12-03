@@ -73,8 +73,8 @@
                     <div class="mb-3">
                         <label for="regPassword" class="form-label">Contraseña</label>
                         <input type="password" class="form-control" id="regPassword" name="password" required
-                            placeholder="Mínimo 8 caracteres" minlength="8">
-                        <small class="form-text text-muted">Usa una contraseña segura (al menos 8 caracteres)</small>
+                            placeholder="Mínimo 6 caracteres" minlength="6">
+                        <small class="form-text text-muted">Usa una contraseña segura (al menos 6 caracteres)</small>
                     </div>
                     <div id="registroError" class="alert alert-danger d-none" role="alert"></div>
                     <div id="registroSuccess" class="alert alert-success d-none" role="alert"></div>
