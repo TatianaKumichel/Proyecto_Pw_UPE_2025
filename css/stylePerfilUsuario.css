@@ -1,0 +1,20 @@
+.btn-moderno {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 12px 25px;
+  border: none;
+  font-weight: 600;
+  box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.15),
+    -5px -5px 12px rgba(255, 255, 255, 0.8);
+  transition: 0.3s ease-in-out;
+}
+
+.btn-moderno:hover {
+  transform: translateY(-3px);
+  box-shadow: 7px 7px 15px rgba(0, 0, 0, 0.2),
+    -7px -7px 15px rgba(255, 255, 255, 0.9);
+}
+
+.btn-moderno:active {
+  transform: translateY(1px);
+}
