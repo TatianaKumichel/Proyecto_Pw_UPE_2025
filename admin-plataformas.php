@@ -10,7 +10,7 @@ requierePermiso('gestionar_plataformas');
   <?php
   require "./inc/head.php";
   ?>
-  <link rel="stylesheet" href="./css/admin-plataforma.css" />
+
   <script src="./js/admin-plataforma.js" defer></script>
 </head>
 
@@ -20,8 +20,7 @@ requierePermiso('gestionar_plataformas');
     require "./inc/menu.php";
     ?>
   </header>
-  <!-- Espaciador -->
-  <div style="margin-top: 70px"></div>
+
 
   <main class="container my-4 flex-fill">
     <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
@@ -35,24 +34,6 @@ requierePermiso('gestionar_plataformas');
       </button>
     </div>
 
-    <!-- FORMULARIO PARA NUEVA PLATAFORMA  -->
-    <form id="formPlataforma" class="d-none mb-4">
-      <div class="row g-2 align-items-end">
-        <div class="col-md-6">
-          <label for="nombrePlataforma" class="form-label">Nombre de la Plataforma</label>
-          <input type="text" id="nombrePlataforma" name="nombre" class="form-control"
-            placeholder="Ej: PC, Xbox, PlayStation..." required />
-        </div>
-        <div class="col-md-6 text-end">
-          <button type="submit" class="btn btn-success">💾 Guardar</button>
-          <button type="button" id="cancelarPlataforma" class="btn btn-secondary">
-            Cancelar
-          </button>
-        </div>
-      </div>
-    </form>
-
-    <!-- Tabla de géneros -->
     <div class="table-responsive shadow rounded">
       <table class="table table-striped align-middle text-center">
         <thead class="table-dark">
@@ -63,42 +44,41 @@ requierePermiso('gestionar_plataformas');
           </tr>
         </thead>
         <tbody id="tablaPlataformas">
-          <tr>
-            <td>1</td>
-            <td>Plataforma</td>
-            <td>
-              <div class="d-flex justify-content-center gap-1">
-                <button class="btn btn-outline-warning btn-sm btn-editar" data-bs-toggle="tooltip" title="Editar">
-                  <i class="bi bi-pencil-square"></i>
-                </button>
-                <button class="btn btn-outline-danger btn-sm btn-eliminar" data-bs-toggle="tooltip" title="Eliminar">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
+
         </tbody>
       </table>
     </div>
   </main>
 
 
-  <!-- Modal Mensaje -->
-  <div class="modal fade" id="msgModal" tabindex="-1">
-    <div class="modal-dialog">
+
+
+  <div class="modal fade" id="plataformaModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="msgModalTitle"></h5>
+
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body" id="msgModalBody"></div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
-        </div>
+
+        <form id="formPlataformaModal">
+          <div class="modal-body">
+            <label class="form-label">Nombre de la Plataforma</label>
+            <input type="text" id="modalNombrePlataforma" class="form-control">
+            <div class="valid-feedback"></div>
+            <div id="ErrorNombrePlataforma" class="invalid-feedback"></div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" id="btnGuardarPlataforma" class="btn btn-success">Guardar</button>
+          </div>
+        </form>
+
       </div>
     </div>
   </div>
-
 
   <!-- Modal Confirmación -->
   <div class="modal fade" id="confirmModal" tabindex="-1">
@@ -114,7 +94,9 @@ requierePermiso('gestionar_plataformas');
         </div>
 
         <div class="modal-footer">
-          <button type="button" id="confirmNo" class="btn btn-secondary">Cancelar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancelar
+          </button>
           <button type="button" id="confirmYes" class="btn btn-danger">Eliminar</button>
         </div>
       </div>
@@ -130,6 +112,10 @@ requierePermiso('gestionar_plataformas');
     require "./inc/footer.php";
     ?>
   </footer>
+  <?php
+  include './componentes/modal_exito.php';
+  include './componentes/modal_error.php';
+  ?>
 </body>
 
 </html>

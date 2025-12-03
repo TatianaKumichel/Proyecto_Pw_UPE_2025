@@ -1,181 +1,275 @@
 window.onload = function () {
-  const tabla = document.getElementById("tablaPlataformas");
-  const form = document.getElementById("formPlataforma");
-  const btnAgregar = document.getElementById("btnAgregarPlataforma");
-  const cancelar = document.getElementById("cancelarPlataforma");
+  CargarPlataformas();
 
-  // ================================
-  //   MODAL MENSAJE
-  // ================================
-  function mostrarModal(titulo, mensaje) {
-    document.getElementById("msgModalTitle").innerText = titulo;
-    document.getElementById("msgModalBody").innerHTML = mensaje;
-    new bootstrap.Modal(document.getElementById("msgModal")).show();
+  const btnNuevaPlataforma = document.getElementById("btnAgregarPlataforma");
+  const formPlataforma = document.getElementById("formPlataformaModal");
+  const btnConfirmarEliminacion = document.getElementById("confirmYes");
+
+
+  btnNuevaPlataforma.addEventListener("click", function () {
+    LimpiarForm();
+    formPlataforma.dataset.mode = "create";
+
+    document.querySelector("#plataformaModal .modal-title").innerText = "Nueva Plataforma";
+    document.getElementById("btnGuardarPlataforma").innerText = "Guardar";
+
+    MostrarModal();
+  });
+
+
+  document.addEventListener("click", async function (event) {
+
+    const btnEdit = event.target.closest(".btn-edit");
+
+    if (btnEdit) {
+      LimpiarErroresPlataforma();
+
+      const id = btnEdit.getAttribute("data-id");
+
+      formPlataforma.dataset.mode = "edit";
+      formPlataforma.dataset.id = id;
+
+      await CargarPlataformaPorId(id);
+
+      document.querySelector("#plataformaModal .modal-title").innerText = "Editar Plataforma";
+      document.getElementById("btnGuardarPlataforma").innerText = "Guardar Cambios";
+
+      MostrarModal();
+    }
+  });
+
+
+  document.addEventListener("click", function (event) {
+
+    const btnDelete = event.target.closest(".btn-delete");
+
+    if (btnDelete) {
+      const id = btnDelete.getAttribute("data-id");
+      const modalEliminar = document.getElementById("confirmModal");
+      modalEliminar.dataset.idPlataforma = id;
+    }
+  });
+
+  btnConfirmarEliminacion.addEventListener("click", function () {
+    const modal = document.getElementById("confirmModal");
+    const id = modal.dataset.idPlataforma;
+
+    if (id) {
+      EliminarPlataforma(id);
+    }
+  });
+
+
+  formPlataforma.addEventListener("submit", function (evento) {
+    evento.preventDefault();
+
+    if (!ValidarNombre()) return;
+
+    GuardarPlataforma();
+  });
+
+};
+
+
+
+function MostrarModal() {
+  bootstrap.Modal.getOrCreateInstance(document.getElementById("plataformaModal")).show();
+}
+
+function CerrarModal() {
+  bootstrap.Modal.getOrCreateInstance(document.getElementById("plataformaModal")).hide();
+}
+
+function LimpiarForm() {
+  document.getElementById("formPlataformaModal").reset();
+  LimpiarErrores();
+}
+
+function LimpiarErrores() {
+  const input = document.getElementById("modalNombrePlataforma");
+  input.classList.remove("is-valid", "is-invalid");
+  document.getElementById("ErrorNombrePlataforma").innerText = "";
+}
+
+
+
+function ValidarNombre() {
+  const input = document.getElementById("modalNombrePlataforma");
+  const error = document.getElementById("ErrorNombrePlataforma");
+
+  if (input.value.trim() === "") {
+    input.classList.add("is-invalid");
+    error.innerText = "Debe ingresar un nombre";
+    return false;
   }
 
-  // ================================
-  //   MODAL CONFIRMAR ELIMINACIÓN
-  // ================================
-  function confirmarEliminar(callback) {
-    const modal = new bootstrap.Modal(document.getElementById("confirmModal"));
+  input.classList.remove("is-invalid");
+  input.classList.add("is-valid");
+  error.innerText = "";
+  return true;
+}
 
-    document.getElementById("confirmYes").onclick = () => {
-      modal.hide();
-      callback(true);
-    };
 
-    document.getElementById("confirmNo").onclick = () => {
-      modal.hide();
-      callback(false);
-    };
 
-    modal.show();
-  }
-
-  // ================================
-  //   CARGAR PLATAFORMAS
-  // ================================
-  cargarPlataformas();
-
-  async function cargarPlataformas() {
+async function CargarPlataformas() {
+  try {
     const res = await fetch("./bd/gestion-juegos/obtener-plataformas.php");
     const data = await res.json();
 
+    const tabla = document.getElementById("tablaPlataformas");
     tabla.innerHTML = "";
 
     if (!data.success || data.data.length === 0) {
-      tabla.innerHTML = "<tr><td colspan='3'>No hay plataformas registradas</td></tr>";
+      tabla.innerHTML = `<tr><td colspan='3'>No hay plataformas registradas</td></tr>`;
       return;
     }
 
     data.data.forEach(p => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${p.id_plataforma}</td>
-        <td>${p.nombre}</td>
-        <td>
-          <button class="btn btn-warning btn-sm btn-edit"
-                  data-id="${p.id_plataforma}"
-                  data-nombre="${p.nombre}">
-            <i class="bi bi-pencil-square"></i>
-          </button>
-
-          <button class="btn btn-danger btn-sm btn-delete"
-                  data-id="${p.id_plataforma}">
-            <i class="bi bi-trash"></i>
-          </button>
-        </td>
-      `;
-      tabla.appendChild(tr);
+      tabla.innerHTML += `
+        <tr>
+          <td>${p.id_plataforma}</td>
+          <td>${p.nombre}</td>
+          <td>
+            <button class="btn btn-warning btn-sm btn-edit" data-id="${p.id_plataforma}">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <button class="btn btn-danger btn-sm btn-delete" data-id="${p.id_plataforma}"
+                    data-bs-toggle="modal" data-bs-target="#confirmModal">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>`;
     });
 
-    document.querySelectorAll(".btn-edit").forEach(btn => {
-      btn.addEventListener("click", () => editarPlataforma(btn));
-    });
-
-    document.querySelectorAll(".btn-delete").forEach(btn => {
-      btn.addEventListener("click", () => eliminarPlataforma(btn.dataset.id));
-    });
+  } catch (err) {
+    console.error(err);
+    MostrarError("Ocurrió un error al cargar las plataformas.");
   }
+}
 
-  // ================================
-  //   MOSTRAR FORM PARA CREAR
-  // ================================
-  btnAgregar.addEventListener("click", () => {
-    form.classList.remove("d-none");
-    form.reset();
-    form.dataset.mode = "create";
-    delete form.dataset.id;
-  });
 
-  cancelar.addEventListener("click", () => {
-    form.classList.add("d-none");
-    form.reset();
-    delete form.dataset.id;
-  });
 
-  // ================================
-  //   EDITAR PLATAFORMA
-  // ================================
-  function editarPlataforma(btn) {
-    form.classList.remove("d-none");
-    form.dataset.mode = "update";
-    form.dataset.id = btn.dataset.id;
+async function CargarPlataformaPorId(id) {
+  try {
+    const res = await fetch(`./bd/gestion-plataformas/obtener-plataforma.php?id=${id}`);
+    const data = await res.json();
 
-    document.getElementById("nombrePlataforma").value = btn.dataset.nombre;
-  }
-
-  // ================================
-  //   GUARDAR (CREATE/UPDATE)
-  // ================================
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const fd = new FormData();
-    fd.append("nombre", document.getElementById("nombrePlataforma").value);
-    fd.append("action", form.dataset.mode);
-
-    if (form.dataset.mode === "update") {
-      fd.append("id", form.dataset.id);
+    if (!data.success) {
+      MostrarError(data.message || "No se pudo cargar la plataforma");
+      return;
     }
 
-    const res = await fetch("./bd/gestion-plataformas/guardar-plataforma.php", {
+    document.getElementById("modalNombrePlataforma").value = data.data.nombre;
+
+  } catch (err) {
+    console.error(err);
+    MostrarError("Error al cargar la plataforma.");
+  }
+}
+
+
+async function GuardarPlataforma() {
+  const form = document.getElementById("formPlataformaModal");
+  const formData = new FormData();
+
+  LimpiarErroresPlataforma();
+
+  const nombreInput = document.getElementById("modalNombrePlataforma");
+  const nombre = nombreInput.value.trim();
+
+  formData.append("nombre", nombre);
+  formData.append("action", form.dataset.mode);
+
+  if (form.dataset.mode === "edit") {
+    formData.append("id", form.dataset.id);
+  }
+
+  try {
+    const response = await fetch("./bd/gestion-plataformas/guardar-plataforma.php", {
       method: "POST",
-      body: fd,
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      CerrarModal();
+      CargarPlataformas();
+      MostrarExito("Éxito", result.message);
+
+    } else if (result.errors) {
+
+
+
+      if (result.errors.nombre) {
+        nombreInput.classList.add("is-invalid");
+        document.getElementById("ErrorNombrePlataforma").innerText = result.errors.nombre;
+      }
+
+
+      if (result.errors.general) {
+        MostrarError("Error", result.errors.general);
+      }
+    }
+
+  } catch (err) {
+    console.error("Error:", err);
+    MostrarError("Error inesperado al guardar la plataforma.");
+  }
+}
+
+
+
+
+async function EliminarPlataforma(id) {
+  try {
+    const res = await fetch("./bd/gestion-plataformas/eliminar-plataforma.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
     });
 
     const data = await res.json();
 
+    bootstrap.Modal.getOrCreateInstance(document.getElementById("confirmModal")).hide();
+
     if (data.success) {
-      mostrarModal("Éxito", data.message);
-      form.reset();
-      form.classList.add("d-none");
-      delete form.dataset.id;
-      cargarPlataformas();
+      CargarPlataformas();
+      MostrarExito("Eliminada", data.message);
     } else {
-      /* mostrarModal("Error", data.error);*/
-      /*agregue esta forma  de mostrar los errores ya que  agregue mas validaciones y en el modal quedaban como undefined */
-      let mensaje = "";
-
-      if (data.errors) {
-        if (typeof data.errors === "string") {
-
-          mensaje = data.errors;
-        } else {
-
-          for (let campo in data.errors) {
-            mensaje += `<p>${data.errors[campo]}</p>`;
-          }
-        }
-      } else {
-        mensaje = "Ocurrió un error desconocido.";
-      }
-
-      mostrarModal("Error", mensaje);
+      MostrarError(data.message || "No se pudo eliminar.");
     }
-  });
 
-  // ================================
-  //   ELIMINAR
-  // ================================
-  async function eliminarPlataforma(id) {
-    confirmarEliminar(async (confirmado) => {
-      if (!confirmado) return;
-
-      const res = await fetch("./bd/gestion-plataformas/eliminar-plataforma.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        mostrarModal("Eliminado", data.message);
-        cargarPlataformas();
-      } else {
-        mostrarModal("Error", data.error);
-      }
-    });
+  } catch (err) {
+    console.error(err);
+    MostrarError("Error inesperado al eliminar.");
   }
-};
+}
+function LimpiarErroresPlataforma() {
+  const nombre = document.getElementById("modalNombrePlataforma");
+  nombre.classList.remove("is-invalid", "is-valid");
+  document.getElementById("ErrorNombrePlataforma").innerText = "";
+}
+
+
+function MostrarExito(titulo = "Éxito", mensaje = "Operación realizada correctamente") {
+  const modalExito = document.getElementById("modalExito");
+
+  document.getElementById("titulo-exito").innerText = titulo;
+  modalExito.querySelector(".modal-body p").innerText = mensaje;
+
+  const instancia = bootstrap.Modal.getOrCreateInstance(modalExito);
+  instancia.show();
+}
+
+
+function MostrarError(mensaje = "Ocurrió un error inesperado") {
+  document.getElementById("mensaje-error").innerText = mensaje;
+  const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById("modalError"));
+  modal.show();
+}
+function LimpiarForm() {
+
+  document.getElementById("formPlataformaModal").reset();
+  LimpiarErroresPlataforma();
+}
