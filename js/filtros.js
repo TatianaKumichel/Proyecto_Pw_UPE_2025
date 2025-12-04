@@ -10,11 +10,11 @@ const selectPlataforma = document.getElementById("filtroPlataforma");
 const selectEmpresa = document.getElementById("filtroEmpresa");
 const contenedorResultados = document.getElementById("contenedorResultados");
 const contadorResultados = document.getElementById("contadorResultados");
-
+const selectDestacados = document.getElementById("filtroDestacados");
 // Variables globales
 let juegosOriginales = [];
 let juegosFiltrados = [];
-
+let soloDestacados = false;
 /**
  * Inicializar la página
  */
@@ -114,17 +114,24 @@ async function cargarJuegos() {
     if (genero) params.append("id_genero", genero);
     if (plataforma) params.append("id_plataforma", plataforma);
     if (empresa) params.append("id_empresa", empresa);
+    // si se quieren ver los destacados 
+    if (soloDestacados) {
+      params.append("destacados", "1");
+    }
 
-    const url = `./bd/juegos/getJuegos.php${
-      params.toString() ? "?" + params.toString() : ""
-    }`;
+    const url = `./bd/juegos/getJuegos.php${params.toString() ? "?" + params.toString() : ""
+      }`;
     const response = await fetch(url);
     const data = await response.json();
 
     if (data.success) {
       juegosOriginales = data.juegos;
       juegosFiltrados = data.juegos;
-      mostrarJuegos(data.juegos);
+
+
+
+      mostrarJuegos(juegosFiltrados);
+      //mostrarJuegos(data.juegos);
       // actualizarContador(data.juegos.length); // Contador removido del HTML
     } else {
       throw new Error(data.error || "Error al cargar juegos");
@@ -170,9 +177,8 @@ function crearCardJuego(juego) {
 
   col.innerHTML = `
     <div class="card h-100 shadow-sm hover-card">
-      <a href="detalle.php?id_juego=${
-        juego.id_juego
-      }" class="text-decoration-none">
+      <a href="detalle.php?id_juego=${juego.id_juego
+    }" class="text-decoration-none">
         <img src="${imagenUrl}"
              class="card-img-top"
              alt="${escapeHtml(juego.titulo)}"
@@ -185,31 +191,28 @@ function crearCardJuego(juego) {
         <p class="card-text text-muted small mb-2">
           <i class="bi bi-building"></i> ${escapeHtml(juego.empresa)}
         </p>
-        ${
-          juego.generos
-            ? `
+        ${juego.generos
+      ? `
           <p class="card-text small mb-1">
             <i class="bi bi-tags"></i> 
             <span class="text-muted">${escapeHtml(juego.generos)}</span>
           </p>
         `
-            : ""
-        }
-        ${
-          juego.plataformas
-            ? `
+      : ""
+    }
+        ${juego.plataformas
+      ? `
           <p class="card-text small mb-0">
             <i class="bi bi-display"></i> 
             <span class="text-muted">${escapeHtml(juego.plataformas)}</span>
           </p>
         `
-            : ""
-        }
+      : ""
+    }
       </div>
       <div class="card-footer bg-transparent border-top-0 mt-auto">
-        <a href="detalle.php?id_juego=${
-          juego.id_juego
-        }" class="btn btn-primary btn-sm w-100">
+        <a href="detalle.php?id_juego=${juego.id_juego
+    }" class="btn btn-primary btn-sm w-100">
           <i class="bi bi-eye"></i> Ver Detalles
         </a>
       </div>
@@ -278,8 +281,13 @@ function configurarEventos() {
     cargarJuegos();
   });
 
-  // Filtrar al cambiar plataforma
+  // Filtrar al cambiar empresa
   selectEmpresa.addEventListener("change", () => {
+    cargarJuegos();
+  });
+  // filtrar por destacados o todos
+  selectDestacados.addEventListener("change", () => {
+    soloDestacados = (selectDestacados.value === "destacados");
     cargarJuegos();
   });
 }

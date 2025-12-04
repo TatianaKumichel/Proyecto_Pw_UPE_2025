@@ -48,7 +48,7 @@
           </select>
         </div>
 
-         <div class="col-md-3 mb-2">
+        <div class="col-md-3 mb-2">
           <label for="filtroEmpresa" class="form-label">
             <i class="bi bi-display"></i> Empresa
           </label>
@@ -57,7 +57,17 @@
             <!-- Se cargan dinámicamente desde la BD -->
           </select>
         </div>
+        <div class="col-md-3 mb-2">
+          <label class="form-label">
+            <i class="bi bi-star-fill"></i> Ver
+          </label>
+          <select id="filtroDestacados" class="form-select">
+            <option value="todos">Todos</option>
+            <option value="destacados">Mejor Calificados</option>
+          </select>
+        </div>
       </div>
+
 
       <!-- Resultados -->
       <div class="row" id="contenedorResultados">
