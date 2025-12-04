@@ -1,5 +1,4 @@
 /* Sidebar fijo en pantallas grandes */
-/*REPETIDO EN CSS: MODERADORES , PLATAFORMAS, GENEROS */
 @media (min-width: 992px) {
     .sidebar-nav {
         position: fixed;
@@ -17,7 +16,7 @@
     }
 }
 
-/* Links del sidebar 
+
 .sidebar-nav .nav-link {
     padding: 10px 20px;
     border-radius: 5px;
@@ -29,7 +28,7 @@
 
 .sidebar-nav .nav-link:hover {
     background-color: #343a40;
-}*/
+}
 
 .table-responsive {
     max-height: 40vh;
@@ -44,6 +43,5 @@
     position: sticky;
     top: 0;
     background-color: #343a40;
-    /* coincide con table-dark */
     z-index: 10;
 }

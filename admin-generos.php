@@ -8,6 +8,7 @@ requierePermiso('gestionar_generos');
 
 <head>
   <?php require "./inc/head.php"; ?>
+  <link rel="stylesheet" href="./css/admin-moderadores.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <script src="./js/admin-generos.js" defer></script>
 </head>
@@ -17,8 +18,7 @@ requierePermiso('gestionar_generos');
     <?php require "./inc/menu.php"; ?>
   </header>
 
-  <!-- Espaciador -->
-  <div class="navbar-spacer"></div>
+
 
   <main class="container my-4 flex-fill">
     <div class="d-flex justify-content-center align-items-center gap-2 mb-4">

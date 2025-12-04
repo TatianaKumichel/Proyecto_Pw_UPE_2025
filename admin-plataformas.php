@@ -10,7 +10,7 @@ requierePermiso('gestionar_plataformas');
   <?php
   require "./inc/head.php";
   ?>
-
+  <link rel="stylesheet" href="./css/admin-moderadores.css" />
   <script src="./js/admin-plataforma.js" defer></script>
 </head>
 
@@ -27,8 +27,8 @@ requierePermiso('gestionar_plataformas');
       <h1 class="m-0 fw-bold">Gestión de Plataformas</h1>
     </div>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="h4">Panel de Plataformas</h2>
+    <div class="d-flex justify-content-end mb-3">
+
       <button id="btnAgregarPlataforma" class="btn btn-primary">
         <i class="bi bi-plus-lg me-2"></i> Agregar Plataforma
       </button>

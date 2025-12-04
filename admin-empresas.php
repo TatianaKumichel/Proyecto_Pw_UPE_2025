@@ -10,7 +10,7 @@ requierePermiso('gestionar_empresas');
   <?php
   require "./inc/head.php";
   ?>
-
+  <link rel="stylesheet" href="./css/admin-moderadores.css" />
   <script defer src="./js/admin-empresas.js"></script>
 </head>
 
@@ -21,7 +21,7 @@ requierePermiso('gestionar_empresas');
     ?>
   </header>
 
-  <div class="container py-4">
+  <main class="container my-4 flex-fill">
 
 
     <div class="d-flex justify-content-center">
@@ -39,7 +39,7 @@ requierePermiso('gestionar_empresas');
 
 
     <div class="table-responsive shadow rounded">
-      <table class="table table-striped align-middle text-center">
+      <table class="table table-striped align-middle text-center  mb-0">
         <thead class="table-dark">
           <th>Empresa</th>
           <th>Sitio web</th>
@@ -50,7 +50,7 @@ requierePermiso('gestionar_empresas');
       </table>
 
     </div>
-  </div>
+  </main>
 
   <div class="modal fade" id="modalNuevaEmpresa">
     <div class="modal-dialog modal-dialog-centered">
