@@ -11,6 +11,8 @@ const selectEmpresa = document.getElementById("filtroEmpresa");
 const contenedorResultados = document.getElementById("contenedorResultados");
 const contadorResultados = document.getElementById("contadorResultados");
 const selectDestacados = document.getElementById("filtroDestacados");
+const selectEstado = document.getElementById("filtroEstado");
+
 // Variables globales
 let juegosOriginales = [];
 let juegosFiltrados = [];
@@ -109,11 +111,13 @@ async function cargarJuegos() {
     const genero = selectGenero.value;
     const plataforma = selectPlataforma.value;
     const empresa = selectEmpresa.value;
+    const estado = selectEstado.value;
 
     if (nombre) params.append("nombre", nombre);
     if (genero) params.append("id_genero", genero);
     if (plataforma) params.append("id_plataforma", plataforma);
     if (empresa) params.append("id_empresa", empresa);
+    if (estado) params.append("estado", estado);
     // si se quieren ver los destacados 
     if (soloDestacados) {
       params.append("destacados", "1");
@@ -288,6 +292,9 @@ function configurarEventos() {
   // filtrar por destacados o todos
   selectDestacados.addEventListener("change", () => {
     soloDestacados = (selectDestacados.value === "destacados");
+    cargarJuegos();
+  });
+  selectEstado.addEventListener("change", () => {
     cargarJuegos();
   });
 }

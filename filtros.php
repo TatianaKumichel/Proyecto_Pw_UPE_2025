@@ -66,6 +66,16 @@
             <option value="destacados">Mejor Calificados</option>
           </select>
         </div>
+        <div class="col-md-3 mb-2">
+          <label for="filtroEstado" class="form-label">
+            <i class="bi bi-clock-history"></i> Estado
+          </label>
+          <select id="filtroEstado" class="form-select">
+            <option value="">Todos</option>
+            <option value="disponible">Disponible</option>
+            <option value="proximamente">Próximamente</option>
+          </select>
+        </div>
       </div>
 
 

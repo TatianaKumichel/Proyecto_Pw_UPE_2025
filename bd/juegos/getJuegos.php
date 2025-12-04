@@ -12,6 +12,8 @@ try {
     $id_genero = isset($_GET['id_genero']) ? intval($_GET['id_genero']) : 0;
     $id_plataforma = isset($_GET['id_plataforma']) ? intval($_GET['id_plataforma']) : 0;
     $id_empresa = isset($_GET['id_empresa']) ? intval($_GET['id_empresa']) : 0;
+    $estado = isset($_GET['estado']) ? trim($_GET['estado']) : '';
+
 
     // si filtra en solo destacados o en todos 
     $solo_destacados = isset($_GET['destacados']) && $_GET['destacados'] == 1;
@@ -27,9 +29,16 @@ try {
                 GROUP_CONCAT(DISTINCT g.nombre ORDER BY g.nombre SEPARATOR ', ') AS generos,
                 GROUP_CONCAT(DISTINCT p.nombre ORDER BY p.nombre SEPARATOR ', ') AS plataformas,
 
-                /*calificaciones */
+                /* calificaciones */
                 ROUND(AVG(c.puntuacion), 1) AS calificacion_promedio,
-                COUNT(c.id_usuario) AS total_calificaciones
+                COUNT(c.id_usuario) AS total_calificaciones,
+
+                /* estado */
+                CASE 
+                    WHEN j.fecha_lanzamiento <= CURDATE() THEN 'disponible'
+                    ELSE 'proximamente'
+                END AS estado
+           
 
               FROM juego j
               INNER JOIN empresa e ON j.id_empresa = e.id_empresa
@@ -75,6 +84,12 @@ try {
     if ($id_empresa > 0) {
         $query .= " AND j.id_empresa = :id_empresa";
         $params[':id_empresa'] = $id_empresa;
+
+    }
+    if ($estado === 'disponible') {
+        $query .= " AND j.fecha_lanzamiento <= CURDATE()";
+    } elseif ($estado === 'proximamente') {
+        $query .= " AND j.fecha_lanzamiento > CURDATE()";
     }
     $query .= " GROUP BY j.id_juego, j.titulo, j.descripcion, j.fecha_lanzamiento, 
                          j.imagen_portada, e.nombre";
@@ -85,7 +100,7 @@ try {
                     ORDER BY calificacion_promedio DESC,
                              total_calificaciones DESC";
     } else {
-        // Orden normal
+
         $query .= " ORDER BY j.fecha_lanzamiento DESC, j.titulo ASC";
     }
     $stmt = $conn->prepare($query);
