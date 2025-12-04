@@ -10,7 +10,7 @@ requierePermiso('gestionar_plataformas');
   <?php
   require "./inc/head.php";
   ?>
-  <link rel="stylesheet" href="./css/admin-moderadores.css" />
+  <link rel="stylesheet" href="./css/admin.css" />
   <script src="./js/admin-plataforma.js" defer></script>
 </head>
 

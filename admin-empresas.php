@@ -10,7 +10,7 @@ requierePermiso('gestionar_empresas');
   <?php
   require "./inc/head.php";
   ?>
-  <link rel="stylesheet" href="./css/admin-moderadores.css" />
+  <link rel="stylesheet" href="./css/admin.css" />
   <script defer src="./js/admin-empresas.js"></script>
 </head>
 
