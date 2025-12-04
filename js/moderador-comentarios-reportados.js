@@ -101,10 +101,12 @@ function renderizar(reportes) {
                             </button>
                            
 
-                            <button class="btn btn-outline-secondary btn-sm btn-descartar"
-                                    data-id="${rep.id_reporte}">
-                                <i class="bi bi-x-circle me-1"></i> Descartar Reporte
-                            </button>
+                             <button class="btn btn-outline-secondary btn-sm btn-descartar"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalDescartar"
+                                data-id="${rep.id_reporte}">
+                            <i class="bi bi-x-circle me-1"></i> Descartar Reporte
+                        </button>
                         </div>
                         `
                 : ""
@@ -123,27 +125,30 @@ function renderizar(reportes) {
 
 function activarBotones() {
 
-    // DESCARTAR REPORTE
+    let idReporteADescartar = null;
+
     document.querySelectorAll(".btn-descartar").forEach(btn => {
         btn.addEventListener("click", () => {
-            const id = btn.dataset.id;
-
-            const formData = new FormData();
-            formData.append("id_reporte", id);
-
-            fetch("bd/gestion-reportes/descartar_reporte.php", {
-                method: "POST",
-                body: formData
-            })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.ok) {
-                        cargarReportes();
-                    } else {
-                        console.error(data);
-                    }
-                });
+            idReporteADescartar = btn.dataset.id;
         });
+    });
+    //descartar
+    document.getElementById("confirmaDescartar").addEventListener("click", () => {
+        const fd = new FormData();
+        fd.append("id_reporte", idReporteADescartar);
+
+        fetch("bd/gestion-reportes/descartar_reporte.php", {
+            method: "POST",
+            body: fd
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (data.ok) {
+                    cargarReportes();
+                } else {
+                    console.error("Error al descartar reporte:", data);
+                }
+            });
     });
 
     let idComentarioAEliminar = null;

@@ -94,6 +94,28 @@ requierePermiso('moderar_comentarios');
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="modalDescartar">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirmar Descarte</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          ¿Seguro que deseas descartar este reporte?
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button class="btn btn-danger" id="confirmaDescartar" data-bs-dismiss="modal">
+            Descartar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

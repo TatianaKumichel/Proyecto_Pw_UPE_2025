@@ -33,7 +33,7 @@ requierePermiso('gestionar_generos');
     </div>
 
     <!-- Botón agregar -->
-    <div class="mb-3">
+    <div class="d-flex justify-content-end mb-3">
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalGenero"
         id="btnNuevoGenero">
         <i class="bi bi-plus-lg me-2"></i> Nuevo Género
