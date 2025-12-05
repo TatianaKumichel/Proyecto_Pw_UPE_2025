@@ -27,10 +27,7 @@ requierePermiso('gestionar_generos');
     </div>
 
 
-    <div class="alert alert-info">
-      <i class="bi bi-info-circle"></i>
-      Administra los géneros de videojuegos.
-    </div>
+
 
     <!-- Botón agregar -->
     <div class="d-flex justify-content-end mb-3">

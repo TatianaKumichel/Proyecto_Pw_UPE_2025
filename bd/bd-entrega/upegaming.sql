@@ -140,9 +140,12 @@ CREATE TABLE `faq` (
 -- Volcado de datos para la tabla `faq`
 --
 
-INSERT INTO `faq` (`id_faq`, `pregunta`, `respuesta`, `visible`, `id_autor`, `fecha_creacion`) VALUES
-(1, '¿por q sivarita es tan rica?', 'aaahhhhaaa', 1, 1, '2025-11-12 00:36:59');
-
+INSERT INTO `faq` (`pregunta`, `respuesta`, `visible`, `id_autor`, `fecha_creacion`) VALUES
+('¿Cómo puedo crear una cuenta en la plataforma?', 'Para crear una cuenta, hacé clic en “Registrarse”, y completá tus datos.', 1, 1, NOW()),
+('¿Por qué no puedo iniciar sesión?', 'Revisá que tu correo y contraseña sean correctos.', 1, 1, NOW()),
+('¿Cómo puedo reportar un comentario ?', 'Desde la página del juego, hacé clic en “Reportar” y completá el motivo y envia el reporte, un moderador se encargara de revisarlo.', 1, 1, NOW()),
+('¿Qué significan los juegos “destacados”?', 'Los juegos destacados  son los juegos con mayor popularidad y mejor calificados por los usuarios', 1, 1, NOW()),
+('¿Cómo agrego un juego a mis favoritos?', 'Para agregar un juego a tus favoritos, hacé clic en marcar como favorito en la página del juego.', 1, 1, NOW());
 -- --------------------------------------------------------
 
 --
@@ -231,17 +234,17 @@ CREATE TABLE `juego` (
 --
 
 INSERT INTO `juego` (`id_juego`, `titulo`, `descripcion`, `fecha_lanzamiento`, `id_empresa`, `imagen_portada`, `publicado`) VALUES
-(1, 'Apex Legends', 'Apex Legends es el galardonado juego gratuito de acción en primera persona...', NULL, 1, 'img/hapex.jpg', 1),
-(2, 'Age of Empires IV', 'La galardonada franquicia de estrategia continúa...', NULL, 2, 'img/hage.jpg', 1),
-(3, 'Assassin\s Creed Origins', 'Explora el antiguo Egipto en este juego de acción...', NULL, 3, 'img/hassasin.jpg', 1),
-(4, 'Call of Duty: Black Ops 7', 'La entrega más alucinante de Black Ops hasta la fecha...', NULL, 4, 'img/hcall.jpg', 1),
-(5, 'Counter Strike 2', 'El próximo capítulo en la historia de CS está a punto de comenzar.', NULL, 5, 'img/hcs.jpg', 1),
-(6, 'Diablo IV', 'Únete a la lucha por Santuario en Diablo IV...', NULL, 6, 'img/hdiablo.jpg', 1),
-(7, 'Grand Theft Auto V', 'Disfruta de los superventas del entretenimiento GTA V...', NULL, 7, 'img/hgta.jpg', 1),
-(8, 'NBA 2K26', 'Exhibe tu colección de movimientos con hiperrealismo...', NULL, 8, 'img/hnba.jpg', 1),
-(9, 'Party Animals', 'Pelea contra tus amigos como perritos y gatitos...', NULL, 9, 'img/hparty.jpg', 1),
-(10, 'Resident Evil 4', 'Sobrevivir es solo el principio...', NULL, 10, 'img/hresident.jpg', 1),
-(11, 'Street Fighter 6', 'Street Fighter 6 trae una nueva evolución...', NULL, 10, 'img/hsf.jpg', 1);
+(1, 'Apex Legends', 'Apex Legends es el galardonado juego gratuito de acción en primera persona...','2019-02-04', 1, 'img/hapex.jpg', 1),
+(2, 'Age of Empires IV', 'La galardonada franquicia de estrategia continúa...', '2021-10-28', 2, 'img/hage.jpg', 1),
+(3, 'Assassin\s Creed Origins', 'Explora el antiguo Egipto en este juego de acción...',  '2017-10-27', 3, 'img/hassasin.jpg', 1),
+(4, 'Call of Duty: Black Ops 7', 'La entrega más alucinante de Black Ops hasta la fecha...', '2010-11-09' , 4, 'img/hcall.jpg', 1),
+(5, 'Counter Strike 2', 'El próximo capítulo en la historia de CS está a punto de comenzar.', '2012-08-21', 5, 'img/hcs.jpg', 1),
+(6, 'Diablo IV', 'Únete a la lucha por Santuario en Diablo IV...',  '2012-05-15' , 6, 'img/hdiablo.jpg', 1),
+(7, 'Grand Theft Auto V', 'Disfruta de los superventas del entretenimiento GTA V...', '2013-09-17', 7, 'img/hgta.jpg', 1),
+(8, 'NBA 2K26', 'Exhibe tu colección de movimientos con hiperrealismo...', '2026-09-05' , 8, 'img/hnba.jpg', 1),
+(9, 'Party Animals', 'Pelea contra tus amigos como perritos y gatitos...', '2026-09-20', 9, 'img/hparty.jpg', 1),
+(10, 'Resident Evil 4', 'Sobrevivir es solo el principio...', '2026-03-24', 10, 'img/hresident.jpg', 1),
+(11, 'Street Fighter 6', 'Street Fighter 6 trae una nueva evolución...', '2026-02-17', 10, 'img/hsf.jpg', 1);
 
 --
 -- Disparadores `juego`

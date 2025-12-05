@@ -65,7 +65,7 @@ requierePermiso('gestionar_juegos');
     <div class="modal fade" id="juegoModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered"> <!-- modal-lg para más espacio -->
         <div class="modal-content">
-          
+
           <div class="modal-header bg-primary text-white">
             <h5 class="modal-title" id="juegoModalLabel">Nuevo Juego</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -77,16 +77,18 @@ requierePermiso('gestionar_juegos');
 
                 <!-- COLUMNA IZQUIERDA: TEXTOS -->
                 <div class="col-md-7">
-                  
+
                   <div class="mb-3">
                     <label for="nombreJuego" class="form-label">Nombre</label>
-                    <input type="text" id="nombreJuego" name="titulo" class="form-control" placeholder="Nombre del juego" required />
+                    <input type="text" id="nombreJuego" name="titulo" class="form-control"
+                      placeholder="Nombre del juego" required />
                     <div class="invalid-feedback"></div>
                   </div>
 
                   <div class="mb-3">
                     <label for="descripcionJuego" class="form-label">Descripción</label>
-                    <textarea id="descripcionJuego" name="descripcion" class="form-control" rows="3" placeholder="Breve descripción..." required></textarea>
+                    <textarea id="descripcionJuego" name="descripcion" class="form-control" rows="3"
+                      placeholder="Breve descripción..." required></textarea>
                     <div class="invalid-feedback"></div>
                   </div>
 
@@ -119,14 +121,15 @@ requierePermiso('gestionar_juegos');
 
                 <!-- COLUMNA DERECHA: IMÁGENES -->
                 <div class="col-md-5">
-                  
+
                   <!-- PORTADA -->
                   <div class="mb-3">
                     <label for="imagenJuego" class="form-label">Imagen Portada</label>
                     <input type="file" id="imagenJuego" name="imagen" class="form-control" accept="image/*" />
                     <div class="invalid-feedback"></div>
                     <!-- Preview Portada -->
-                    <div id="previewPortada" class="mt-2 d-flex justify-content-center border rounded bg-light p-2" style="min-height: 100px;">
+                    <div id="previewPortada" class="mt-2 d-flex justify-content-center border rounded bg-light p-2"
+                      style="min-height: 100px;">
                       <span class="text-muted align-self-center small">Vista previa</span>
                     </div>
                   </div>
@@ -134,14 +137,16 @@ requierePermiso('gestionar_juegos');
                   <!-- IMÁGENES EXTRA -->
                   <div class="mb-3">
                     <label for="imagenesExtra" class="form-label">Imágenes adicionales</label>
-                    <input type="file" class="form-control" id="imagenesExtra" name="imagenesExtra[]" multiple accept="image/*" />
+                    <input type="file" class="form-control" id="imagenesExtra" name="imagenesExtra[]" multiple
+                      accept="image/*" />
                     <div class="form-text small">Selecciona varias imágenes.</div>
                     <div class="invalid-feedback"></div>
                   </div>
 
                   <!-- CONTENEDOR IMÁGENES EXISTENTES (SOLO EDITAR) -->
                   <label class="form-label small fw-bold">Galería Actual</label>
-                  <div id="containerImagenesExistentes" class="d-flex flex-wrap gap-2 border rounded p-2 bg-light" style="min-height: 80px;">
+                  <div id="containerImagenesExistentes" class="d-flex flex-wrap gap-2 border rounded p-2 bg-light"
+                    style="min-height: 80px;">
                     <!-- Se llena dinámicamente -->
                   </div>
 
