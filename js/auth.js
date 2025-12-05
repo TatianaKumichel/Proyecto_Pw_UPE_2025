@@ -57,6 +57,22 @@ document
     const successDiv = document.getElementById("registroSuccess");
     const submitBtn = e.target.querySelector('button[type="submit"]');
 
+    // Validación de contraseña
+    const regexContrasena = /^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/;
+    const erroresClave = [];
+    if (!password) {
+      erroresClave.push("La contraseña es requerida.");
+    } else if (password.length < 6) {
+      erroresClave.push("La contraseña debe tener al menos 6 caracteres.");
+    } else if (!regexContrasena.test(password)) {
+      erroresClave.push("La contraseña debe contener al menos una letra, un número y un símbolo especial.");
+    }
+    if (erroresClave.length > 0) {
+      errorDiv.innerHTML = erroresClave.join("<br>");
+      errorDiv.classList.remove("d-none");
+      return;
+    }
+
     errorDiv.classList.add("d-none");
     successDiv.classList.add("d-none");
     submitBtn.disabled = true;
@@ -186,7 +202,21 @@ document.getElementById("formRecuperarPaso2")?.addEventListener("submit", async 
   const submitBtn = e.target.querySelector('button[type="submit"]');
 
   errorDiv.classList.add("d-none");
-
+  // Validación de contraseña
+  const regexContrasena = /^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/;
+  const erroresClave = [];
+  if (!password) {
+    erroresClave.push("La contraseña es requerida.");
+  } else if (password.length < 6) {
+    erroresClave.push("La contraseña debe tener al menos 6 caracteres.");
+  } else if (!regexContrasena.test(password)) {
+    erroresClave.push("La contraseña debe contener al menos una letra, un número y un símbolo especial.");
+  }
+  if (erroresClave.length > 0) {
+    errorDiv.innerHTML = erroresClave.join("<br>");
+    errorDiv.classList.remove("d-none");
+    return;
+  }
   if (password !== passwordConfirm) {
     errorDiv.textContent = "Las contraseñas no coinciden.";
     errorDiv.classList.remove("d-none");

@@ -35,6 +35,16 @@ try {
             exit;
         }
 
+        $regexContrasena = '/^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/u';
+    
+        if (empty($password)) {
+            echo json_encode(['success' => false, 'message' => 'La contraseña es requerida']);
+        } elseif (strlen($password) < 6) {
+          echo json_encode(['success' => false, 'message' => 'La contraseña debe tener al menos 6 caracteres']);
+        } elseif (!preg_match($regexContrasena, $password)) {
+          echo json_encode(['success' => false, 'message' => 'La contraseña debe contener al menos una letra, un número y un símbolo especial']);
+        }
+        
         if ($password !== $passwordConfirm) {
             echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden.']);
             exit;
