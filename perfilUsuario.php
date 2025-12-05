@@ -10,10 +10,12 @@ requiereLogin();
     <?php require "inc/head.php"; ?>
     <script src="./js/scriptPerfilUsuario.js" defer></script>
      <link rel="stylesheet" href="./css/stylePerfilUsuario.css" />
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
  
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100 bg-light">
 
     <?php
     require "./inc/menu.php";
@@ -26,7 +28,7 @@ requiereLogin();
     $_SESSION['nombre'] = $usuario['username'];
     ?>
 
-   <main class="container my-4">
+   <main class="container my-4 flex-fill">
 
   <div class="panel-claro shadow-sm">
     <h2 class="text-center mb-4">Perfil de Usuario</h2>
@@ -47,12 +49,18 @@ requiereLogin();
       <form method="POST" id="formEditarNombre" class="form-box d-none mt-3 p-3 rounded border">
         <div class="mb-3">
           <label for="campoNombre" class="form-label fw-semibold">Nuevo nombre de usuario</label>
-          <input
-            type="text"
-            id="campoNombre"
-            class="form-control"
-            placeholder="Ingrese su nombre"
-          />
+                <input
+                type="text"
+                id="campoNombre"
+                class="form-control"
+                placeholder="Ingrese su nombre"
+                required
+                minlength="3"
+                maxlength="50"
+                pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s.,;:!@#$%^&*()_\-+=¿?¡!'\"/\\]+"
+            />
+       
+
           <div id="errorNombre" class="text-danger mt-2 d-none"></div>
         </div>
 
@@ -69,14 +77,20 @@ requiereLogin();
       </button>
 
       <form id="formCambiarContrasena" class="form-box d-none mt-3 p-3 rounded border">
-        <div class="mb-3">
+        <div class="mb-3 " >
           <label for="campoContrasena" class="form-label fw-semibold">Nueva contraseña</label>
-          <input
-            type="password"
-            id="campoContrasena"
-            class="form-control"
-            placeholder="Ingrese su contraseña"
-          />
+                <input
+                type="password"
+                id="campoContrasena"
+                class="form-control"
+                placeholder="Ingrese su contraseña"
+                required
+                minlength="6"
+                
+            />
+
+            
+
           <div id="errorContrasena" class="text-danger mt-2 d-none"></div>
         </div>
 
@@ -97,7 +111,7 @@ requiereLogin();
 </main>
 
 
-    <footer class="bg-dark text-white mt-4 pt-3 pb-2">
+    <footer class="bg-dark text-white mt-auto pt-3 pb-2">
         <?php require "./inc/footer.php"; ?>
     </footer>
 

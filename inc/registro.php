@@ -26,11 +26,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errores['email'] = 'El email no es válido';
     }
 
-    if (empty($password)) {
-        $errores['password'] = 'La contraseña es requerida';
-    } elseif (strlen($password) < 6) {
-        $errores['password'] = 'La contraseña debe tener al menos 6 caracteres';
-    }
+  $regexContrasena = '/^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/u';
+
+if (empty($password)) {
+    $errores['password'] = 'La contraseña es requerida';
+} elseif (strlen($password) < 6) {
+    $errores['password'] = 'La contraseña debe tener al menos 6 caracteres';
+} elseif (!preg_match($regexContrasena, $password)) {
+    $errores['password'] = 'La contraseña debe incluir letras, números y símbolos.';
+}
+
 
     // Si hay errores de validación, retornar
     if (!empty($errores)) {
