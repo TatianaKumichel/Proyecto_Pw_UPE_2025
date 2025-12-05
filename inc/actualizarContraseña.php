@@ -19,11 +19,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $errores = [];
 
-    if (empty($nuevaContrasena)) {
-        $errores['contrasena'] = "La contraseña no puede estar vacía.";
-    } elseif (strlen($nuevaContrasena) < 6) {
-        $errores['contrasena'] = "La contraseña debe tener al menos 6 caracteres.";
-    }
+  $regexContrasena = '/^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/u';
+
+if (empty($nuevaContrasena)) {
+    $errores['contrasena'] = "La contraseña no puede estar vacía.";
+} elseif (strlen($nuevaContrasena) < 6) {
+    $errores['contrasena'] = "La contraseña debe tener al menos 6 caracteres.";
+} elseif (!preg_match($regexContrasena, $nuevaContrasena)) {
+    $errores['contrasena'] = "La contraseña debe incluir letras, números y al menos un carácter especial.";
+}
+
 
     if (!empty($errores)) {
         echo json_encode(["success" => false, "errors" => $errores]);

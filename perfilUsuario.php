@@ -10,6 +10,8 @@ requiereLogin();
     <?php require "inc/head.php"; ?>
     <script src="./js/scriptPerfilUsuario.js" defer></script>
      <link rel="stylesheet" href="./css/stylePerfilUsuario.css" />
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
  
 </head>
 
@@ -47,12 +49,18 @@ requiereLogin();
       <form method="POST" id="formEditarNombre" class="form-box d-none mt-3 p-3 rounded border">
         <div class="mb-3">
           <label for="campoNombre" class="form-label fw-semibold">Nuevo nombre de usuario</label>
-          <input
-            type="text"
-            id="campoNombre"
-            class="form-control"
-            placeholder="Ingrese su nombre"
-          />
+                <input
+                type="text"
+                id="campoNombre"
+                class="form-control"
+                placeholder="Ingrese su nombre"
+                required
+                minlength="3"
+                maxlength="50"
+                pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s.,;:!@#$%^&*()_\-+=¿?¡!'\"/\\]+"
+            />
+       
+
           <div id="errorNombre" class="text-danger mt-2 d-none"></div>
         </div>
 
@@ -69,14 +77,20 @@ requiereLogin();
       </button>
 
       <form id="formCambiarContrasena" class="form-box d-none mt-3 p-3 rounded border">
-        <div class="mb-3">
+        <div class="mb-3 " >
           <label for="campoContrasena" class="form-label fw-semibold">Nueva contraseña</label>
-          <input
-            type="password"
-            id="campoContrasena"
-            class="form-control"
-            placeholder="Ingrese su contraseña"
-          />
+                <input
+                type="password"
+                id="campoContrasena"
+                class="form-control"
+                placeholder="Ingrese su contraseña"
+                required
+                minlength="6"
+                pattern="^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$"
+            />
+
+            
+
           <div id="errorContrasena" class="text-danger mt-2 d-none"></div>
         </div>
 

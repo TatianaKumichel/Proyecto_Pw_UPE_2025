@@ -106,7 +106,9 @@ formularioCambiarContrasena.addEventListener("submit", async (evento) => {
   } else if (contrasena.length < 6) {
     errores.push("Debe tener al menos 6 caracteres.");
   } else if (!regexContrasena.test(contrasena)) {
-    errores.push("Solo se permiten letras, números y símbolos válidos.");
+    errores.push(
+      "La contraseña debe incluir letras, numeros y al menos un caracter especial."
+    );
   }
 
   if (errores.length > 0) {

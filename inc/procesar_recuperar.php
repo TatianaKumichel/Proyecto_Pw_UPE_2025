@@ -26,34 +26,48 @@ try {
         exit;
 
     } elseif ($action === 'actualizar_pass') {
-        $email = trim($data['email'] ?? '');
-        $password = $data['password'] ?? '';
-        $passwordConfirm = $data['passwordConfirm'] ?? '';
+    $email = trim($data['email'] ?? '');
+    $password = $data['password'] ?? '';
+    $passwordConfirm = $data['passwordConfirm'] ?? '';
 
-        if (strlen($password) < 6) {
-            echo json_encode(['success' => false, 'message' => 'La contraseña debe tener al menos 6 caracteres.']);
-            exit;
-        }
+    // Regex para validar contraseña segura
+    $regexContrasena = '/^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/u';
 
-        if ($password !== $passwordConfirm) {
-            echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden.']);
-            exit;
-        }
-
-        // Verificar que el email siga existiendo (seguridad básica)
-        $stmt = $conn->prepare("SELECT id_usuario FROM usuario WHERE email = ?");
-        $stmt->execute([$email]);
-        if ($stmt->rowCount() === 0) {
-            echo json_encode(['success' => false, 'message' => 'Email inválido.']);
-            exit;
-        }
-
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $conn->prepare("UPDATE usuario SET password_hash = ? WHERE email = ?");
-        $stmt->execute([$hash, $email]);
-
-        echo json_encode(['success' => true, 'message' => 'Contraseña actualizada correctamente.']);
+    // Validaciones
+    if (empty($password)) {
+        echo json_encode(['success' => false, 'message' => 'La contraseña no puede estar vacía.']);
         exit;
+    }
+
+    if (!preg_match($regexContrasena, $password)) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'La contraseña debe tener al menos 6 caracteres, incluir una letra, un número y un símbolo.'
+        ]);
+        exit;
+    }
+
+    if ($password !== $passwordConfirm) {
+        echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden.']);
+        exit;
+    }
+
+    // Verificar que el email siga existiendo (seguridad básica)
+    $stmt = $conn->prepare("SELECT id_usuario FROM usuario WHERE email = ?");
+    $stmt->execute([$email]);
+    if ($stmt->rowCount() === 0) {
+        echo json_encode(['success' => false, 'message' => 'Email inválido.']);
+        exit;
+    }
+
+    // Guardar la nueva contraseña hasheada
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $stmt = $conn->prepare("UPDATE usuario SET password_hash = ? WHERE email = ?");
+    $stmt->execute([$hash, $email]);
+
+    echo json_encode(['success' => true, 'message' => 'Contraseña actualizada correctamente.']);
+    exit;
+
 
     } else {
         echo json_encode(['success' => false, 'message' => 'Acción no válida.']);
