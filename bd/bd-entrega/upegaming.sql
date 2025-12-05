@@ -71,11 +71,10 @@ CREATE TABLE `comentario` (
 --
 
 INSERT INTO `comentario` (`id_comentario`, `id_usuario`, `id_juego`, `contenido`, `fecha`, `estado`) VALUES
-(1, 7, 1, 'el primer comentario.', '2025-11-06 00:36:52', 'reportado'),
+(1, 7, 1, 'el primer comentario.', '2025-11-06 00:36:52', 'activo'),
 (2, 7, 1, 'otro', '2025-11-06 00:37:21', 'eliminado'),
-(3, 7, 3, 'fua', '2025-11-06 00:52:27', 'activo'),
-(4, 8, 2, 'aa', '2025-11-10 16:02:25', 'eliminado'),
-(5, 8, 2, 'aa', '2025-11-10 18:15:11', 'eliminado');
+(3, 10, 2, 'malisimo', '2025-12-05 00:27:11', 'reportado');
+
 
 -- --------------------------------------------------------
 
@@ -140,12 +139,12 @@ CREATE TABLE `faq` (
 -- Volcado de datos para la tabla `faq`
 --
 
-INSERT INTO `faq` (`pregunta`, `respuesta`, `visible`, `id_autor`, `fecha_creacion`) VALUES
-('¿Cómo puedo crear una cuenta en la plataforma?', 'Para crear una cuenta, hacé clic en “Registrarse”, y completá tus datos.', 1, 1, NOW()),
-('¿Por qué no puedo iniciar sesión?', 'Revisá que tu correo y contraseña sean correctos.', 1, 1, NOW()),
-('¿Cómo puedo reportar un comentario ?', 'Desde la página del juego, hacé clic en “Reportar” y completá el motivo y envia el reporte, un moderador se encargara de revisarlo.', 1, 1, NOW()),
-('¿Qué significan los juegos “destacados”?', 'Los juegos destacados  son los juegos con mayor popularidad y mejor calificados por los usuarios', 1, 1, NOW()),
-('¿Cómo agrego un juego a mis favoritos?', 'Para agregar un juego a tus favoritos, hacé clic en marcar como favorito en la página del juego.', 1, 1, NOW());
+INSERT INTO `faq` ( `id_faq`,`pregunta`, `respuesta`, `visible`, `id_autor`, `fecha_creacion`) VALUES
+(1,'¿Cómo puedo crear una cuenta en la plataforma?', 'Para crear una cuenta, hacé clic en “Registrarse”, y completá tus datos.', 1, 1, NOW()),
+(2,'¿Por qué no puedo iniciar sesión?', 'Revisá que tu correo y contraseña sean correctos.', 1, 1, NOW()),
+(3,'¿Cómo puedo reportar un comentario ?', 'Desde la página del juego, hacé clic en “Reportar” y completá el motivo y envia el reporte, un moderador se encargara de revisarlo.', 1, 1, NOW()),
+(4,'¿Qué significan los juegos “destacados”?', 'Los juegos destacados  son los juegos con mayor popularidad y mejor calificados por los usuarios', 1, 1, NOW()),
+(5,'¿Cómo agrego un juego a mis favoritos?', 'Para agregar un juego a tus favoritos, hacé clic en marcar como favorito en la página del juego.', 1, 1, NOW());
 -- --------------------------------------------------------
 
 --
@@ -468,8 +467,7 @@ CREATE TABLE `reporte_comentario` (
 --
 
 INSERT INTO `reporte_comentario` (`id_reporte`, `id_comentario`, `id_usuario_reporta`, `motivo`, `fecha_reporte`, `id_moderador_accion`, `fecha_accion`, `accion`, `observaciones`) VALUES
-(1, 1, 10, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcd', '2025-11-07 19:13:19', NULL, NULL, NULL, NULL);
-
+(1, 3, 8, 'comportamiento ofensivo', '2025-12-05 00:29:49', NULL, NULL, NULL, NULL);
 -- --------------------------------------------------------
 
 --
