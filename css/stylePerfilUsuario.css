@@ -1,20 +1,35 @@
-.btn-moderno {
-  background: #ffffff;
-  border-radius: 15px;
-  padding: 12px 25px;
-  border: none;
+/* Panel general claro */
+.panel-claro {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 700px;
+  margin: 0 auto;
+  border: 1px solid #e3e3e3;
+}
+
+/* Caja de formularios internos */
+.form-box {
+  background: #fafafa;
+  border: 1px solid #dcdcdc;
+}
+
+/* Colores y ajustes */
+.form-control {
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 6px rgba(13, 110, 253, 0.3);
+}
+
+.btn {
   font-weight: 600;
-  box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.15),
-    -5px -5px 12px rgba(255, 255, 255, 0.8);
-  transition: 0.3s ease-in-out;
+  border-radius: 6px;
 }
 
-.btn-moderno:hover {
-  transform: translateY(-3px);
-  box-shadow: 7px 7px 15px rgba(0, 0, 0, 0.2),
-    -7px -7px 15px rgba(255, 255, 255, 0.9);
-}
-
-.btn-moderno:active {
-  transform: translateY(1px);
+.text-danger {
+  font-size: 0.9rem;
 }

@@ -26,74 +26,76 @@ requiereLogin();
     $_SESSION['nombre'] = $usuario['username'];
     ?>
 
-    <main class="container my-4">
+   <main class="container my-4">
 
-        <div class="panel shadow">
+  <div class="panel-claro shadow-sm">
+    <h2 class="text-center mb-4">Perfil de Usuario</h2>
 
-            <h2 class="text-center  mb-4">Tu perfil</h2>
+    <!-- Datos del usuario -->
+    <div id="usuarioDatos" data-id="<?php echo $_SESSION['id_usuario']; ?>">
+      <h4 class="mb-4 text-primary fw-bold">
+        <span id="mostrarNombre"><?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
+      </h4>
+    </div>
 
-            <!-- Datos del usuario -->
-            <div id="usuarioDatos" data-id="<?php echo $_SESSION['id_usuario']; ?>" class="text-center mb-4">
-                <h4>
-                    Bienvenid@,
-                    <span id="mostrarNombre" class="text-info fw-bold">
-                        <?php echo htmlspecialchars($_SESSION['nombre']); ?>
-                    </span>
-                </h4>
-            </div>
+    <!-- Editar nombre -->
+    <div class="mb-4">
+      <button id="btnEditarNombre" class="btn btn-primary w-100 fw-semibold shadow-sm">
+        Editar Nombre de Usuario
+      </button>
 
-            <!-- Editar nombre -->
-            <div class="mb-4">
-                <button id="btnEditarNombre" class="btn-moderno">
-                    Editar Nombre de Usuario
-                </button>
-
-                <form method="POST" id="formEditarNombre"
-                    class="d-none mt-3 p-3 rounded bg-dark border border-secondary">
-
-                    <label for="campoNombre" class="form-label text-light">Nuevo nombre de usuario</label>
-                    <input
-                        type="text"
-                        id="campoNombre"
-                        class="form-control bg-secondary text-light border-0"
-                        placeholder="Ingrese su nuevo nombre" />
-
-                    <div id="errorNombre" class="text-danger mt-2 d-none"></div>
-
-                    <button type="submit" class="btn btn-success w-100 mt-3">Guardar</button>
-                </form>
-            </div>
-
-            <!-- Cambiar contraseña -->
-            <div class="mb-4">
-                <button id="btnCambiarContrasena" class="btn-moderno">
-                    Cambiar Contraseña
-                </button>
-
-                <form id="formCambiarContrasena"
-                    class="d-none mt-3 p-3 rounded bg-dark border border-secondary">
-
-                    <label for="campoContrasena" class="form-label text-light">Nueva contraseña</label>
-                    <input
-                        type="password"
-                        id="campoContrasena"
-                        class="form-control bg-secondary text-light border-0"
-                        placeholder="Ingrese su nueva contraseña" />
-
-                    <div id="errorContrasena" class="text-danger mt-2 d-none"></div>
-
-                    <button type="submit" class="btn btn-success w-100 mt-3">Guardar</button>
-                </form>
-            </div>
-
-            <!-- Ver favoritos -->
-            <div class="ms-auto">
-                <a href="favoritos.php" class="btn-moderno">Ver mis favoritos</a>
-            </div>
-
+      <form method="POST" id="formEditarNombre" class="form-box d-none mt-3 p-3 rounded border">
+        <div class="mb-3">
+          <label for="campoNombre" class="form-label fw-semibold">Nuevo nombre de usuario</label>
+          <input
+            type="text"
+            id="campoNombre"
+            class="form-control"
+            placeholder="Ingrese su nombre"
+          />
+          <div id="errorNombre" class="text-danger mt-2 d-none"></div>
         </div>
 
-    </main>
+        <button type="submit" class="btn btn-success w-100 fw-semibold shadow-sm">
+          Guardar
+        </button>
+      </form>
+    </div>
+
+    <!-- Cambiar contraseña -->
+    <div class="mb-4">
+      <button id="btnCambiarContrasena" class="btn btn-warning w-100 fw-semibold shadow-sm">
+        Cambiar Contraseña
+      </button>
+
+      <form id="formCambiarContrasena" class="form-box d-none mt-3 p-3 rounded border">
+        <div class="mb-3">
+          <label for="campoContrasena" class="form-label fw-semibold">Nueva contraseña</label>
+          <input
+            type="password"
+            id="campoContrasena"
+            class="form-control"
+            placeholder="Ingrese su contraseña"
+          />
+          <div id="errorContrasena" class="text-danger mt-2 d-none"></div>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100 fw-semibold shadow-sm">
+          Guardar
+        </button>
+      </form>
+    </div>
+
+    <!-- Favoritos -->
+    <div class="text-end">
+      <a href="favoritos.php" class="btn btn-info fw-semibold shadow-sm">
+        Ver mis favoritos
+      </a>
+    </div>
+
+  </div>
+</main>
+
 
     <footer class="bg-dark text-white mt-4 pt-3 pb-2">
         <?php require "./inc/footer.php"; ?>

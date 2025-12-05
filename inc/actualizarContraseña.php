@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($nuevaContrasena)) {
         $errores['contrasena'] = "La contraseña no puede estar vacía.";
     } elseif (strlen($nuevaContrasena) < 6) {
-        $errores['contrasena'] = "La contraseña debe tener al menos  caracteres.";
+        $errores['contrasena'] = "La contraseña debe tener al menos 6 caracteres.";
     }
 
     if (!empty($errores)) {

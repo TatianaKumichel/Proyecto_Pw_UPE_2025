@@ -31,15 +31,18 @@ botonCambiarContrasena.addEventListener("click", () => {
 formularioEditarNombre.addEventListener("submit", async (evento) => {
   evento.preventDefault();
   const nombre = campoNombre.value.trim();
-  const regexNombre = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+  const regexNombre =
+    /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s.,;:!@#$%^&*()_\-+=¿?¡!'"\/\\]+$/;
 
   // Creo array de errores
   const errores = [];
 
   if (nombre === "") {
     errores.push("El nombre no puede estar vacío.");
+  } else if (nombre.length < 3) {
+    errores.push("El nombre debe tener al menos 3 caracteres.");
   } else if (!regexNombre.test(nombre)) {
-    errores.push("El nombre solo puede contener letras y espacios.");
+    errores.push("El nombre contiene caracteres no permitidos.");
   }
 
   if (errores.length > 0) {
@@ -71,8 +74,15 @@ formularioEditarNombre.addEventListener("submit", async (evento) => {
       const modal = new bootstrap.Modal(document.getElementById("modalExito"));
       modal.show();
     } else {
-      errorNombre.textContent =
-        data.mensaje || "Error al actualizar el nombre.";
+      // Muestro error especifico del backend
+      if (data.errors && data.errors.nombre) {
+        errorNombre.textContent = data.errors.nombre;
+      } else if (data.mensaje) {
+        errorNombre.textContent = data.mensaje;
+      } else {
+        errorNombre.textContent = "Ingrese un nombre válido.";
+      }
+
       errorNombre.classList.remove("d-none");
     }
   } catch (error) {
@@ -86,7 +96,8 @@ formularioEditarNombre.addEventListener("submit", async (evento) => {
 formularioCambiarContrasena.addEventListener("submit", async (evento) => {
   evento.preventDefault();
   const contrasena = campoContrasena.value.trim();
-  const regexContrasena = /^[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/;
+  const regexContrasena =
+    /^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/;
 
   const errores = [];
 
